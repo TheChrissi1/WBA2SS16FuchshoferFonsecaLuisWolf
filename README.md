@@ -2,6 +2,6 @@
 
 Autoren:
 
-*Bastian Fuchshofer
-*Niklas Fonseca Luis
-*Christian Wolf
+- Bastian Fuchshofer
+- Niklas Fonseca Luis
+- Christian Wolf
