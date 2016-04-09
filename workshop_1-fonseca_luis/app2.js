@@ -1,3 +1,4 @@
+//Aufgabe 2
 var fs = require('fs');
 var chalk = require('chalk');
 
