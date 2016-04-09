@@ -15,5 +15,9 @@ var data = fs.readFile('./wolkenkratzer.json', function(err, data) {
 	data.wolkenkratzer.sort(function(a, b){
 		return b.hoehe - a.hoehe;
 	});
-	printTower(data);	
+	var data_stringified = JSON.stringify(data);
+	fs.writeFile('./wolkenkratzer_sortiert.json',data,function(err){
+		if(err) throw err;
+	});
+	printTower(data);
 });
