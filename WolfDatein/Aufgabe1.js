@@ -1,17 +1,21 @@
-javascript var fs = require('fs');
+var fs = require('fs');
 
-var data fs.readFile("/wolkenkartzer.json", function(err, data) {
+
+function printTower(data){
+    for (var i=0; i < data.wolkenkratzer.length; i++){
+        console.log("Name: " + data.wolkenkratzer[i].name);
+        console.log("Stadt: " + data.wolkenkratzer[i].stadt);
+        console.log("Höhe: " + data.wolkenkratzer[i].hoehe);
+        console.log("--------------------");
+    };
+};
+
+
+var data = fs.readFile('./wolkenkratzer.json', function(err, data) {
     if (err) throw err;
-    console.log(data);
+    data = JSON.parse(data);
+    printTower(data);
 });
-
-for (var i=0; i < data.lenght; i++) {
-    
-    console.log("Name: " + data[i].name);
-    console.log("Stadt: " + data[i].stadt);
-    console.log("Höhe: " + data[i].hoehe);
-    console.log("--------------------");
-}
 
 
 
