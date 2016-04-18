@@ -14,10 +14,20 @@ function printTower(data){
 var data = fs.readFile('./wolkenkratzer.json', function(err, data) {
     if (err) throw err;
     data = JSON.parse(data);
+
+    
+    data.wolkenkratzer.sort(function (a, b) {
+            return b.hoehe - a.hoehe;
+        });
+    
+    var data_sotiert = JSON.stringify(data);
+    fs.writeFile('./wolkenkratzer_sotiert.json',data_sotiert,function(err){
+    if (err) throw err;
+    });
+     
     printTower(data);
 });
 
 
-
-                                                                 
+                                                            
                                                                  
