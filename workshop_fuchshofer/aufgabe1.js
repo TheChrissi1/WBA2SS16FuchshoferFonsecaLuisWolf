@@ -1,12 +1,13 @@
 var fs = require('fs');
 
+var chalk = require("chalk");
 
 
 function towerAusgeben(data) {
     for (var i=0; i< data.wolkenkratzer.length; i++) {
-        console.log("Name: " + data.wolkenkratzer[i].name);
-        console.log("Stadt: " + data.wolkenkratzer[i].stadt);
-        console.log("Hoehe: " + data.wolkenkratzer[i].hoehe);
+        console.log("Name: " +  chalk.blue(data.wolkenkratzer[i].name));
+        console.log("Stadt: " + chalk.green(data.wolkenkratzer[i].stadt));
+        console.log("Hoehe: " + chalk.red(data.wolkenkratzer[i].hoehe));
         console.log("___________________________________________");
         };
     };
