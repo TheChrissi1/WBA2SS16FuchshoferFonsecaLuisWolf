@@ -21,4 +21,4 @@ Dienstgeber:
 -Stellt verschiedene Funktionen bereit wie z.b. alle bisher gesehehn Serien anzeigen und formt sie in ein passendes Format.
 Dienstnutzer: 
 -Nimmt Interaktion vom Client entgegen und stellt entsprechende Anfrage an den Dienstgeber.
-- Nimmt Daten vom Dienstgeber entgegen und arbeitet diese für den Nutzer auf. 
+- Nimmt Daten vom Dienstgeber entgegen und arbeitet diese für den Nutzer auf um sie über eine Schnittstelle dem Nutzer zur Verfügung zu stellen. 
