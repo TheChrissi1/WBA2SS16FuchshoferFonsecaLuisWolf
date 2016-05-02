@@ -4,8 +4,9 @@ var app = express();
 var serverPort = 1337;
 
 var users = [
-    {name: "Hans", age: 21},
-    {name: "Peter", age: 26}
+    {name: "Hans", age: 21, studiengang: "Medieninformatik"},
+    {name: "Peter", age: 26, studiengang: "Wirtschaftsinformatik"},
+    
 ];
 
 app.get('/users', function(req, res){
