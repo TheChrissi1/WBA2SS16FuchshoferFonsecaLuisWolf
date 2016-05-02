@@ -9,6 +9,10 @@ var users = [
     
 ];
 
+var acceptendContentType = req.accepts(['html', 'json']);
+
+switch (acceptendContentType)
+
 app.get('/users', function(req, res){
     
     if (req.query.age !== undefined) {
