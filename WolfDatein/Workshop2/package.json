@@ -1,0 +1,11 @@
+{
+  "name": "workshop2",
+  "version": "0.0.1",
+  "description": "Aufgaben fuer den 2ten Workshop",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christian Wolf",
+  "license": "ISC"
+}
