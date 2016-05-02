@@ -19,9 +19,19 @@ Das Projekt wird eine Webanwendung in der der Nutzer die Möglichkeit hat sich �
 Darüber hinaus wird dem Nutzer zu jedem eingetragenen Medium ein Verweis auf eine andere Website präsentiert, auf der
 er sich das Medium anschauen kann. Der Nutzer hat außerdem die Möglichkeit sich nach einem Login mit seinen Daten, 
 seinen persönlichen „Fortschritt“ anzeigen zu lassen der unter anderem beinhaltet welche Folgen er schon gesehen hat.
+
 Dienstgeber:  
 -Bezieht Daten aus einem DBMS und verarbeitet diese mit node.js. 
--Stellt verschiedene Funktionen bereit wie z.b. alle bisher gesehehn Serien anzeigen und formt sie in ein passendes Format.
+-Stellt verschiedene Funktionen bereit.
+ *Zeige alle bisher gesehenen Folgen an.
+ *Zeige alle abgeschloßenen und gesehenen Serien an.
+ *Zeige bereits publizierte, aber noch nicht gesehenen Folgen an.
+ *Hebe abgeschloßene Serien farblich hervor.
+ *Gebe einen Infotext zu einer Serie an.
+ *Zeige die Hauptdarsteller einer Serie an.
+ *Verweise auf die aktuelle imdb Seite der Serie die die Wertung ausgibt.
+ ...
+
 Dienstnutzer: 
 -Nimmt Interaktion vom Client entgegen und stellt entsprechende Anfrage an den Dienstgeber.
 - Nimmt Daten vom Dienstgeber entgegen und arbeitet diese für den Nutzer auf um sie über eine Schnittstelle dem Nutzer 
