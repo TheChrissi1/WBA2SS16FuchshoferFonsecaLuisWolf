@@ -1,5 +1,5 @@
 {
-  "name": "testing",
+  "name": "Testing",
   "version": "0.0.1",
   "description": "Testprojekt",
   "main": "application.js",
@@ -7,5 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Christian WOlf",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
 }
