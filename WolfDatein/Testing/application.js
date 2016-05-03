@@ -4,10 +4,8 @@ var serverPort = 3000;
 
 var server = http.createServer(function(request, response){
     console.log('Got a request!');
-    response.wirte('Hello');
-    response.end();
-    
-    
+    response.write('Hello');
+    response.end();  
 });
 
 server.listen(serverPort, function(){
