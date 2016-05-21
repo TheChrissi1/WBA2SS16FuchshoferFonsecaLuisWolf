@@ -40,22 +40,32 @@ app.get('/anime/shingeki+no+kyojin', jsonParser, function(req, res){
  *im JSON-File! (Oder das "+" durch eine Funktion entfernen)           *
  *********************************************************************/
 
-//Die Suche aus dem JSON File funktioniert noch nicht!
-
-app.get('/anime/:anime_name', jsonParser, function(req, res){
-	var data = require('./profil.json');
-	var querry = req.params.anime_name;
-    console.log("Para: "+ querry);
-    var erg = data.anime.find(function(a, b) {
-        if (data.anime.name == querry){
+//Funktion um einen Anime anhand seines Namens aus einem JSOn File zu lesen. (kleinbuchstaben!)
+function returnAnime (string) {
+    var datas = require('./profil.json');
+    var erg = 0;
+    for (i=0; i<datas.anime.length; i++) {
+        
+        if (datas.anime[i].name == string) {
+            var erg = datas.anime[i];
             return erg;
         }
-        else {
-            res.send("Anime nicht verfügbar!");
-        }      
-    });
+    }
+    if (erg==0) {
+        erg = 'Anime nicht gefunden!';
+        return erg;
+    }
+    
+}
+
+app.get('/anime/:anime_name', jsonParser, function(req, res){
+	
+    
+	var querry = req.params.anime_name;
+    var erg = returnAnime(querry);
 	res.send(erg);
 });
+
 
 /**********************************************
  *Gibt eine Liste aller User in user.json aus.*
@@ -73,20 +83,28 @@ app.get('/benutzer', jsonParser, function(req, res){
  *im JSON-File! (Oder das "+" durch eine Funktion entfernen)           *
  *********************************************************************/
 
-//Die Suche aus dem JSON File funktioniert noch nicht!
-
-app.get('/benutzer/:id', jsonParser, function(req, res){
-	var data = require('./user.json');
-	var querry = req.params.id;
-    console.log("Para: "+ querry);
-    var erg = data.user.find(function(a, b) {
-        if (data.user.name == querry){
+//Funktion um einen User anhand seiner ID aus einem JSOn File zu lesen.
+function returnUser (string) {
+    var datas = require('./user.json');
+    var erg = 0;
+    for (i=0; i<datas.user.length; i++) {
+        
+        if (datas.user[i].id == string) {
+            var erg = datas.user[i];
             return erg;
         }
-        else {
-            res.send("Nutzer nicht gefunden!");
-        }      
-    });
+    }
+    if (erg==0) {
+        erg = 'User nicht gefunden!';
+        return erg;
+    }
+    
+}
+
+app.get('/benutzer/:id', jsonParser, function(req, res){
+	
+	var querry = req.params.id;
+    var erg = returnUser(querry);
 	res.send(erg);
 });
 
