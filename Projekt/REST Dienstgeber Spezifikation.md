@@ -5,7 +5,7 @@
 | /anime                 | GET    | Gibt eine Liste sämtlicher Animes der DB aus.                                       | -                 | application/json |
 | /anime/{name}          | GET    | Gibt einen bestehenden Anime mit all seinen Informationen aus.                      | -                 | application/json |
 |                        | DELETE | Löscht einen bestehenden Anime.                                                     | -                 | - |
-|                        | POST   | Erstellt einen neuen Anime.                                                         | -                 | - |
+|                        | POST   | Erstellt einen neuen Anime.                                                         | application/json  | application/json |
 |                        | PUT    | Aktuallisiert einen bestehenden Anime.                                              | application/json  | application/json |
 | /benutzer              | GET    | Gibt sämmtliche bestehenden Nutzernamen (Alias) als Liste aus.                      | -                 | application/json |
 | /benutzer/{id}         | GET    | Zeigt das Profil eines bestehenden Nutzers an.                                      | -                 | application/json |
@@ -13,7 +13,7 @@
 |                        | POST   | Erstellt einen neuen Nutzer.                                                        | application/json  | application/json |
 |                        | PUT    | Ändert die Daten eines bestehenden Nutzers.                                         | application/json  | application/json |
 | /benutzer/{id}/stats   | GET    | Zeigt eine Liste aller angesehenen Folgen.                                          | -                 | application/json |
-|                        | POST   | Erstellt eine Initialstatistik für einen Benutzer.                                  | -                 | - |
+|                        | POST   | Erstellt eine Initialstatistik für einen Benutzer.                                  | application/json  | application/json |
 |                        | PUT    | Aktuallisiert die Statistik eines Benutzers.                                        | application/json  | application/json |
 | /genre                 | GET    | Gibt eine Liste aller Genres aus (weiterleitung auf Liste mit zutreffenden Animes). | -                 | application/json |
 | /ref                   | GET    | Gibt eine Liste aller referenzierenden Websites aus.                                | -                 | application/json |
@@ -21,8 +21,7 @@
 | /filter/{querry-param} | GET    | Gibt eine Filterung der DB anhand des Querry-Parameters aus.                        | -                 | - |
 
 
-| /createAnime | 
-| /login | 
+| /createAnime |
+| /login |
 | /anime/film |
 | /anime/serie |
-
