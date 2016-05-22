@@ -87,16 +87,17 @@ app.get('/anime/:anime_name', jsonParser, function(req, res){
  		});
  }
 
-app.put( '/anime/', function( req, res, next ){
+app.put( '/anime/', jsonParser, function( req, res){
 	var data = require( './profil.json' );
 	var anime = data.anime;
-	var body = {"name":"Shokugeki no Soma", "episodes":25, "status":"finished"};
+	var body = req.body;
 
   var search = returnAnime(body.name);
 	if( search == -1 ){
 		anime.push(body);
 	}
 	anime_sort();
+	res.send();
 });
 
 
@@ -152,12 +153,12 @@ app.get('/benutzer/:id', jsonParser, function(req, res){
 app.put('/benutzer', jsonParser, function(req, res){
 
   var body = req.body;
-  var data = JSON.stringify(body);
+	body = JSON.stringify(body);
   console.log(body);
-  console.log(data);
-  fs.writeFile("./user.json", data, function(err) {
+  fs.writeFile("./user.json", body, function(err) {
               if (err) throw err;
   });
+	res.send();
 });
 
 
