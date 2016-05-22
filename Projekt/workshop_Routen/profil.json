@@ -29,6 +29,16 @@
             "name": "Steins;Gate",
             "episodes": 25,
             "status": "finished"
+        },
+        {
+            "name": "Toradora",
+            "episodes": 26,
+            "status": "finished"
+        },
+        {
+            "name": "Usagi Drop",
+            "episodes": 24,
+            "status": "finished"
         }
     ]
 }
