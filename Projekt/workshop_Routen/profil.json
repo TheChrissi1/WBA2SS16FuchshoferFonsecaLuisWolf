@@ -1,0 +1,21 @@
+{
+	"anime":[
+	{
+	 "name":"shingeki+no+kyojin",
+	 "episodes":25,
+	 "status":"finished"	
+	},
+    {
+	 "name":"one+piece",
+	 "episodes":"-",
+	 "status":"not finished"	
+	},  
+     {
+	 "name":"bleach",
+	 "episodes":366,
+	 "status":"finished"	
+	}
+	]
+}
+
+

@@ -1,0 +1,16 @@
+{
+	"user":[
+	{
+     "id":"001",
+	 "name":"Bastian Fuchshofer",
+	 "Alter":22,
+	 "Wohnort":"Gummersbach"	
+	},
+    {
+     "id":"002",
+	 "name":"Max Mustermann",
+	 "Alter":30,
+	 "Wohnort":"Musterstadt"	
+	}  
+	]
+}
