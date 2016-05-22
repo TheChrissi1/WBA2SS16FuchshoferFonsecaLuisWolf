@@ -81,7 +81,7 @@ app.get('/anime/:anime_name', jsonParser, function(req, res){
  	  return 0;
 
  		});
- 		data = JSON.stringify( data );
+ 		data = JSON.stringify( data, null, 4);
  		fs.writeFile( './profil.json', data, function(err){
  			if(err) throw err;
  		});
@@ -153,7 +153,7 @@ app.get('/benutzer/:id', jsonParser, function(req, res){
 app.put('/benutzer', jsonParser, function(req, res){
 
   var body = req.body;
-	body = JSON.stringify(body);
+	body = JSON.stringify(body, null, 4);
   console.log(body);
   fs.writeFile("./user.json", body, function(err) {
               if (err) throw err;
