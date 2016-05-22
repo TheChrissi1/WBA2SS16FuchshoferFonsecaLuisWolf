@@ -81,7 +81,7 @@ app.get('/anime/:anime_name', jsonParser, function(req, res){
  	  return 0;
 
  		});
- 		data = JSON.stringify( data );
+ 		data = JSON.stringify( data, null, 4 );
  		fs.writeFile( './profil.json', data, function(err){
  			if(err) throw err;
  		});
@@ -97,7 +97,7 @@ app.put( '/anime/', jsonParser, function( req, res){
 		anime.push(body);
 	}
 	anime_sort();
-	res.send();
+	res.send("done");
 });
 
 

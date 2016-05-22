@@ -1,1 +1,5 @@
-{"name":"Detective Conan","episodes":25,"status":"running"}
+{"user":[
+    {"id":"001","name":"Bastian Fuchshofer","Wohnort":"Gummersbach","Alter": "22"},
+    {"id":"002","name":"Max Mustermann","Wohnort":"Köln","Alter": "19"},
+    {"id":"003","name":"Hans Peter","Wohnort":"Berlin","Alter": "42"}
+]}
