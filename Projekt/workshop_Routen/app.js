@@ -150,7 +150,7 @@ app.get('/benutzer/:id', jsonParser, function(req, res){
 
 //Funktioniert noch nicht, im REST-Client kann im Body ein neuer Nutzer eingetragen werden
 //der dann in user.json gepspeichert wird
-app.put('/benutzer', jsonParser, function(req, res){
+app.put('/benutzer/', jsonParser, function(req, res){
 
   var body = req.body;
 	body = JSON.stringify(body, null, 4);

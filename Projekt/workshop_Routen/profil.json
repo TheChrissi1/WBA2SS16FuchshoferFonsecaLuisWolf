@@ -11,6 +11,11 @@
             "status": "running"
         },
         {
+            "name": "Naruto Shippuuden",
+            "episode": 447,
+            "status": "running"
+        },
+        {
             "name": "One Piece",
             "episodes": "-",
             "status": "not finished"
