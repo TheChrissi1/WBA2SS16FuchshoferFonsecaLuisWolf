@@ -1,18 +1,43 @@
-var redis = require("redis"),
-    client = redis.createClient();
+var express = require( 'express' );
+var app = express();
+var bodyParser = require( 'body-parser' );
+var jsonParser = bodyParser.json();
+var fs = require( 'fs' );
 
+var redis = require('redis');
+var client = redis.createClient();
 
-client.on("error", function (err) {
-    console.log("Error " + err);
+var serverPort = 1337;
+
+client.on('connect', function() {
+    console.log('connected');
 });
 
-client.set("string key", "string val", redis.print);
-client.hset("hash key", "hashtest 1", "some value", redis.print);
-client.hset(["hash key", "hashtest 2", "some other value"], redis.print);
-client.hkeys("hash key", function (err, replies) {
-    console.log(replies.length + " replies:");
-    replies.forEach(function (reply, i) {
-        console.log("    " + i + ": " + reply);
-    });
-    client.quit();
+
+client.hmset('benutzer', {
+    'user1': 'Peter',
+    'user2': 'Hans',
+    'user3': 'Det'
+});
+
+
+app.get('/benutzer/user2', jsonParser, function(req, res){
+
+  client.hget('./benutzer.json', 'user2',function(err, reply) {
+    var benutzer = require('./benutzer.json');
+    var ausgabe = benutzer.user2;
+    res.send(reply);
+      console.log(reply);
+      console.log(ausgabe);
+
+  });
+
+
+    console.log('JO');
+});
+
+
+
+app.listen(serverPort, function(){
+	console.log('Server running on Port: ' + serverPort);
 });
