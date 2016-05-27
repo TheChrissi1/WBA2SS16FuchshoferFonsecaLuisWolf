@@ -1,0 +1,55 @@
+{
+    "anime": [
+        {
+            "name": "abc",
+            "episodes": 3,
+            "status": "finished"
+        },
+        
+        {
+            "name": "Bleach",
+            "episodes": "-",
+            "status": "not finished"
+        },
+        {
+            "name": "Detective Conan",
+            "episodes": 25,
+            "status": "running"
+        },
+        {
+            "name": "One Piece",
+            "episodes": 366,
+            "status": "finished"
+        },
+        {
+            "name": "Shingeki no Kyojin",
+            "episodes": 25,
+            "status": "finished"
+        },
+        {
+            "name": "Shokugeki no Soma",
+            "episodes": 25,
+            "status": "finished"
+        },
+        {
+            "name": "Steins;Gate",
+            "episodes": 25,
+            "status": "finished"
+        },
+        {
+            "name": "test122",
+            "episodes": 3,
+            "status": "finished"
+        },
+        {
+            "name": "Toradora",
+            "episodes": 3,
+            "status": "finished"
+        },
+        {
+            "name": "Usagi Drop",
+            "episodes": 24,
+            "status": "finished"
+        }
+    ]
+}
