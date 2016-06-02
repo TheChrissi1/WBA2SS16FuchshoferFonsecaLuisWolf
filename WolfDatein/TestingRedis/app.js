@@ -138,13 +138,6 @@ db.hmset('animes_Shingeki_no_Kyojin', {
 });
 
 
-db.hgetall('animes_Naruto',function(err, object) {
-		console.log(object);
-})
-
-db.hgetall('animes_Shingeki_no_Kyojin',function(err, object) {
-		console.log(object);
-})
 
 //Liste Aller Anime {GET, POST} [OK, OK]
 app.get( '/anime/' , jsonParser, function(req, res){
@@ -211,10 +204,62 @@ app.put( '/anime/:anime_name', jsonParser, function(req, res){
 });
 
 //Liste Aller Benutzer {GET, POST} [OK, OK]
+
+
+db.hmset("Anton98", {name: 'Anton', age: 20 , test: "hallo"});
+
 app.get( '/user', jsonParser, function(req, res){
-		var data = require( user_path );
-		res.send(data.users);
+
+		db.hgetall("Anton98",function(err, object) {
+				console.log(object);
+				res.send(object);
+		});
 });
+
+db.hmset('User1', {
+    'name': 'Peter',
+    'age': 22
+});
+
+db.hmset('User2', {
+    'name': 'Franz',
+    'age': 22
+});
+
+db.hmset('User3', {
+    'name': 'Det',
+    'age': 22
+});
+
+db.rpush([{
+    'name': 'Det',
+    'age': 22}, 'angularjs', 'backbone'], function(err, reply) {
+    console.log(reply); //prints 2
+});
+
+app.get( '/usertest', jsonParser, function(req, res){
+
+	db.lrange('frameworks', 0, -1, function(err, reply) {
+	console.log(reply);
+		res.send(reply);
+});
+});
+
+app.get( '/usertest2', jsonParser, function(req, res){
+
+		db.hgetall("User1",function(err, object) {
+			db.hgetall("User2",function(err, object2) {
+					console.log(object);
+					var test = object + object2;
+					res.send(test);
+			});
+		});
+});
+
+
+
+
+
 app.post( '/user', jsonParser, function(req, res){
 	var data = require( user_path );
 	data = data.users;
