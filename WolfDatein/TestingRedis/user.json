@@ -1,8 +1,28 @@
 {
-    "users":
-      "alex" : { "name": "Alexander Hastings",
-         "age": 19},
-      "Sandra" : {"name:" "Sandra Kimers",
-          "age" : 20}
+    "users": [
+        {
+            "user_id": 0,
+            "name": "Niklas",
+            "username": "eXeLuis",
+            "email": "exe.niklas@googlemail.com"
+        },
+        {
+            "user_id": 1,
+            "name": "Christian",
+            "username": "TheChrissi1",
+            "email": "default"
+        },
+        {
+            "user_id": 2,
+            "name": "Bastian",
+            "username": "LittleGundam",
+            "email": "bastian.f.1993@web.de"
+        },
+        {
+            "user_id": 3,
+            "name": "Viktoria",
+            "username": "Viki444",
+            "email": "default"
         }
-        
+    ]
+}
