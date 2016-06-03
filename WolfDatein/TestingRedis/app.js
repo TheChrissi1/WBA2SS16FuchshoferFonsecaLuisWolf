@@ -206,115 +206,82 @@ app.put( '/anime/:anime_name', jsonParser, function(req, res){
 //Liste Aller Benutzer {GET, POST} [OK, OK]
 
 
-db.hmset("Anton98", {name: 'Anton', age: 20 , test: "hallo"});
-
 app.get( '/user', jsonParser, function(req, res){
 
-		db.hgetall("Anton98",function(err, object) {
-				console.log(object);
-				res.send(object);
-		});
-});
+	db.keys('user:*',function(err,rep) {
 
-db.hmset('User1', {
-    'name': 'Peter',
-    'age': 22
-});
+		var users = [];
 
-db.hmset('User2', {
-    'name': 'Franz',
-    'age': 22
-});
+		if (rep.length == 0) {
+			res.json(users);
+			return;
+		}
 
-db.hmset('User3', {
-    'name': 'Det',
-    'age': 22
-});
-
-db.rpush([{
-    'name': 'Det',
-    'age': 22}, 'angularjs', 'backbone'], function(err, reply) {
-    console.log(reply); //prints 2
-});
-
-app.get( '/usertest', jsonParser, function(req, res){
-
-	db.lrange('frameworks', 0, -1, function(err, reply) {
-	console.log(reply);
-		res.send(reply);
-});
-});
-
-app.get( '/usertest2', jsonParser, function(req, res){
-
-		db.hgetall("User1",function(err, object) {
-			db.hgetall("User2",function(err, object2) {
-					console.log(object);
-					var test = object + object2;
-					res.send(test);
+		db.mget(rep, function(err,rep) {
+				rep.forEach(function(val){
+				users.push(JSON.parse(val));
 			});
+
+			users = users.map(function(user){
+				return {id: users.id, name: users.name};
+			});
+			res.json(users);
 		});
+	});
 });
-
-
-
 
 
 app.post( '/user', jsonParser, function(req, res){
-	var data = require( user_path );
-	data = data.users;
-	var body = req.body;
-	var search = returnUser(body.username);
-	if( search == -1){
-		var id_counter = data[data.length-1].user_id;
-		data.push(body);
-		id_counter++;
-		data[data.length-1].user_id = id_counter;
-		res.send("Successfully created User " + body.username + " with ID: " + id_counter);
-	} else {
-		res.send("Username was already taken");
-	}
-	user_sort();
+
+	var newUser = req.body;
+
+	db.incr('id:user', function (err, rep) {
+
+		newUser.id = rep;
+		db.set('user:'+newUser.id, JSON.stringify(newUser), function(err, rep) {
+			res.json(newUser);
+		});
+	});
 });
+
 
 //Spezifischer Benutzer {GET, DELETE, POST, PUT} [OK, OK, OK]
 app.get( '/user/:id', jsonParser, function(req, res){
-	var data = require( user_path );
-	data = data.users;
-	var querry = req.params.id;
-	var search = returnUserID(querry);
-	if(search >= 0){
-		res.send(data[search]);
-	}
+
+	db.get('user:'+req.params.id, function(err, rep) {
+
+		if (rep) {
+			res.type('json').send(rep);
+		} else {
+			res.status(404).type('text').send('User not found!');
+		}
+	});
 });
+
 app.delete( '/user/:id', jsonParser, function(req, res){
-	var data = require( user_path );
-	data = data.users;
-	var querry = req.params.id;
-	var search = returnUserID(querry);
-	if(search != -1){
-		data.splice(search, 1);
-		res.send("Successfully deleted UserID: " + querry);
-	} else {
-		res.send("User not Found");
-	}
-	user_sort();
+
+	db.del('user:'+req.params.id, function(err, rep){
+		if (rep == 1){
+			res.status(200).type('text').send('User successfully deleted');
+		}  else {
+			res.status(404).type('text').send('User not found!');
+		}
+	});
 });
 app.put( '/user/:id', jsonParser, function(req, res){
-	var data = require( user_path );
-	data = data.users;
-	var body = req.body;
-	var querry = req.params.id;
-	var search = returnUserID(querry);
-	if(search != -1){
-		data[search].name = body.name;
-		data[search].username = body.username;
-		data[search].email = body.email;
-		res.send("Successfully changend User with ID: " + querry);
-	} else {
-		res.send("User with ID: " + querry + " not Found");
-	}
-	user_sort();
+
+	db.exists('user:'+req.params.id, function(err, rep) {
+		if (rep == 1) {
+			var updatedUser = req.body;
+			updatedUser.id = req.params.id;
+
+			db.set('user:' + req.params.id, JSON.stringify(updatedUser), function(err, rep) {
+				res.json(updatedUser);
+			});
+		} else {
+			res.status(404).type('text').send('User already exists!');
+		}
+	});
 });
 
 //Spezifische Benutzerstatistiken {GET, POST, PUT} [FAIL, FAIL, FAIL]
