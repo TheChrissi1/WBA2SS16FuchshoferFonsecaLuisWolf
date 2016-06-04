@@ -132,10 +132,24 @@ router.put('/anime', jsonParser, function( req, res){
 	res.send("done");
 });
 
-
+// Ändert die Daten eines Animes
+router.put( '/anime/:anime_name', jsonParser, function(req, res){
+	var data = require( anime_path );
+	data = data.anime;
+	var body = req.body;
+	var querry = req.params.anime_name;
+	var search = returnAnime(querry);
+	if(search != -1){
+		data[search] = body;
+		res.send("Successfully changed " + body.name);
+	} else {
+		res.send(body.name + " not in List");
+	}
+	anime_sort();
+});
 
 //Trägt einen neuen Benutzer in /data/user.json ein.
-router.put('/benutzer', jsonParser, function(req, res){
+router.put('/user', jsonParser, function(req, res){
     
     var data = loadUser();
     
@@ -157,6 +171,27 @@ router.put('/benutzer', jsonParser, function(req, res){
     res.send("done");
 });
 
+//Ändert die Daten eines Benutzers
+router.put( '/user/:id', jsonParser, function(req, res){
+
+	db.exists('user:'+req.params.id, function(err, rep) {
+		if (rep == 1) {
+			var updatedUser = req.body;
+			updatedUser.id = req.params.id;
+
+			db.set('user:' + req.params.id, JSON.stringify(updatedUser), function(err, rep) {
+				res.json(updatedUser);
+			});
+		} else {
+			res.status(404).type('text').send('User already exists!');
+		}
+	});
+});
+
+//Ändert die Statistik eines Nutzers.
+app.put( '/user/:id/stats', jsonParser, function(req, res){
+
+});
 
 
 
