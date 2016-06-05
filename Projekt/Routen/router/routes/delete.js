@@ -95,7 +95,7 @@ function returnAnime (string) {
 };
 
 
-
+//[NOT OK]
 router.delete( '/anime/:anime_name', jsonParser, function(req, res){
 	var data = loadProfile();
 	data = data.anime;
@@ -103,8 +103,11 @@ router.delete( '/anime/:anime_name', jsonParser, function(req, res){
 	var search = returnAnime(querry);
 	if(search != -1){
 		data.splice(search, 1);
+        /*
         data = JSON.stringify( data, null, 4 );
         fs.writeFileSync(__parentdirectory+"/daten/profil.json", data);
+        */
+        
 		res.send("Anime successfully deleted: " + querry);
         console.log("DELETE anime: " + querry);
 	} else {
@@ -114,6 +117,7 @@ router.delete( '/anime/:anime_name', jsonParser, function(req, res){
 	
 });
 
+//[NOT OK]
 router.delete( '/user/:id', jsonParser, function(req, res){
     
     var querry = req.params.id;

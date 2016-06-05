@@ -187,6 +187,26 @@ router.get( '/user/:uID/stats', jsonParser, function(req, res){
 
 });
 
+//[NOT OK]
+//Gibt eine Liste der Genres aus.
+router.get('/genre', jsonParser, function(req, res) {
+    
+    
+});
+
+//[NOT OK]
+//Gibt eine Liste der Referenzen aus.
+router.get('/ref', jsonParser, function(req, res) {
+    
+    
+});
+
+//[NOT OK]
+//Gibt Informationen zu einer Referenz aus.
+router.get('/ref/:refID', jsonParser, function(req, res) {
+    
+    
+});
 
 
 

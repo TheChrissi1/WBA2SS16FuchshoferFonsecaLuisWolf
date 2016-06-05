@@ -108,7 +108,7 @@ function returnUser (string) {
 
 
 
-
+//[NOT OK]
 //Trägt einen neuen Anime in /data/profil.json.
 router.put('/anime', jsonParser, function( req, res){
     
@@ -132,6 +132,7 @@ router.put('/anime', jsonParser, function( req, res){
 	res.send("done");
 });
 
+//[NOT OK]
 // Ändert die Daten eines Animes
 router.put( '/anime/:anime_name', jsonParser, function(req, res){
 	var data = require( anime_path );
@@ -148,6 +149,7 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 	anime_sort();
 });
 
+//[NOT OK]
 //Trägt einen neuen Benutzer in /data/user.json ein.
 router.put('/user', jsonParser, function(req, res){
     
@@ -171,6 +173,7 @@ router.put('/user', jsonParser, function(req, res){
     res.send("done");
 });
 
+//[NOT OK]
 //Ändert die Daten eines Benutzers
 router.put( '/user/:id', jsonParser, function(req, res){
 
@@ -188,6 +191,7 @@ router.put( '/user/:id', jsonParser, function(req, res){
 	});
 });
 
+//[NOT OK]
 //Ändert die Statistik eines Nutzers.
 router.put( '/user/:id/stats', jsonParser, function(req, res){
 
