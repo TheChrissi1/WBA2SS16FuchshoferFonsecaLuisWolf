@@ -24,6 +24,15 @@ function loadUser() {
     return data;
 }
 
+//Lädt die /data/stats.json per synchronen Aufruf.
+function loadStats() {
+    
+    var data = fs.readFileSync(__parentdirectory+"/daten/stats.json")
+    data = JSON.parse(data);
+    return data;
+    
+}
+
 //Gibt einen Anime zurück.
 function returnAnime (string) {
     
@@ -71,14 +80,30 @@ function user_sort(string){
     var data = string;
     data.user.sort(function(a, b){
         
-        if(a.id.toLowerCase() < b.id.toLowerCase()) return -1;
- 	    if(a.id.toLowerCase() > b.id.toLowerCase()) return 1;
+        if(a.uID.toLowerCase() < b.uID.toLowerCase()) return -1;
+ 	    if(a.uID.toLowerCase() > b.uID.toLowerCase()) return 1;
  	    return 0;
     });
     
     data = JSON.stringify( data, null, 4 );
     
     fs.writeFileSync(__parentdirectory+"/daten/user.json", data);
+    
+}
+
+function stats_sort(string) {
+    
+    var data = string;
+    data.stats.sort(function(a, b){
+        
+        if(a.uID.toLowerCase() < b.uID.toLowerCase()) return -1;
+ 	    if(a.uID.toLowerCase() > b.uID.toLowerCase()) return 1;
+ 	    return 0;
+    });
+    
+    data = JSON.stringify( data, null, 4 );
+    
+    fs.writeFileSync(__parentdirectory+"/daten/stats.json", data);
     
 }
 
@@ -94,7 +119,7 @@ function returnUser (string) {
 	data = data.user;
     
 	for(var i = 0; i<data.length;i++){
-		var tmp = data[i].id;
+		var tmp = data[i].uID;
 		
         
 		if(string == tmp){
@@ -108,14 +133,12 @@ function returnUser (string) {
 
 
 
-//[NOT OK]
+//[OK]
 //Trägt einen neuen Anime in /data/profil.json.
 router.put('/anime', jsonParser, function( req, res){
     
     var data = loadProfile();
-
     var body = req.body;
-
     var search = returnAnime(body.name);
     
 	if( search == -1 ){
@@ -132,63 +155,68 @@ router.put('/anime', jsonParser, function( req, res){
 	res.send("done");
 });
 
-//[NOT OK]
+//[OK]
 // Ändert die Daten eines Animes
 router.put( '/anime/:anime_name', jsonParser, function(req, res){
-	var data = require( anime_path );
-	data = data.anime;
+	var data = loadProfile();
 	var body = req.body;
 	var querry = req.params.anime_name;
 	var search = returnAnime(querry);
 	if(search != -1){
-		data[search] = body;
-		res.send("Successfully changed " + body.name);
+		data.anime[search] = body;
+		res.send("Successfully changed " + data.anime[search].name);
+        console.log("PUT changed anime: " + data.anime[search].name);
 	} else {
-		res.send(body.name + " not in List");
-	}
-	anime_sort();
+		res.send(data.anime[search].name + " not in List");
+        console.log("PUT changed anime FAILED: " + data.anime[search].name);
+    }
+    anime_sort(data);
+    
 });
 
-//[NOT OK]
+//[OK]
 //Trägt einen neuen Benutzer in /data/user.json ein.
 router.put('/user', jsonParser, function(req, res){
     
-    var data = loadUser();
-    
+    var data = loadUser(); 
     var body = req.body;
-    
-    var search = returnUser(body.id);
+    var search = returnUser(body.uID);
     
 	if ( search == -1) {
         data.user.push(body);
+        console.log("New user: " +body.uID);
+        res.send("Neuer Benutzer: " + body.uID);
+        
+        //Zu jedem neuen User wird eine Initialstatistik angelegt
+        var stats = loadStats();
+        stats.stats.push({"uID": body.uID,"gesFolgen": "","gesAnimes": ""});
+        stats_sort(stats);
+        console.log("initial statistic created");
     } else {
         res.send("Failed! User already exists!");
-        console.log("Failed! User already exists: " +body.id);
+        console.log("Failed! User already exists: " +body.uID);
     }
-    
     user_sort(data);
-    if (search == -1) {
-        console.log("New user: " +body.id);
-    }
-    res.send("done");
 });
 
-//[NOT OK]
+//[OK]
 //Ändert die Daten eines Benutzers
-router.put( '/user/:id', jsonParser, function(req, res){
+router.put( '/user/:uID', jsonParser, function(req, res){
 
-	db.exists('user:'+req.params.id, function(err, rep) {
-		if (rep == 1) {
-			var updatedUser = req.body;
-			updatedUser.id = req.params.id;
-
-			db.set('user:' + req.params.id, JSON.stringify(updatedUser), function(err, rep) {
-				res.json(updatedUser);
-			});
-		} else {
-			res.status(404).type('text').send('User already exists!');
-		}
-	});
+	var data = loadUser();
+	var body = req.body;
+	var querry = req.params.uID;
+	var search = returnUser(querry);
+    
+	if(search != -1){
+		data.user[search] = body;
+		res.send("Successfully changed " + data.user[search].uID);
+        console.log("PUT changed user: " + data.user[search].uID);
+	} else {
+		res.send(data.user[search].uID + " not in list");
+        console.log("PUT changed user FAILED: " + data.user[search].uID);
+    }
+    user_sort(data);
 });
 
 //[NOT OK]

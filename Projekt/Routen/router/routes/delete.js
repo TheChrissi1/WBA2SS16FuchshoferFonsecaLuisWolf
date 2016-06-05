@@ -94,6 +94,23 @@ function returnAnime (string) {
 
 };
 
+//Sortiert die profil.json alphabetisch und fügt einen neun Anime ein.
+function anime_sort(string){
+
+    var data = string;
+    data.anime.sort(function(a, b){
+        
+        if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+ 	    if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+ 	    return 0;
+    });
+    
+    data = JSON.stringify( data, null, 4 );
+    
+    fs.writeFileSync(__parentdirectory+"/daten/profil.json", data);
+   
+}
+
 
 //[NOT OK]
 router.delete( '/anime/:anime_name', jsonParser, function(req, res){
@@ -114,6 +131,8 @@ router.delete( '/anime/:anime_name', jsonParser, function(req, res){
 		res.send("Anime was not in list: " + querry);
         console.log("DELETE anime FAILED: " + querry);
 	}
+    console.log("ldasd");
+    anime_sort(data);
 	
 });
 

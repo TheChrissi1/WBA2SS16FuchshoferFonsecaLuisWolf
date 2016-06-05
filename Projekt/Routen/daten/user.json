@@ -11,12 +11,12 @@
         },
         {
             "uID": "002",
-            "name": "Hans Peter",
-            "email": "hans.peter@gmx.de",
-            "alias": "Hapu",
-            "wohnort": "Köln",
+            "name": "changed name",
+            "email": "bastian.fuchshofer@gmx.de",
+            "alias": "bafu12",
+            "wohnort": "Gummersbach",
             "gender": "male",
-            "alter": "29"
+            "alter": "22"
         },
         {
             "uID": "003",
@@ -62,6 +62,33 @@
             "wohnort": "Braunschweig",
             "gender": "female",
             "alter": "49"
+        },
+        {
+            "uID": "010",
+            "name": "test12",
+            "email": "bastian.fuchshofer@gmx.de",
+            "alias": "bafu12",
+            "wohnort": "Gummersbach",
+            "gender": "male",
+            "alter": "22"
+        },
+        {
+            "uID": "011",
+            "name": "changed name",
+            "email": "bastian.fuchshofer@gmx.de",
+            "alias": "bafu12",
+            "wohnort": "Gummersbach",
+            "gender": "male",
+            "alter": "22"
+        },
+        {
+            "uID": "012",
+            "name": "changed name",
+            "email": "bastian.fuchshofer@gmx.de",
+            "alias": "bafu12",
+            "wohnort": "Gummersbach",
+            "gender": "male",
+            "alter": "22"
         }
     ]
 }
