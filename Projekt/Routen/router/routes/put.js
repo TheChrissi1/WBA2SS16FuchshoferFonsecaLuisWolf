@@ -189,7 +189,7 @@ router.put( '/user/:id', jsonParser, function(req, res){
 });
 
 //Ändert die Statistik eines Nutzers.
-app.put( '/user/:id/stats', jsonParser, function(req, res){
+router.put( '/user/:id/stats', jsonParser, function(req, res){
 
 });
 

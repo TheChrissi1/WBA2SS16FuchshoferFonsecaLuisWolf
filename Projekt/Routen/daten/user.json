@@ -1,7 +1,7 @@
 {
     "user": [
         {
-            "id": "001",
+            "uID": "001",
             "name": "Bastian Fuchshofer",
             "email": "bastian.fuchshofer@gmx.de",
             "alias": "bafu12",
@@ -10,7 +10,7 @@
             "alter": "22"
         },
         {
-            "id": "002",
+            "uID": "002",
             "name": "Hans Peter",
             "email": "hans.peter@gmx.de",
             "alias": "Hapu",
@@ -19,7 +19,7 @@
             "alter": "29"
         },
         {
-            "id": "003",
+            "uID": "003",
             "name": "Maria Butz",
             "email": "maria.butz@web.de",
             "alias": "glöckchen12",
@@ -28,7 +28,7 @@
             "alter": "19"
         },
         {
-            "id": "004",
+            "uID": "004",
             "name": "Max Mustermann",
             "email": "max.mustermann@gmx.de",
             "alias": "Maxll",
@@ -37,7 +37,7 @@
             "alter": "34"
         },
         {
-            "id": "005",
+            "uID": "005",
             "name": "Florian Peters",
             "email": "florian.peters@googlemail.com",
             "alias": "Crank217",
@@ -46,7 +46,7 @@
             "alter": "15"
         },
         {
-            "id": "006",
+            "uID": "006",
             "name": "Alina Klutz",
             "email": "klutz.alina@gmx.de",
             "alias": "alinakanns",
@@ -55,7 +55,7 @@
             "alter": "22"
         },
         {
-            "id": "007",
+            "uID": "007",
             "name": "Jennifer Mustermann",
             "email": "jenni.hasi12@googlemail.com",
             "alias": "hasi12",
