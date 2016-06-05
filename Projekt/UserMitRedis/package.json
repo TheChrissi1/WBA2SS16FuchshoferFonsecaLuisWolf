@@ -1,0 +1,24 @@
+{
+  "name": "wba2_tests",
+  "version": "1.0.0",
+  "description": "tests for wba2 workshop",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"there is no test command!\";"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://eXeLuis:kotzbrocken452gitlab@gitlab.com/eXeLuis/wba2_tests.git"
+  },
+  "author": "eXeLuis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/eXeLuis/wba2_tests/issues"
+  },
+  "homepage": "https://gitlab.com/eXeLuis/wba2_tests#README",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "redis": "^2.6.0-2"
+  }
+}

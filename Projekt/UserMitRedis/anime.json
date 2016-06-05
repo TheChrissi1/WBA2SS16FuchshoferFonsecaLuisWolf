@@ -1,0 +1,14 @@
+{
+    "anime": [
+        {
+            "name": "Naruto",
+            "episode": 300,
+            "status": "finished"
+        },
+        {
+            "name": "Shingeki no Kyojin",
+            "episodes": 25,
+            "status": "finished"
+        }
+    ]
+}
