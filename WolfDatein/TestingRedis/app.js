@@ -206,6 +206,8 @@ app.put( '/anime/:anime_name', jsonParser, function(req, res){
 //Liste Aller Benutzer {GET, POST} [OK, OK]
 
 
+app.use(bodyParser.json());
+
 app.get( '/user', jsonParser, function(req, res){
 
 	db.keys('user:*',function(err,rep) {
