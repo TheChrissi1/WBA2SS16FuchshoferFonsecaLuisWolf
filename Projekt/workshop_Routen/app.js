@@ -42,29 +42,64 @@ app.get('/anime/shingeki+no+kyojin', jsonParser, function(req, res){
 
 //Funktion um einen Anime anhand seines Namens aus einem JSOn File zu lesen. (kleinbuchstaben!)
 function returnAnime (string) {
-    var datas = require('./profil.json');
-    var erg = 0;
-    for (i=0; i<datas.anime.length; i++) {
-        
-        if (datas.anime[i].name == string) {
-            var erg = datas.anime[i];
-            return erg;
-        }
-    }
-    if (erg==0) {
-        erg = 'Anime nicht gefunden!';
-        return erg;
-    }
-    
+	string = string.toLowerCase();
+	string = string.replace(/-/g,' ');
+	var anime = require('./profil.json');
+	var return_value = -1;
+	anime = anime.anime;
+	for(var i = 0; i<anime.length;i++){
+		var tmp = anime[i].name;
+		tmp = tmp.toLowerCase();
+		if(string == tmp){
+			return_value = i;
+		}
+	}
+	return return_value;
 }
 
 app.get('/anime/:anime_name', jsonParser, function(req, res){
-	
-    
+
+	var anime = require('./profil.json');
+	anime = anime.anime;
 	var querry = req.params.anime_name;
-    var erg = returnAnime(querry);
-	res.send(erg);
+  var erg = returnAnime(querry);
+	if(erg >= 0){
+		res.send(anime[erg]);
+	}
 });
+/******************************************
+ *
+ ******************************************/
+ function anime_sort(err){
+ 		if( err ) throw err;
+		var data = require('./profil.json');
+ 		data.anime.sort(function(a, b){
+
+ 	  //compare two values
+ 	  if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+ 	  if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+ 	  return 0;
+
+ 		});
+ 		data = JSON.stringify( data, null, 4 );
+ 		fs.writeFile( './profil.json', data, function(err){
+ 			if(err) throw err;
+ 		});
+ }
+
+app.put( '/anime/', jsonParser, function( req, res){
+	var data = require( './profil.json' );
+	var anime = data.anime;
+	var body = req.body;
+
+  var search = returnAnime(body.name);
+	if( search == -1 ){
+		anime.push(body);
+	}
+	anime_sort();
+	res.send("done");
+});
+
 
 
 /**********************************************
@@ -88,7 +123,7 @@ function returnUser (string) {
     var datas = require('./user.json');
     var erg = 0;
     for (i=0; i<datas.user.length; i++) {
-        
+
         if (datas.user[i].id == string) {
             var erg = datas.user[i];
             return erg;
@@ -98,11 +133,11 @@ function returnUser (string) {
         erg = 'User nicht gefunden!';
         return erg;
     }
-    
+
 }
 
 app.get('/benutzer/:id', jsonParser, function(req, res){
-	
+
 	var querry = req.params.id;
     var erg = returnUser(querry);
 	res.send(erg);
@@ -115,15 +150,15 @@ app.get('/benutzer/:id', jsonParser, function(req, res){
 
 //Funktioniert noch nicht, im REST-Client kann im Body ein neuer Nutzer eingetragen werden
 //der dann in user.json gepspeichert wird
-app.put('/benutzer', jsonParser, function(req, res){
-    
+app.put('/benutzer/', jsonParser, function(req, res){
+
   var body = req.body;
-  var data = JSON.stringify(body);
+	body = JSON.stringify(body, null, 4);
   console.log(body);
-  console.log(data);
-  fs.writeFile("./user.json", data, function(err) {
+  fs.writeFile("./user.json", body, function(err) {
               if (err) throw err;
   });
+	res.send();
 });
 
 

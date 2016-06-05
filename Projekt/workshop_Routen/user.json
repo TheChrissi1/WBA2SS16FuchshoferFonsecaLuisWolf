@@ -1,16 +1,5 @@
-{
-	"user":[
-	{
-     "id":"001",
-	 "name":"Bastian Fuchshofer",
-	 "Alter":22,
-	 "Wohnort":"Gummersbach"	
-	},
-    {
-     "id":"002",
-	 "name":"Max Mustermann",
-	 "Alter":30,
-	 "Wohnort":"Musterstadt"	
-	}  
-	]
-}
+{"user":[
+    {"id":"001","name":"Bastian Fuchshofer","Wohnort":"Gummersbach","Alter": "22"},
+    {"id":"002","name":"Max Mustermann","Wohnort":"Köln","Alter": "19"},
+    {"id":"003","name":"Hans Peter","Wohnort":"Berlin","Alter": "42"}
+]}

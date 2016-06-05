@@ -1,0 +1,5 @@
+
+-Beim erstellen eines neuen users wird im req.body angegeben welche ID er bekommt, könnte zu problemen führen da diese ja nicht immer fortlaufend ist (user werden gelöscht).
+-User darf keine Möglichkeit haben Animes oder andere user zu löschen! (Administratorabfrage?)
+-Beim erstellen eines neuen Users muss eine Initialstatistik erzeugt werden. Anhand der neuen uID wir ein neuer Eintrag im Array in stats.json angelegt
+-Login der User?? Passwort extern abspeichern?
