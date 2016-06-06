@@ -130,7 +130,7 @@ router.delete( '/anime/:anime_name', jsonParser, function(req, res){
 	
 });
 
-//[NOT OK]
+//[OK]
 router.delete( '/user/:uID', jsonParser, function(req, res){
     
     var querry = req.params.uID;
