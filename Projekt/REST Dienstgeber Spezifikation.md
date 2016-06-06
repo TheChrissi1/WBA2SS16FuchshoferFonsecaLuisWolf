@@ -17,7 +17,7 @@
 | /genre                 | GET     | Gibt eine Liste aller Genres aus (weiterleitung auf Liste mit zutreffenden Animes). | -                  | application/json   |
 | /ref                   | GET     | Gibt eine Liste aller referenzierenden Websites aus.                                | -                  | application/json   |
 | /ref/{id}              | GET     | Gibt Informationen einer referenzierenden Website aus.                              | -                  | application/json   |
-| /filter/{querry-param} | GET     | Gibt eine Filterung der DB anhand des Querry-Parameters aus.                        | -                  | -                  |
+| /anime/filter/{querry-param} | GET     | Gibt eine Filterung der DB anhand des Querry-Parameters aus.                        | -                  | -                  |
 
 
 | /login |

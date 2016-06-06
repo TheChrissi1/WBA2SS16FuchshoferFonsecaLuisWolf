@@ -208,7 +208,12 @@ router.get('/ref/:refID', jsonParser, function(req, res) {
     
 });
 
-
+//[NOT OK]
+//Gibt eine spezifizierung der Animetabelle aus.
+router.get('/anime/filter/:para', jsonParser, function(req, res) {
+    
+    
+});
 
 
 console.log('loaded get.js');
