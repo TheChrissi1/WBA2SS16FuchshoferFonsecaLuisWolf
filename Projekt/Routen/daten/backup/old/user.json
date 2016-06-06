@@ -1,0 +1,67 @@
+{
+    "user": [
+        {
+            "id": "001",
+            "name": "Bastian Fuchshofer",
+            "email": "bastian.fuchshofer@gmx.de",
+            "alias": "bafu12",
+            "wohnort": "Gummersbach",
+            "gender": "male",
+            "alter": "22"
+        },
+        {
+            "id": "002",
+            "name": "Hans Peter",
+            "email": "hans.peter@gmx.de",
+            "alias": "Hapu",
+            "wohnort": "Köln",
+            "gender": "male",
+            "alter": "29"
+        },
+        {
+            "id": "003",
+            "name": "Maria Butz",
+            "email": "maria.butz@web.de",
+            "alias": "glöckchen12",
+            "wohnort": "Salzburg",
+            "gender": "female",
+            "alter": "19"
+        },
+        {
+            "id": "004",
+            "name": "Max Mustermann",
+            "email": "max.mustermann@gmx.de",
+            "alias": "Maxll",
+            "wohnort": "Berlin",
+            "gender": "male",
+            "alter": "34"
+        },
+        {
+            "id": "005",
+            "name": "Florian Peters",
+            "email": "florian.peters@googlemail.com",
+            "alias": "Crank217",
+            "wohnort": "München",
+            "gender": "male",
+            "alter": "15"
+        },
+        {
+            "id": "006",
+            "name": "Alina Klutz",
+            "email": "klutz.alina@gmx.de",
+            "alias": "alinakanns",
+            "wohnort": "Kiel",
+            "gender": "female",
+            "alter": "22"
+        },
+        {
+            "id": "007",
+            "name": "Jennifer Mustermann",
+            "email": "jenni.hasi12@googlemail.com",
+            "alias": "hasi12",
+            "wohnort": "Braunschweig",
+            "gender": "female",
+            "alter": "49"
+        }
+    ]
+}

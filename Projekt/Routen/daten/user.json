@@ -1,7 +1,7 @@
 {
     "user": [
         {
-            "uID": "001",
+            "id": "001",
             "name": "Bastian Fuchshofer",
             "email": "bastian.fuchshofer@gmx.de",
             "alias": "bafu12",
@@ -10,16 +10,16 @@
             "alter": "22"
         },
         {
-            "uID": "002",
-            "name": "changed name",
-            "email": "bastian.fuchshofer@gmx.de",
-            "alias": "bafu12",
-            "wohnort": "Gummersbach",
+            "id": "002",
+            "name": "Hans Peter",
+            "email": "hans.peter@gmx.de",
+            "alias": "Hapu",
+            "wohnort": "Köln",
             "gender": "male",
-            "alter": "22"
+            "alter": "29"
         },
         {
-            "uID": "003",
+            "id": "003",
             "name": "Maria Butz",
             "email": "maria.butz@web.de",
             "alias": "glöckchen12",
