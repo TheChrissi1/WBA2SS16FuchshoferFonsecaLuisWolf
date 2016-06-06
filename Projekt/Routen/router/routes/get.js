@@ -212,6 +212,9 @@ router.get('/ref/:refID', jsonParser, function(req, res) {
 //Gibt eine spezifizierung der Animetabelle aus.
 router.get('/anime/filter/:para', jsonParser, function(req, res) {
     
+    //Anhand der querry parameter kann die profil.json nach bestimmten 
+    //kriterien wie genre, anzahl folgen etc. durchsucht werden.
+    // localhost.de/anime/filter/?genre=action&folgen=500
     
 });
 
