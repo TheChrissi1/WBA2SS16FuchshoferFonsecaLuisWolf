@@ -26,69 +26,6 @@
             "wohnort": "Salzburg",
             "gender": "female",
             "alter": "19"
-        },
-        {
-            "uID": "004",
-            "name": "Max Mustermann",
-            "email": "max.mustermann@gmx.de",
-            "alias": "Maxll",
-            "wohnort": "Berlin",
-            "gender": "male",
-            "alter": "34"
-        },
-        {
-            "uID": "005",
-            "name": "Florian Peters",
-            "email": "florian.peters@googlemail.com",
-            "alias": "Crank217",
-            "wohnort": "München",
-            "gender": "male",
-            "alter": "15"
-        },
-        {
-            "uID": "006",
-            "name": "Alina Klutz",
-            "email": "klutz.alina@gmx.de",
-            "alias": "alinakanns",
-            "wohnort": "Kiel",
-            "gender": "female",
-            "alter": "22"
-        },
-        {
-            "uID": "007",
-            "name": "Jennifer Mustermann",
-            "email": "jenni.hasi12@googlemail.com",
-            "alias": "hasi12",
-            "wohnort": "Braunschweig",
-            "gender": "female",
-            "alter": "49"
-        },
-        {
-            "uID": "010",
-            "name": "test12",
-            "email": "bastian.fuchshofer@gmx.de",
-            "alias": "bafu12",
-            "wohnort": "Gummersbach",
-            "gender": "male",
-            "alter": "22"
-        },
-        {
-            "uID": "011",
-            "name": "changed name",
-            "email": "bastian.fuchshofer@gmx.de",
-            "alias": "bafu12",
-            "wohnort": "Gummersbach",
-            "gender": "male",
-            "alter": "22"
-        },
-        {
-            "uID": "012",
-            "name": "changed name",
-            "email": "bastian.fuchshofer@gmx.de",
-            "alias": "bafu12",
-            "wohnort": "Gummersbach",
-            "gender": "male",
-            "alter": "22"
         }
     ]
 }

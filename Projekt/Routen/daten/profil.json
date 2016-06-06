@@ -46,24 +46,6 @@
             "status": "finished"
         },
         {
-            "name": "test12",
-            "name_jap": "",
-            "episodes": 3,
-            "release": "01.06.2002",
-            "release_jap": "01.01.2002",
-            "license": "yes",
-            "status": "finished"
-        },
-        {
-            "name": "test13",
-            "name_jap": "",
-            "episodes": 3,
-            "release": "01.06.2002",
-            "release_jap": "01.01.2002",
-            "license": "yes",
-            "status": "finished"
-        },
-        {
             "name": "test15",
             "name_jap": "domo",
             "episodes": 3,
