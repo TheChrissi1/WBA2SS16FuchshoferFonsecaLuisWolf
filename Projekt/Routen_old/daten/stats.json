@@ -1,0 +1,19 @@
+{
+    "stats": [
+        {
+            "uID": "001",
+            "gesFolgen": "123",
+            "gesAnimes": "22"
+        },
+        {
+            "uID": "002",
+            "gesFolgen": "12",
+            "gesAnimes": "1"
+        },
+        {
+            "uID": "003",
+            "gesFolgen": "2025",
+            "gesAnimes": "67"
+        }
+    ]
+}
