@@ -125,82 +125,83 @@ app.get( '/', jsonParser, function(req, res){
 	res.send('Das ist der Index');
 });
 
-db.hmset('animes_Naruto', {
-		"name": "Naruto",
-		"episode": 300,
-		"status": "finished"
-});
-
-db.hmset('animes_Shingeki_no_Kyojin', {
-	"name": "Shingeki no Kyojin",
-	"episodes": 25,
-	"status": "finished"
-});
-
 
 
 //Liste Aller Anime {GET, POST} [OK, OK]
 app.get( '/anime/' , jsonParser, function(req, res){
 
-	db.hgetall('animes_Naruto',function(err, object) {
-			console.log(object);
-			res.send(object);
+	db.keys('anime:*',function(err,rep) {
+
+		var animes = [];
+
+		if (rep.length == 0) {
+			res.json(animes);
+			return;
+		}
+
+		db.mget(rep, function(err,rep) {
+				rep.forEach(function(val){
+				animes.push(JSON.parse(val));
+			});
+
+			animes = animes.map(function(animes){
+				return {id: animes.id, name: animes.name};
+			});
+			res.json(animes);
+		});
 	});
 });
 
-app.post( '/anime/', jsonParser, function(req, res){
-	var data = require( anime_path );
-	data = data.anime;
-	var body = req.body;
-	var search = returnAnime(body.name);
-	if( search == -1){
-		data.push(body);
-		db.hmset('animes_Shingeki_no_Kyojin', {
-			body,
+app.post( '/anime', jsonParser, function(req, res){
+	var newAnime = req.body;
+
+	db.incr('id:anime', function (err, rep) {
+
+		newAnime.id = rep;
+		db.set('anime:'+newAnime.id, JSON.stringify(newAnime), function(err, rep) {
+			res.json(newAnime);
 		});
-		res.send(body.name + " successfully added.");
-	} else {
-		res.send(body.name + " already in the list.");
-	}
-	anime_sort();
+	});
 });
 
 //Spezifischer Anime {GET, DELETE, PUT} [OK, OK, OK]
-app.get( '/anime/:anime_name', jsonParser, function(req, res){
-	var data = require( anime_path );
-	data = data.anime;
-	var querry = req.params.anime_name;
-	var search = returnAnime(querry);
-	if(search >= 0){
-		res.send(data[search]);
-	}
+app.get( '/anime/:id', jsonParser, function(req, res){
+
+	db.get('anime:'+req.params.id, function(err, rep) {
+
+		if (rep) {
+			res.type('json').send(rep);
+		} else {
+			res.status(404).type('text').send('Anime not found!');
+		}
+	});
+
 });
-app.delete( '/anime/:anime_name', jsonParser, function(req, res){
-	var data = require( anime_path )
-	data = data.anime;
-	var querry = req.params.anime_name;
-	var search = returnAnime(querry);
-	if(search != -1){
-		data.splice(search, 1);
-		res.send("Successfully deleted " + querry);
-	} else {
-		res.send("Anime was not in List");
-	}
-	anime_sort();
+app.delete( '/anime/:id', jsonParser, function(req, res){
+
+	db.del('anime:'+req.params.id, function(err, rep){
+		if (rep == 1){
+			res.status(200).type('text').send('Anime successfully deleted');
+		}  else {
+			res.status(404).type('text').send('Anime not found!');
+		}
+	});
 });
-app.put( '/anime/:anime_name', jsonParser, function(req, res){
-	var data = require( anime_path );
-	data = data.anime;
-	var body = req.body;
-	var querry = req.params.anime_name;
-	var search = returnAnime(querry);
-	if(search != -1){
-		data[search] = body;
-		res.send("Successfully changed " + body.name);
-	} else {
-		res.send(body.name + " not in List");
-	}
-	anime_sort();
+
+app.put( '/anime/:id', jsonParser, function(req, res){
+
+	db.exists('anime:'+req.params.id, function(err, rep) {
+		if (rep == 1) {
+			var updatedAnime = req.body;
+			updatedAnime.id = req.params.id;
+
+			db.set('anime:' + req.params.id, JSON.stringify(updatedAnime), function(err, rep) {
+				res.json(updatedAnime);
+			});
+		} else {
+			res.status(404).type('text').send('Anime already exists!');
+		}
+	});
 });
 
 //Liste Aller Benutzer {GET, POST} [OK, OK]
@@ -224,7 +225,7 @@ app.get( '/user', jsonParser, function(req, res){
 				users.push(JSON.parse(val));
 			});
 
-			users = users.map(function(user){
+			users = users.map(function(users){
 				return {id: users.id, name: users.name};
 			});
 			res.json(users);
