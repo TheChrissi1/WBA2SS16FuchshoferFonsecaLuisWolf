@@ -4,17 +4,15 @@ var app = express();
 global.redis = require( 'redis' );
 global.db = redis.createClient(); //Creates a new Client
 
+
 global.bodyParser = require('body-parser');
 global.jsonParser = bodyParser.json();
 
 app.set('port', 3000);
 
-
-
-
-
-
-
+console.log('**************************************');
+console.log('**** Dienstgeber Server (Express) ****');
+console.log('**************************************');
 
 
 
