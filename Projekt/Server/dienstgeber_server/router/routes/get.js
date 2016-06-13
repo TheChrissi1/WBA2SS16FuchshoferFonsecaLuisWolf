@@ -34,13 +34,9 @@ router.get('/anime', jsonParser, function(req, res){
 		} else if (rep.length > 0) {
             db.mget(rep, function(err,rep) {
                 rep.forEach(function(val){
-                    anime.push(val);
+                    anime.push(JSON.parse(val));
 			    });
-/*
-			users = users.map(function(user){
-				return {uID: users.uID, name: users.name};
-			});
-            */
+
                 res.status(200).type('json').send(anime);
             });
         }
@@ -78,13 +74,9 @@ router.get('/user', jsonParser, function(req, res){
         } else if (rep.length > 0) {
             db.mget(rep, function(err,rep) {
                 rep.forEach(function(val){
-				    users.push(val);
+				    users.push(JSON.parse(val));
 			    });
-/*
-			users = users.map(function(user){
-				return {uID: users.uID, name: users.name};
-			});
-            */
+
               res.status(200).type('json').send(users);  
             });
         }
