@@ -27,6 +27,8 @@ router.get('/anime', jsonParser, function(req, res){
 			    });
 
                 res.status(200).type('json').send(anime);
+                //res.set("Content-Type", 'application/json').status(200).json(anime).end();
+                
             });
         }
 	});

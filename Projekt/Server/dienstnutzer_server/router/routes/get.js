@@ -4,7 +4,7 @@ var router = express.Router();
 //Index
 
 router.get('/', function(req, res){
-	res.render('pages/about');
+	res.render('pages/index');
     console.log('Projekt der TH Köln, Medieninformatik 4. Semester.');
 });
 
@@ -23,14 +23,15 @@ router.get('/anime', function(req, res){
         }
     }
     
-    http.request(opt, function(externalResponse) {
+    var x = http.request(opt, function(externalResponse) {
         externalResponse.on("data", function(chunks) {
             var anime = JSON.parse(chunks);
             res.render('pages/anime', {
-                anime: anime
+                anime:anime
             });
+            res.end();
             
-        })
+        });
     });
     externalRequest.end();
  

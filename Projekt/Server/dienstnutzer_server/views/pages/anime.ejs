@@ -1,4 +1,4 @@
-<!-- views/pages/index.ejs -->
+<!-- views/pages/anime.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,14 +13,14 @@
 
     <main>
         <div class="jumbotron">
-            <h1>Anime</h1>
+            <h2>Anime</h2>
             <p>Liste aller Animes:</p>
             
             <ul>
-    <% anime.forEach(function(anime) { %>
-        <li><%= anime.name %></li>
-    <% }); %>
-</ul>
+                <% anime.forEach(function(anime) { %>
+                    <li><%= anime.name %></li>
+                <% }); %>
+            </ul>
         </div>
         
     
