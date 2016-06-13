@@ -1,17 +1,13 @@
-//// Starten des www.js Servers aus der app.js herraus
-//var server = require('./bin/www.js');
-//
-//server.start();
-
-
-var express = require('express');
+global.express = require('express');
 var app = express();
+
+global.redis = require( 'redis' );
+global.db = redis.createClient(); //Creates a new Client
+
+global.bodyParser = require('body-parser');
+global.jsonParser = bodyParser.json();
+
 app.set('port', 3000);
-var fs = require('fs');
-
-var redis = require( 'redis' );
-var db = redis.createClient(); //Creates a new Client
-
 
 
 

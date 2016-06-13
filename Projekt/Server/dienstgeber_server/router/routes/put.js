@@ -1,13 +1,4 @@
-var express = require('express');
 var router = express.Router();
-var fs = require('fs');
-
-var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
-
-var redis = require( 'redis' );
-var db = redis.createClient(); //Creates a new Client
-
 
 //[OK]
 //Trägt einen neuen Anime in die DB ein.
