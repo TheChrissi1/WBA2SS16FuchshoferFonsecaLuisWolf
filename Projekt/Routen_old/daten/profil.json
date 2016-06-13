@@ -1,0 +1,76 @@
+{
+    "anime": [
+    {
+        "name": "abc",
+        "name_jap": "",
+        "episodes": 3,
+        "release": "01.06.2002",
+        "release_jap": "01.01.2002",
+        "license": "yes",
+        "status": "finished"
+    },
+    {
+        "name": "Detective Conan",
+        "name_jap": "",
+        "episodes": 889,
+        "release": "01.06.2002",
+        "release_jap": "01.01.1998",
+        "license": "yes",
+        "status": "running"
+    },
+    {
+        "name": "One Piece",
+        "name_jap": "",
+        "episodes": 669,
+        "release": "22.06.2001",
+        "release_jap": "01.01.1995",
+        "license": "yes",
+        "status": "running"
+    },
+    {
+        "name": "Shingeki no Kyojin",
+        "name_jap": "",
+        "episodes": 25,
+        "release": "22.06.2013",
+        "release_jap": "01.01.2012",
+        "license": "yes",
+        "status": "finished"
+    },
+    {
+        "name": "Shokugeki no Soma",
+        "name_jap": "",
+        "episodes": 25,
+        "release": "",
+        "release_jap": "01.02.2016",
+        "license": "no",
+        "status": "running"
+    },
+    {
+        "name": "Steins;Gate",
+        "name_jap": "",
+        "episodes": 25,
+        "release": "05.11.2014",
+        "release_jap": "01.12.2014",
+        "license": "yes",
+        "status": "finished"
+    },
+    {
+        "name": "Toradora",
+        "name_jap": "",
+        "episodes": 24,
+        "release": "",
+        "release_jap": "01.12.2005",
+        "license": "no",
+        "status": "finished"
+    },
+    {
+        "name": "Usagi Drop",
+        "name_jap": "",
+        "episodes": 24,
+        "release": "",
+        "release_jap": "01.10.2007",
+        "license": "no",
+        "status": "finished"
+    }
+    ]
+}
