@@ -1,4 +1,5 @@
 var router = express.Router();
+var http = require('http');
 
 //[OK]
 //Index
@@ -12,9 +13,9 @@ router.get('/', function(req, res){
 //[OK]
 //Gibt eine Liste aller Animes aus.
 router.get('/anime', function(req, res){
-
-    var opt = {
-        host: "127.0.0.1",
+    
+    var options = {
+        host: "localhost",
         port: 3000,
         path: "/anime",
         method:"GET",
@@ -22,25 +23,47 @@ router.get('/anime', function(req, res){
             accept:"application/json"
         }
     }
-    
-    var x = http.request(opt, function(externalResponse) {
-        externalResponse.on("data", function(chunks) {
-            var anime = JSON.parse(chunks);
-            res.render('pages/anime', {
-                anime:anime
-            });
+    var externalRequest = http.request(options, function(externalResponse){
+
+        externalResponse.on("data", function(chunk){
+
+            var anime = JSON.parse(chunk);
+            res.render('pages/anime',{anime:anime});
             res.end();
-            
         });
     });
     externalRequest.end();
- 
+
+/*
+     var externalRequest = http.request(options, function(externalResponse){
+
+        externalResponse.on("data", function(chunk){
+
+            var animeAll = JSON.parse(chunk);
+            res.render('pages/anime',{animeAll:animeAll});
+            res.end();
+        });
+    });
+    externalRequest.end();
+  */   
+    
+
 });
 
 //[OK]
 //Gibt einen Anime anhand seines Namens (querry-parameter) zurück.
 router.get('/anime/:anime_name', jsonParser, function(req, res){
     
+    var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/anime/:anime_name",
+        method:"GET",
+        headers:{
+            accept:"application/json"
+        }
+    }
+ /*   
     db.get('anime:'+req.params.anime_name, function(err, rep) {
 
 		if (rep) {
@@ -49,6 +72,7 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
 			res.status(404).type('text').send('Anime not found!');
 		}
 	});
+    */
 
 });
 

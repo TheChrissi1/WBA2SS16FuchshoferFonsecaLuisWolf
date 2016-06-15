@@ -13,14 +13,19 @@
 
     <main>
         <div class="jumbotron">
-            <h2>Anime</h2>
+            <h1>Anime</h1>
             <p>Liste aller Animes:</p>
             
-            <ul>
-                <% anime.forEach(function(anime) { %>
-                    <li><%= anime.name %></li>
-                <% }); %>
-            </ul>
+            <% anime.forEach(function(anime) { %>
+                            
+            <p class="list-group-item-text">Name: <%= anime.name %></p>
+            <p class="list-group-item-text">Name_Jap: <%= anime.name_jap %></p>
+            <p class="list-group-item-text">Episodes: <%= anime.episodes %></p>
+            <p class="list-group-item-text">Release: <%= anime.release %></p>
+            <p class="list-group-item-text">Release_Jap: <%= anime.release_jap %></p>
+            <p class="list-group-item-text">License: <%= anime.license %></p>
+            <p class="list-group-item-text">status: <%= anime.status %></p>
+            <% });  %>
         </div>
         
     
