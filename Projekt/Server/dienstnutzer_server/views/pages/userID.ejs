@@ -1,0 +1,39 @@
+<!-- views/pages/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+    <main>
+        <div class="jumbotron">
+            <h1>User</h1>
+            
+    
+            <ul>  
+            <p>ID: <%= userData.uID %></p>                
+            <p>Name: <%= userData.name %></p>
+            <p>E-Mail: <%= userData.email %></p>
+            <p>Alias: <%= userData.alias %></p>
+            <p>Wohnort: <%= userData.wohnort %></p>
+            <p>Geschlecht: <%= userData.gender %></p>
+            <p>Alter: <%= userData.alter %></p>
+            </ul>
+        </div>
+    
+    
+        
+    </main>
+
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
+    
+</body>
+</html>

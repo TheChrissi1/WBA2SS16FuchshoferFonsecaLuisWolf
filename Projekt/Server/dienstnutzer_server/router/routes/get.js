@@ -23,29 +23,17 @@ router.get('/anime', function(req, res){
             accept:"application/json"
         }
     }
-    var externalRequest = http.request(options, function(externalResponse){
+    var exReq = http.request(options, function(exRes){
 
-        externalResponse.on("data", function(chunk){
+        exRes.on("data", function(chunk){
 
-            var anime = JSON.parse(chunk);
-            res.render('pages/anime',{anime:anime});
+            //wird nich automatisch geparst!??
+            var animeList = JSON.parse(chunk);
+            res.render('pages/anime',{animeList:animeList});
             res.end();
         });
     });
-    externalRequest.end();
-
-/*
-     var externalRequest = http.request(options, function(externalResponse){
-
-        externalResponse.on("data", function(chunk){
-
-            var animeAll = JSON.parse(chunk);
-            res.render('pages/anime',{animeAll:animeAll});
-            res.end();
-        });
-    });
-    externalRequest.end();
-  */   
+    exReq.end(); 
     
 
 });
@@ -63,55 +51,67 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
             accept:"application/json"
         }
     }
- /*   
-    db.get('anime:'+req.params.anime_name, function(err, rep) {
-
-		if (rep) {
-			res.status(200).type('json').send(rep);
-		} else {
-			res.status(404).type('text').send('Anime not found!');
-		}
-	});
-    */
-
+    var exReq = http.request(options, function(exRes){
+        exRes.on("data", function(chunk){
+            
+            //Ist schon geparst??!
+            var animeData = chunk;
+            res.render('pages/animeID',{animeData:animeData});
+            res.end();
+        });
+    });
+    exReq.end(); 
+    
 });
 
 //[OK] - kein json format?
 //Gibt eine Liste aller Benutzer aus.
 router.get('/user', jsonParser, function(req, res){
 
-    db.keys('user:*',function(err,rep) {
-
-		var users = [];
-
-		if (rep.length == 0) {
-            console.log('keine user vorhanden');
-            res.status(404).type('text').send('no user found');
-		
-        } else if (rep.length > 0) {
-            db.mget(rep, function(err,rep) {
-                rep.forEach(function(val){
-				    users.push(JSON.parse(val));
-			    });
-
-              res.status(200).type('json').send(users);  
-            });
+     var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/user",
+        method:"GET",
+        headers:{
+            accept:"application/json"
         }
-	});
+    }
+    var exReq = http.request(options, function(exRes){
+        exRes.on("data", function(chunk){
+            
+            //wird nich automatisch geparst!??
+            var userList = JSON.parse(chunk);
+            res.render('pages/user',{userList:userList});
+            res.end();
+        });
+    });
+    exReq.end(); 
 });
 
 //[OK]
 //Gibt einen Benutzer anhand seiner ID (querry-parameter) zurück.
 router.get('/user/:uID', jsonParser, function(req, res){
 
-    db.get('user:'+req.params.uID, function(err, rep) {
-
-		if (rep) {
-			res.status(200).type('json').send(rep);
-		} else {
-			res.status(404).type('text').send('User not found!');
-		}
-	});
+    var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/user/:uID",
+        method:"GET",
+        headers:{
+            accept:"application/json"
+        }
+    }
+    var exReq = http.request(options, function(exRes){
+        exRes.on("data", function(chunk){
+            
+            //Ist schon geparst??!
+            var userData = chunk;
+            res.render('pages/userID',{userData:userData});
+            res.end();
+        });
+    });
+    exReq.end(); 
     
 });
 
@@ -146,12 +146,6 @@ router.get('/ref', jsonParser, function(req, res) {
     
 });
 
-//[NOT OK]
-//Gibt Informationen zu einer Referenz aus.
-router.get('/ref/:refID', jsonParser, function(req, res) {
-    
-    
-});
 
 //[NOT OK]
 //Gibt eine spezifizierung der Animetabelle aus.
