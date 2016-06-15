@@ -11,8 +11,6 @@ router.put('/anime', jsonParser, function( req, res){
 
 });
 
-
-
 //[OK]
 // Ändert die Daten eines Animes.
 router.put( '/anime/:anime_name', jsonParser, function(req, res){
