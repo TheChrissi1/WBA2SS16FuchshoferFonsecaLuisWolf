@@ -41,24 +41,29 @@ router.get('/anime', function(req, res){
 //[OK]
 //Gibt einen Anime anhand seines Namens (querry-parameter) zurück.
 router.get('/anime/:anime_name', jsonParser, function(req, res){
-    
+    var anime_error = {"name":req.params.anime_name};
     var options = {
         host: "localhost",
         port: 3000,
-        path: "/anime/:anime_name",
+        path: "/anime/" + req.params.anime_name,
         method:"GET",
         headers:{
             accept:"application/json"
         }
     }
     var exReq = http.request(options, function(exRes){
-        exRes.on("data", function(chunk){
-            
-            //Ist schon geparst??!
-            var animeData = chunk;
-            res.render('pages/animeID',{animeData:animeData});
+        if( exRes.statusCode == 404 ){
+            res.statusCode = 404;
+            res.render('pages/error');
             res.end();
-        });
+        }else {
+                exRes.on("data", function(chunk){
+                //Ist schon geparst??!
+                var animeData = JSON.parse(chunk);
+                res.render('pages/animeID',{animeData:animeData});
+                res.end();
+            });
+        }
     });
     exReq.end(); 
     
@@ -92,11 +97,10 @@ router.get('/user', jsonParser, function(req, res){
 //[OK]
 //Gibt einen Benutzer anhand seiner ID (querry-parameter) zurück.
 router.get('/user/:uID', jsonParser, function(req, res){
-
     var options = {
         host: "localhost",
         port: 3000,
-        path: "/user/:uID",
+        path: "/user/" + req.params.uID,
         method:"GET",
         headers:{
             accept:"application/json"
@@ -104,9 +108,8 @@ router.get('/user/:uID', jsonParser, function(req, res){
     }
     var exReq = http.request(options, function(exRes){
         exRes.on("data", function(chunk){
-            
             //Ist schon geparst??!
-            var userData = chunk;
+            var userData = JSON.parse(chunk);
             res.render('pages/userID',{userData:userData});
             res.end();
         });

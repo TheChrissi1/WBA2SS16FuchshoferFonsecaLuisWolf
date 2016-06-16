@@ -42,9 +42,9 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
     db.get('anime:'+req.params.anime_name, function(err, rep) {
 
 		if (rep) {
-			res.status(200).type('json').send(rep);
+			res.status(200).type('json').send( JSON.parse( rep ));
 		} else {
-			res.status(404).type('text').send('Anime not found!');
+			res.status(404).type('text').send();
 		}
 	});
 
@@ -77,9 +77,9 @@ router.get('/user', jsonParser, function(req, res){
 //[OK]
 //Gibt einen Benutzer anhand seiner ID (querry-parameter) zurück.
 router.get('/user/:uID', jsonParser, function(req, res){
-
+    console.log(req.params.uID);
     db.get('user:'+req.params.uID, function(err, rep) {
-
+        
 		if (rep) {
 			res.status(200).type('json').send(rep);
 		} else {
