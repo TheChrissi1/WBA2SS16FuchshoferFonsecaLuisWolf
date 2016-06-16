@@ -13,7 +13,7 @@ router.get('/', function(req, res){
 //[OK]
 //Gibt eine Liste aller Animes aus.
 router.get('/anime', function(req, res){
-    
+
     var options = {
         host: "localhost",
         port: 3000,
@@ -33,8 +33,8 @@ router.get('/anime', function(req, res){
             res.end();
         });
     });
-    exReq.end(); 
-    
+    exReq.end();
+
 
 });
 
@@ -65,8 +65,8 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
             });
         }
     });
-    exReq.end(); 
-    
+    exReq.end();
+
 });
 
 //[OK] - kein json format?
@@ -84,20 +84,20 @@ router.get('/user', jsonParser, function(req, res){
     }
     var exReq = http.request(options, function(exRes){
         exRes.on("data", function(chunk){
-            
+
             //wird nich automatisch geparst!??
             var userList = JSON.parse(chunk);
             res.render('pages/user',{userList:userList});
             res.end();
         });
     });
-    exReq.end(); 
+    exReq.end();
 });
 
 //[OK]
 //Gibt einen Benutzer anhand seiner ID (querry-parameter) zurück.
 router.get('/user/:uID', jsonParser, function(req, res){
-    var options = {
+		var options = {
         host: "localhost",
         port: 3000,
         path: "/user/" + req.params.uID,
@@ -107,22 +107,28 @@ router.get('/user/:uID', jsonParser, function(req, res){
         }
     }
     var exReq = http.request(options, function(exRes){
+			if( exRes.statusCode == 404 ){
+					res.statusCode = 404;
+					res.render('pages/error');
+					res.end();
+			}else {
         exRes.on("data", function(chunk){
             //Ist schon geparst??!
             var userData = JSON.parse(chunk);
             res.render('pages/userID',{userData:userData});
             res.end();
         });
+			}
     });
-    exReq.end(); 
-    
+    exReq.end();
+
 });
 
 //[OK]
 //Gibt die Statistik eines Benutzers aus.
 router.get( '/user/:uID/stats', jsonParser, function(req, res){
-    
-  
+
+
     db.get('stats:'+req.params.uID, function(err, rep) {
 
 		if (rep) {
@@ -138,26 +144,26 @@ router.get( '/user/:uID/stats', jsonParser, function(req, res){
 //[NOT OK]
 //Gibt eine Liste der Genres aus.
 router.get('/genre', jsonParser, function(req, res) {
-    
-    
+
+
 });
 
 //[NOT OK]
 //Gibt eine Liste der Referenzen aus.
 router.get('/ref', jsonParser, function(req, res) {
-    
-    
+
+
 });
 
 
 //[NOT OK]
 //Gibt eine spezifizierung der Animetabelle aus.
 router.get('/anime/filter/:para', jsonParser, function(req, res) {
-    
-    //Anhand der querry parameter kann die profil.json nach bestimmten 
+
+    //Anhand der querry parameter kann die profil.json nach bestimmten
     //kriterien wie genre, anzahl folgen etc. durchsucht werden.
     // localhost.de/anime/filter/?genre=action&folgen=500
-    
+
 });
 
 
