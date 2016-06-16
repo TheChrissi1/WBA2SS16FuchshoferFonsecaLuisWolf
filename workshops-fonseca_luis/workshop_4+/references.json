@@ -1,0 +1,22 @@
+{
+    "reference":[
+        {
+            "name":"narutotube",
+            "address":"http://naruto-tube.org/",
+            "address_ep_en":default,
+            "address_ep_de":"http://naruto-tube.org/shippuuden-sub-" + episode,
+            "disjoin":"",
+            "lang":"DE",
+            "active":true
+        },
+        {
+            "name":"anilinkz",
+            "address":"http://anilinkz.tv/",
+            "address_ep_en":"http://anilinkz.tv/",
+            "address_ep_de":default,
+            "disjoin":"-",
+            "lang":"EN",
+            "active":true
+        }
+    ]
+}

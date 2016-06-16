@@ -160,13 +160,55 @@ if( val.genre.toLowerCase().contains( req.params.genre_name.toLowerCase() )){
                        anime_forGenre.push( val );
                     }
 */
-//[NOT OK]
+//[OK]
 //Gibt eine Liste der Referenzen aus.
 router.get('/ref', jsonParser, function(req, res) {
     
+    db.keys('refs:*',function(err,rep) {
+
+		var refs = [];
+
+		if (rep.length == 0) {
+			
+            console.log('keine refs vorhanden');
+            res.status(404).type('text').send('no refs found');
+			
+		} else if (rep.length > 0) {
+            db.mget(rep, function(err,rep) {
+                rep.forEach(function(val){
+                    refs.push(JSON.parse(val));
+			    });
+
+                res.status(200).type('json').send(refs);
+                //res.set("Content-Type", 'application/json').status(200).json(anime).end();
+                
+            });
+        }
+	});
     
 });
 
+//[OK]
+//Gibt eine bestimmte Referenz aus.
+router.get('/ref/:ref_name', jsonParser, function(req, res){
+        
+    db.keys('refs:*',function(err,rep) {
+
+
+		if (rep.length == 0) {
+			
+            console.log('keine refs vorhanden');
+            res.status(404).type('text').send('no refs found');
+			
+		} else if (rep.length > 0) {
+            db.get('refs:' + req.params.ref_name, function(err,rep) {
+                var refs = JSON.parse(rep);
+                res.status(200).type('json').send(refs);
+                //res.set("Content-Type", 'application/json').status(200).json(anime).end();
+            });
+        }
+	});
+});
 
 //[NOT OK]
 //Gibt eine spezifizierung der Animetabelle aus.
