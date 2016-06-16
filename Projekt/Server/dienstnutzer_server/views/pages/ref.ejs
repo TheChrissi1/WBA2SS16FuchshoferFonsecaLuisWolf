@@ -1,4 +1,4 @@
-<!-- views/pages/index.ejs -->
+<!-- views/pages/ref.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,12 +13,15 @@
 
     <main>
         <div class="jumbotron">
-            <h1>This is great</h1>
-            <p>Welcome to templating using EJS</p>
+            <h1>Anime</h1>
+            <p>Liste aller Refs:</p>
+            
+            <% refList.forEach(function(refs) { %>
+                            
+            <p>Name: <%= refs.name %></p>
+            <% });  %>
         </div>
         
-        <h2>Variable</h2>
-        <p><%= tagline %></p>
     
         
     </main>

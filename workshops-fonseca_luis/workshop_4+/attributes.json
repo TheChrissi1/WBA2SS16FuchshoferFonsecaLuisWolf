@@ -42,6 +42,7 @@
             "address_ep_en":STRING,
             "address_ep_de":STRING,
             "disjoin":CHAR,
+            "querry":STRING,
             "lang":STRING,
             "active":BOOLEAN
         }

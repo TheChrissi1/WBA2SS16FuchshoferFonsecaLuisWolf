@@ -1,0 +1,15 @@
+{
+    "user":[
+        {
+            "user_id":0,
+            "name":"Niklas",
+            "lastname":"Fonseca Luis",
+            "username":"eXeLuis",
+            "authority":0,
+            "email":"exe.niklas@googlemail.com",
+            "gender":"Male",
+            "birthdate":"21111994",
+            "active":true
+        }
+    ]
+}

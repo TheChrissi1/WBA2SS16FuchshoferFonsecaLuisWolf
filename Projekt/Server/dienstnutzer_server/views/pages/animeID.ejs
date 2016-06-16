@@ -24,6 +24,9 @@
             <p>Release_Jap: <%= animeData.release_jap %></p>
             <p>License: <%= animeData.license %></p>
             <p>status: <%= animeData.status %></p>
+            <% refData.forEach(function(refs) { %>
+                <p><%= refs.name %></p>
+            <% }); %>
             </ul>
             
             

@@ -60,7 +60,20 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
                 exRes.on("data", function(chunk){
                 //Ist schon geparst??!
                 var animeData = JSON.parse(chunk);
-                res.render('pages/animeID',{animeData:animeData});
+                var refs = animeData.refs;
+                var refData = [];
+                var i = -1;
+                while( refs.indexOf("|"+(i+1)+"|") > -1 ){
+                    i++;
+                    if( i == 0 ){
+                        refData.push({"name":refs.substring(0, refs.indexOf("|"+(0)+"|"))});;
+                    } else if( i > 0){
+                        var str1 = refs.indexOf("|"+(i-1)+"|");
+                        var str2 = refs.indexOf("|"+(i)+"|");
+                        refData.push({"name":refs.substring(str1 + 3, str2)});
+                    }
+                };
+                res.render('pages/animeID',{animeData:animeData, refData:refData});
                 res.end();
             });
         }
@@ -162,7 +175,6 @@ router.get('/genre', jsonParser, function(req, res){
 					res.end();
 			}else {
                 exRes.on("data", function(chunk){
-                    console.log("ELSE");
                     //wird nich automatisch geparst!??
                     var genreList = JSON.parse(chunk);
                     res.render('pages/genre',{genreList:genreList});
@@ -177,8 +189,32 @@ router.get('/genre', jsonParser, function(req, res){
 //[NOT OK]
 //Gibt eine Liste der Referenzen aus.
 router.get('/ref', jsonParser, function(req, res) {
+    var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/ref",
+        method:"GET",
+        headers:{
+            accept:"application/json"
+        }
+    }
+    var exReq = http.request(options, function(exRes){
+        if( exRes.statusCode == 404 ){
+					res.statusCode = 404;
+					res.render('pages/error');
+					res.end();
+        }else {
+            exRes.on("data", function(chunk){
 
-
+                //wird nich automatisch geparst!??
+                var refList = JSON.parse(chunk);
+                res.render('pages/ref',{refList:refList});
+                res.end();
+            });
+        }
+    });
+    exReq.end();
+    
 });
 
 
