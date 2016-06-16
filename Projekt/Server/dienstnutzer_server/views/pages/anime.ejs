@@ -16,15 +16,15 @@
             <h1>Anime</h1>
             <p>Liste aller Animes:</p>
             
-            <% anime.forEach(function(anime) { %>
+            <% animeList.forEach(function(anime) { %>
                             
-            <p class="list-group-item-text">Name: <%= anime.name %></p>
-            <p class="list-group-item-text">Name_Jap: <%= anime.name_jap %></p>
-            <p class="list-group-item-text">Episodes: <%= anime.episodes %></p>
-            <p class="list-group-item-text">Release: <%= anime.release %></p>
-            <p class="list-group-item-text">Release_Jap: <%= anime.release_jap %></p>
-            <p class="list-group-item-text">License: <%= anime.license %></p>
-            <p class="list-group-item-text">status: <%= anime.status %></p>
+            <p>Name: <%= anime.name %></p>
+            <p>Name_Jap: <%= anime.name_jap %></p>
+            <p>Episodes: <%= anime.episodes %></p>
+            <p>Release: <%= anime.release %></p>
+            <p>Release_Jap: <%= anime.release_jap %></p>
+            <p>License: <%= anime.license %></p>
+            <p>status: <%= anime.status %></p>
             <% });  %>
         </div>
         

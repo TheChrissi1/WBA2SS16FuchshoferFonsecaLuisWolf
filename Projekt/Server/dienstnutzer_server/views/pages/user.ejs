@@ -13,12 +13,20 @@
 
     <main>
         <div class="jumbotron">
-            <h1>This is great</h1>
-            <p>Welcome to templating using EJS</p>
+            <h1>User</h1>
+            <p>Liste aller User:</p>
+            
+            <% userList.forEach(function(user) { %>
+            
+            <p>ID: <%= user.uID %></p>                
+            <p>Name: <%= user.name %></p>
+            <p>E-Mail: <%= user.email %></p>
+            <p>Alias: <%= user.alias %></p>
+            <p>Wohnort: <%= user.wohnort %></p>
+            <p>Geschlecht: <%= user.gender %></p>
+            <p>Alter: <%= user.alter %></p>
+            <% });  %>
         </div>
-        
-        <h2>Variable</h2>
-        <p><%= tagline %></p>
     
         
     </main>

@@ -167,12 +167,6 @@ router.get('/ref', jsonParser, function(req, res) {
     
 });
 
-//[NOT OK]
-//Gibt Informationen zu einer Referenz aus.
-router.get('/ref/:refID', jsonParser, function(req, res) {
-    
-    
-});
 
 //[NOT OK]
 //Gibt eine spezifizierung der Animetabelle aus.
