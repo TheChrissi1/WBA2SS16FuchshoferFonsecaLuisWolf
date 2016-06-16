@@ -8,7 +8,7 @@ global.db = redis.createClient(); //Creates a new Client
 global.bodyParser = require('body-parser');
 global.jsonParser = bodyParser.json();
 
-app.set('port', 8080);
+app.set('port', 3001);
 
 console.log('*************************************');
 console.log('***** Dienstnutzer Server (EJS) *****');
@@ -26,7 +26,7 @@ app.listen(app.get('port'), function() {
         console.log('--------------------------------------');
  });
 
- 
+
 router = require('./router')(app);
 
 
