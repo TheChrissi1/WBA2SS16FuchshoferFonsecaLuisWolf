@@ -97,7 +97,8 @@ router.get('/user', jsonParser, function(req, res){
 //[OK]
 //Gibt einen Benutzer anhand seiner ID (querry-parameter) zurück.
 router.get('/user/:uID', jsonParser, function(req, res){
-		var options = {
+    
+    var options = {
         host: "localhost",
         port: 3000,
         path: "/user/" + req.params.uID,
@@ -143,8 +144,33 @@ router.get( '/user/:uID/stats', jsonParser, function(req, res){
 
 //[NOT OK]
 //Gibt eine Liste der Genres aus.
-router.get('/genre', jsonParser, function(req, res) {
-
+router.get('/genre', jsonParser, function(req, res){
+    
+    var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/genre",
+        method:"GET",
+        headers:{
+            accept:"application/json"
+        }
+    }
+    var exReq = http.request(options, function(exRes){
+			if( exRes.statusCode == 404 ){
+					res.statusCode = 404;
+					res.render('pages/error');
+					res.end();
+			}else {
+                exRes.on("data", function(chunk){
+                    console.log("ELSE");
+                    //wird nich automatisch geparst!??
+                    var genreList = JSON.parse(chunk);
+                    res.render('pages/genre',{genreList:genreList});
+                    res.end();
+                });
+			}
+    });
+    exReq.end();
 
 });
 

@@ -1,4 +1,4 @@
-<!-- views/pages/index.ejs -->
+<!-- views/pages/genre.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,12 +13,16 @@
 
     <main>
         <div class="jumbotron">
-            <h1>This is great</h1>
-            <p>Welcome to templating using EJS</p>
+            <h1>Genre</h1>
+            <p>Liste aller Genre:</p>
+            
+            <% genreList.forEach(function(genre) { %>
+                            
+            <p>Name: <%= genre.name %></p>
+            <p>Beschreibung: <%= genre.description %></p>
+            <% });  %>
         </div>
         
-        <h2>Variable</h2>
-        <p><%= tagline %></p>
     
         
     </main>
