@@ -78,10 +78,5 @@ router.put( '/user/:id/stats', jsonParser, function(req, res){
 
 });
 
-
-
-
-
-
 console.log('loaded put.js.')
 module.exports = router;

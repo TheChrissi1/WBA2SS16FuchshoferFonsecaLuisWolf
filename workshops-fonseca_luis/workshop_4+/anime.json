@@ -1,0 +1,19 @@
+{
+    "anime":[
+        {
+            "name":"Naruto Shippuuden",
+            "name_en":"Naruto Shippuuden",
+            "name_de":"Naruto Shippuuden",
+            "genre":"Action, Adventure, Comedy, Drama, Fantasy, Martial Arts, Shounen, Super Power",
+            "episodes":465,
+            "release_jp":"14.02.2007",
+            "release_en":"",
+            "release_de":"",
+            "status":"running",
+            "dub":"JP, EN, DE",
+            "sub":"DE, EN",
+            "license":"JP, EN, DE",
+            "refs":"narutotube|0|anilinkz|1|gogoanime|2|"
+        }
+    ]
+}

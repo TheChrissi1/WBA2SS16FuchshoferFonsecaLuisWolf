@@ -1,0 +1,59 @@
+{
+    "user":[
+        {
+            "user_id":INT,
+            "name":STRING,
+            "lastname":STRING,
+            "username":STRING,
+            "authority":INT,
+            "email":STRING,
+            "gender":STRING,
+            "birthdate":DATE,
+            "active":BOOLEAN
+        }
+    ]
+}
+///////////////////////////////////////
+{
+    "anime":[
+        {
+            "name":STRING,
+            "name_en":STRING,
+            "name_de":STRING,
+            "genre":STRING,
+            "episodes":INT,
+            "release_jp":DATE,
+            "release_en":DATE,
+            "release_de":DATE,
+            "status":STRING,
+            "dub":STRING,
+            "sub":STRING,
+            "license":STRING,
+            "refs":STRING
+        }
+    ]
+}
+///////////////////////////////////////
+{
+    "reference":[
+        {
+            "name":STRING,
+            "address":STRING,
+            "address_ep_en":STRING,
+            "address_ep_de":STRING,
+            "disjoin":CHAR,
+            "querry":STRING,
+            "lang":STRING,
+            "active":BOOLEAN
+        }
+    ]
+}
+///////////////////////////////////////
+{
+    "genre":[
+        {
+            "name":STRING,
+            "description":STRING
+        }
+    ]
+}
