@@ -1,0 +1,35 @@
+<!-- views/pages/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container" id="body">
+
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+    <main>
+        <div class="jumbotron">
+            <h1>Statistik</h1>
+
+
+            <ul>
+            <li>ID: <%= statData.uID %></li>
+            <li>Gesehene Folgen: <%= statData.gesFolgen %></li>
+            <li>Gesehene Animes: <%= statData.gesAnimes %></li>
+            </ul>
+        </div>
+
+
+
+    </main>
+
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
+
+</body>
+</html>
