@@ -5,7 +5,7 @@
 <head>
     <% include ../partials/head %>
 </head>
-<body class="container">
+<body class="container" id="body">
 
     <header>
         <% include ../partials/header %>
@@ -14,10 +14,10 @@
     <main>
         <div class="jumbotron">
             <h1>User</h1>
-            
-    
-            <ul>  
-            <p>ID: <%= userData.uID %></p>                
+
+
+            <ul>
+            <p>ID: <%= userData.uID %></p>
             <p>Name: <%= userData.name %></p>
             <p>E-Mail: <%= userData.email %></p>
             <p>Alias: <%= userData.alias %></p>
@@ -26,14 +26,14 @@
             <p>Alter: <%= userData.alter %></p>
             </ul>
         </div>
-    
-    
-        
+
+
+
     </main>
 
     <footer>
         <% include ../partials/footer %>
     </footer>
-    
+
 </body>
 </html>

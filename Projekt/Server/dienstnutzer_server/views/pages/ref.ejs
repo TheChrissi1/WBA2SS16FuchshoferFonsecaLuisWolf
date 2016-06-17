@@ -5,7 +5,7 @@
 <head>
     <% include ../partials/head %>
 </head>
-<body class="container">
+<body class="container" id="body">
 
     <header>
         <% include ../partials/header %>
@@ -15,20 +15,20 @@
         <div class="jumbotron">
             <h1>Anime</h1>
             <p>Liste aller Refs:</p>
-            
+
             <% refList.forEach(function(refs) { %>
-                            
+
             <p>Name: <%= refs.name %></p>
             <% });  %>
         </div>
-        
-    
-        
+
+
+
     </main>
 
     <footer>
         <% include ../partials/footer %>
     </footer>
-    
+
 </body>
 </html>

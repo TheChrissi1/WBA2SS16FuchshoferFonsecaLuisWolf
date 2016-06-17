@@ -1,0 +1,36 @@
+{
+    "anime":[
+        {
+            "name":"Naruto Shippuuden",
+            "name_en":"Naruto Shippuuden",
+            "name_de":"Naruto Shippuuden",
+            "description":"",
+            "genre":"Action, Adventure, Comedy, Drama, Fantasy, Martial Arts, Shounen, Super Power",
+            "episodes":465,
+            "release_jp":"14.02.2007",
+            "release_en":"",
+            "release_de":"",
+            "status":"Running",
+            "dub":"JP, EN, DE",
+            "sub":"DE, EN",
+            "license":"JP, EN, DE",
+            "refs":"narutotube|0|anilinkz|1|gogoanime|2|"
+        },
+        {
+            "name":"Shingeki no Kyojin",
+            "name_en":"Attack on Titan",
+            "name_de":"Attack on Titan",
+            "description":"",
+            "genre":"Action, Adventure, Horror, Shounen, Super Power, Tragedy",
+            "episodes":25,
+            "release_jp":"07.04.2013",
+            "release_en":"",
+            "release_de":"",
+            "status":"Finished",
+            "dub":"JP, EN, DE",
+            "sub":"DE, EN",
+            "license":"JP, EN, DE",
+            "refs":"anilinkz|0|gogoanime|1|"
+        }
+    ]
+}

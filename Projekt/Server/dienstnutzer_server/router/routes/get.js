@@ -40,8 +40,10 @@ router.get('/anime', function(req, res){
 
 //[OK]
 //Gibt einen Anime anhand seines Namens (querry-parameter) zurück.
+
+
 router.get('/anime/:anime_name', jsonParser, function(req, res){
-    var anime_error = {"name":req.params.anime_name};
+    console.log(req.params.anime_name);
     var options = {
         host: "localhost",
         port: 3000,
@@ -51,35 +53,82 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
             accept:"application/json"
         }
     }
+    var refData = [];
     var exReq = http.request(options, function(exRes){
         if( exRes.statusCode == 404 ){
+            console.log("IN IF");
             res.statusCode = 404;
             res.render('pages/error');
             res.end();
+
         }else {
-                exRes.on("data", function(chunk){
+            console.log("IN ELSE");
+            var animeData;
+            var refData = [];
+            exRes.on("data", function(chunk){
                 //Ist schon geparst??!
-                var animeData = JSON.parse(chunk);
+                console.log(JSON.parse(chunk));
+                animeData = JSON.parse(chunk);
                 var refs = animeData.refs;
-                var refData = [];
+                var ref_ids = [];
+                var index = 0;
                 var i = -1;
+
+
+            exRes.on("end", function(){
                 while( refs.indexOf("|"+(i+1)+"|") > -1 ){
+                    console.log("IN WHILE | INDEX: " + i);
                     i++;
                     if( i == 0 ){
-                        refData.push({"name":refs.substring(0, refs.indexOf("|"+(0)+"|"))});;
+                        options.path = "/ref/" + refs.substring(0, refs.indexOf("|"+(0)+"|"));
+                        ref_ids.push(options.path);
+                        var axReq = http.request(options, function(axRes){
+                            axRes.setEncoding('utf8');
+                            var content;
+                            axRes.on("data", function(chunk){
+                                content = chunk;
+                            });
+                            axRes.on("end", function(){
+                                refData.push(JSON.parse(content));
+                                index++;
+                                if(index == ref_ids.length){
+                                    exReq.end();
+                                    res.render('pages/animeID',{animeData:animeData, refData:refData});
+                                    res.end();
+                                }
+                            });
+                        });
+                        axReq.end();
                     } else if( i > 0){
                         var str1 = refs.indexOf("|"+(i-1)+"|");
                         var str2 = refs.indexOf("|"+(i)+"|");
-                        refData.push({"name":refs.substring(str1 + 3, str2)});
+                        options.path = "/ref/" + refs.substring(str1 + 3, str2);
+                        ref_ids.push(options.path);
+
+                        var axReq = http.request(options, function(axRes){
+                            axRes.setEncoding('utf8');
+                            var content;
+                            axRes.on("data", function(chunk){
+                                content = chunk;
+                            });
+                            axRes.on("end", function(){
+                                refData.push(JSON.parse(content));
+                                index++;
+                                if(index == ref_ids.length){
+                                    exReq.end();
+                                    res.render('pages/animeID',{animeData:animeData, refData:refData});
+                                    res.end();
+                                }
+                            });
+                        });
+                        axReq.end();
                     }
                 };
-                res.render('pages/animeID',{animeData:animeData, refData:refData});
-                res.end();
+            });
             });
         }
     });
     exReq.end();
-
 });
 
 //[OK] - kein json format?
@@ -110,7 +159,7 @@ router.get('/user', jsonParser, function(req, res){
 //[OK]
 //Gibt einen Benutzer anhand seiner ID (querry-parameter) zurück.
 router.get('/user/:uID', jsonParser, function(req, res){
-    
+
     var options = {
         host: "localhost",
         port: 3000,
@@ -158,7 +207,7 @@ router.get( '/user/:uID/stats', jsonParser, function(req, res){
 //[NOT OK]
 //Gibt eine Liste der Genres aus.
 router.get('/genre', jsonParser, function(req, res){
-    
+
     var options = {
         host: "localhost",
         port: 3000,
@@ -213,8 +262,7 @@ router.get('/ref', jsonParser, function(req, res) {
             });
         }
     });
-    exReq.end();
-    
+    exReq.end()
 });
 
 

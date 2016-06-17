@@ -5,7 +5,7 @@
 <head>
     <% include ../partials/head %>
 </head>
-<body class="container">
+<body class="container" id="body">
 
     <header>
         <% include ../partials/header %>
@@ -13,10 +13,10 @@
 
     <main>
         <div class="jumbotron">
-            <h1>Anime</h1>
-            
-    
-            <ul>  
+            <h2>Anime</h2>
+
+
+            <ul>
             <p>Name: <%= animeData.name %></p>
             <p>Name_Jap: <%= animeData.name_jap %></p>
             <p>Episodes: <%= animeData.episodes %></p>
@@ -25,20 +25,19 @@
             <p>License: <%= animeData.license %></p>
             <p>status: <%= animeData.status %></p>
             <% refData.forEach(function(refs) { %>
-                <p><%= refs.name %></p>
+                <p><a href=<%= refs.address %>><%= refs.name %></a></p>
             <% }); %>
             </ul>
-            
-            
+
         </div>
-        
-    
-        
+
+
+
     </main>
 
     <footer>
         <% include ../partials/footer %>
     </footer>
-    
+
 </body>
 </html>

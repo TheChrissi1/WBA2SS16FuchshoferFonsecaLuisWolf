@@ -1,0 +1,24 @@
+{
+    "reference":[
+        {
+            "name":"narutotube",
+            "address":"http://naruto-tube.org/",
+            "address_ep_en":"default",
+            "address_ep_de":"http://naruto-tube.org/",
+            "disjoin":"-",
+            "querry":"sub",
+            "lang":"DE",
+            "active":true
+        },
+        {
+            "name":"anilinkz",
+            "address":"http://anilinkz.tv/",
+            "address_ep_en":"http://anilinkz.io/",
+            "address_ep_de":"default",
+            "disjoin":"-",
+            "querry":"episode",
+            "lang":"EN",
+            "active":true
+        }
+    ]
+}

@@ -1,6 +1,5 @@
 global.express = require('express');
 var app = express();
-
 global.redis = require( 'redis' );
 global.db = redis.createClient(); //Creates a new Client
 
@@ -26,7 +25,7 @@ app.listen(app.get('port'), function() {
         console.log('--------------------------------------');
  });
 
- 
+
 router = require('./router')(app);
 
 

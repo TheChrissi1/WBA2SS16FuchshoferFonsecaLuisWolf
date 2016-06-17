@@ -1,0 +1,56 @@
+#blanket {
+background-color:#111;
+opacity: 0.65;
+filter:alpha(opacity=65);
+position:absolute;
+z-index: 9001;
+top:0px;
+left:0px;
+width:100%;
+}
+#popUpDiv {
+position:absolute;
+background-color:#eeeeee;
+width:300px;
+height:300px;
+z-index: 9002;
+}
+
+
+
+#anime {
+  width: 100%;
+  background-color: #c0c0c0;
+  display: inline-block;
+}
+#anime_list {
+  list-style: none;
+}
+#anime_info1 {
+  float: left;
+  width: 50%; /* optionale Weitenangabe */
+}
+#anime_name {
+  padding-top: 15px;
+  align-self: center;
+  font-size: 20px;
+  color: #0066ff;
+}
+#anime_info2 {
+  border-left: 1px solid #0066ff;
+  padding-left: 10px;
+  float: right;
+  width: 50%;
+}
+.anime_info {
+  font-size: 9px;
+}
+.anime_info span {
+  color: #0066ff;
+}
+
+
+
+#body {
+  background-color: #909ff5;
+}

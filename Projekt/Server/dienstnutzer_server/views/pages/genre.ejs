@@ -5,7 +5,7 @@
 <head>
     <% include ../partials/head %>
 </head>
-<body class="container">
+<body class="container" id="body">
 
     <header>
         <% include ../partials/header %>
@@ -15,21 +15,21 @@
         <div class="jumbotron">
             <h1>Genre</h1>
             <p>Liste aller Genre:</p>
-            
+
             <% genreList.forEach(function(genre) { %>
-                            
+
             <p>Name: <%= genre.name %></p>
             <p>Beschreibung: <%= genre.description %></p>
             <% });  %>
         </div>
-        
-    
-        
+
+
+
     </main>
 
     <footer>
         <% include ../partials/footer %>
     </footer>
-    
+
 </body>
 </html>

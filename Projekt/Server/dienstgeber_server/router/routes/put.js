@@ -3,7 +3,7 @@ var router = express.Router();
 //[OK]
 //Trägt einen neuen Anime in die DB ein.
 router.put('/anime', jsonParser, function( req, res){
-    
+
     var newAnime = req.body;
     db.set('anime:'+newAnime.name, JSON.stringify(newAnime), function(err, rep) {
         res.status(201).type('text').send('new anime: ' +newAnime.name);
@@ -28,7 +28,7 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 		} else {
 			res.status(404).type('text').send('Anime not exists!');
         }
-		
+
 	});
 });
 
@@ -37,7 +37,7 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 router.put('/user', jsonParser, function(req, res){
 
     var newUser = req.body;
-    
+
     //Inkrement wird nicht zurückgesetzt wenn bspw. alle User gelöscht werden!!!
 	db.incr('uID:user', function (err, rep) {
 
@@ -55,7 +55,7 @@ router.put('/user', jsonParser, function(req, res){
 //[OK]
 //Ändert die Daten eines Benutzers.
 router.put( '/user/:uID', jsonParser, function(req, res){
-    
+
     	db.exists('user:'+req.params.uID, function(err, rep) {
 		if (rep == 1) {
 			var updatedUser = req.body;
@@ -73,10 +73,50 @@ router.put( '/user/:uID', jsonParser, function(req, res){
 //[NOT OK]
 //Ändert die Statistik eines Nutzers.
 router.put( '/user/:id/stats', jsonParser, function(req, res){
-    
-    
+
+
 
 });
+
+
+/*
+///////// PUT GENRE ONLY ONCE /////////////////
+router.put('/genre', jsonParser, function( req, res ){
+
+    var genre = require('./input/genre.json');
+    genre = genre.genre;
+    genre.forEach(function(val){
+        db.rpush(['genre', JSON.stringify(val)]);
+    })
+    res.status(201).type('text').send('added');
+});
+///////////////////////////////////////////////
+
+///////// PUT REFS ONLY ONCE //////////////////
+router.put('/refs', jsonParser, function( req, res ){
+
+    var refs = require('./input/references.json');
+    refs = refs.reference;
+    refs.forEach(function(val){
+        db.set('refs:' + val.ref_id, JSON.stringify(val));
+    })
+    res.status(201).type('text').send('added');
+});
+///////////////////////////////////////////////
+
+//////// PUT ANIME ONLY ONCE //////////////////
+router.put('/animes', jsonParser, function( req, res ){
+    var animes = require('./input/anime.json');
+    animes = animes.anime;
+
+    animes.forEach(function(val){
+        console.log(val.name.toLowerCase().replace(/ /g,'-'));
+        db.set('anime:' + val.name.toLowerCase().replace(/ /g,'-'), JSON.stringify(val));
+    })
+    res.status(201).type('text').send('added');
+})
+///////////////////////////////////////////////
+*/
 
 console.log('loaded put.js.')
 module.exports = router;
