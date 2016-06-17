@@ -227,12 +227,12 @@ router.get('/user', jsonParser, function(req, res){
 
 //[OK]
 //Gibt einen Benutzer anhand seiner ID (querry-parameter) zurück.
-router.get('/user/:uID', jsonParser, function(req, res){
+router.get('/user/:user_id', jsonParser, function(req, res){
 
     var options = {
         host: "localhost",
         port: 3000,
-        path: "/user/" + req.params.uID,
+        path: "/user/" + req.params.user_id,
         method:"GET",
         headers:{
             accept:"application/json"
@@ -258,13 +258,13 @@ router.get('/user/:uID', jsonParser, function(req, res){
 
 //[OK]
 //Gibt die Statistik eines Benutzers aus.
-router.get( '/user/:uID/stats', jsonParser, function(req, res){
+router.get( '/user/:user_id/stats', jsonParser, function(req, res){
 
 
 	var options = {
 			host: "localhost",
 			port: 3000,
-			path: "/user/" + req.params.uID + "/stats",
+			path: "/user/" + req.params.user_id + "/stats",
 			method:"GET",
 			headers:{
 					accept:"application/json"

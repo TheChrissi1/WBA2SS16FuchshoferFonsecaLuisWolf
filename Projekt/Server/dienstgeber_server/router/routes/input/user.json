@@ -1,14 +1,14 @@
 {
     "user":[
         {
-            "user_id":0,
+            "user_id":1,
             "name":"Niklas",
             "lastname":"Fonseca Luis",
             "username":"eXeLuis",
             "authority":0,
             "email":"exe.niklas@googlemail.com",
             "gender":"Male",
-            "birthdate":"21111994",
+            "birthdate":"21.11.1994",
             "active":true
         }
     ]

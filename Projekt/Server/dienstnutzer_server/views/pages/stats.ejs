@@ -16,16 +16,20 @@
             <h2>Stats</h2>
 
 
-            <ul>
-              <section>
-                <p><%= statData.stats[0].user_id %></p>
-                <p><%= statData.stats[0].username %></p>
-              </section>
+
+            <section id="user_info">
+
+              <li><%= statData.stats[0].user_id %></li>
+              <li><%= statData.stats[0].username %></li>
+            </section>
+            <section id="user_stats">
+              <ul>
               <% for(var i=1; i<statData.stats.length; i++){ %>
                 <li><%= statData.stats[i].name %></li>
                 <li><%= statData.stats[i].episodes %></li>
               <% } %>
-            </ul>
+              </ul>
+            </section>
         </div>
 
 

@@ -38,29 +38,38 @@ router.put('/user', jsonParser, function(req, res){
     var newUser = req.body;
 
     //Inkrement wird nicht zurückgesetzt wenn bspw. alle User gelöscht werden!!!
-	db.incr('uID:user', function (err, rep) {
+	db.incr('user_id:user', function (err, rep) {
 
-		newUser.uID = rep;
-		db.set('user:'+newUser.uID, JSON.stringify(newUser), function(err, rep) {
-			res.status(201).type('text').send('new user: ' +newUser.uID);
+		newUser.user_id = rep;
+		db.set('user:'+newUser.user_id, JSON.stringify(newUser), function(err, rep) {
+			res.status(201).type('text').send('new user: ' +newUser.user_id);
 		});
-        var newStat = {"uID": newUser.uID,"gesFolgen": "","gesAnimes": ""};
-        db.set('stats:'+newUser.uID, JSON.stringify(newStat), function(err, rep) {
-            console.log('new statistic for user: ' +newUser.uID);
+        var newStat = {
+            "stats":[
+              {
+                "user_id":newUser.user_id,
+                "username":newUser.username,
+                "seen_ep":0,
+                "seen_anime":0,
+              }
+            ]
+        };
+        db.set('stats:'+newUser.user_id, JSON.stringify(newStat), function(err, rep) {
+            console.log('new statistic for user: ' +newUser.user_id);
         });
 	});
 });
 
 //[OK]
 //Ändert die Daten eines Benutzers.
-router.put( '/user/:uID', jsonParser, function(req, res){
+router.put( '/user/:user_id', jsonParser, function(req, res){
 
-    	db.exists('user:'+req.params.uID, function(err, rep) {
+    	db.exists('user:'+req.params.user_id, function(err, rep) {
 		if (rep == 1) {
 			var updatedUser = req.body;
-			updatedUser.uID = req.params.uID;
+			updatedUser.user_id = req.params.user_id;
 
-			db.set('user:' + req.params.uID, JSON.stringify(updatedUser), function(err, rep) {
+			db.set('user:' + req.params.user_id, JSON.stringify(updatedUser), function(err, rep) {
 				res.status(200).type('json').send(updatedUser);
 			});
 		} else {
@@ -71,14 +80,14 @@ router.put( '/user/:uID', jsonParser, function(req, res){
 
 //[NOT OK]
 //Ändert die Statistik eines Nutzers.
-router.put( '/user/:id/stats', jsonParser, function(req, res){
+router.put( '/user/:user_id/stats', jsonParser, function(req, res){
 
 
 
 });
 
 
-/*
+
 ///////// PUT GENRE ONLY ONCE /////////////////
 router.put('/genre', jsonParser, function( req, res ){
 
@@ -114,15 +123,18 @@ router.put('/animes', jsonParser, function( req, res ){
     })
     res.status(201).type('text').send('added');
 })
+
 ///////////////////////////////////////////////
 
 //////// PUT STATS ONLY ONCE //////////////////
 router.put('/stats', jsonParser, function( req, res ){
-    var stats = require('./input/stats.json');
-    db.set('stats:1', JSON.stringify(stats));
+    console.log("IN PUT STATS");
+    var stat = require('./input/stats.json');
+    console.log(stat);
+    db.set('stats:1', JSON.stringify(stat));
     res.status(201).type('text').send('added');
 })
 ///////////////////////////////////////////////
-*/
+
 console.log('loaded put.js.')
 module.exports = router;

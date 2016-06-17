@@ -76,9 +76,9 @@ router.get('/user', jsonParser, function(req, res){
 
 //[OK]
 //Gibt einen Benutzer anhand seiner ID (querry-parameter) zurück.
-router.get('/user/:uID', jsonParser, function(req, res){
-    console.log(req.params.uID);
-    db.get('user:'+req.params.uID, function(err, rep) {
+router.get('/user/:user_id', jsonParser, function(req, res){
+    console.log(req.params.user_id);
+    db.get('user:'+req.params.user_id, function(err, rep) {
 
 		if (rep) {
 			res.status(200).type('json').send(rep);
@@ -91,10 +91,10 @@ router.get('/user/:uID', jsonParser, function(req, res){
 
 //[OK]
 //Gibt die Statistik eines Benutzers aus.
-router.get( '/user/:uID/stats', jsonParser, function(req, res){
+router.get( '/user/:user_id/stats', jsonParser, function(req, res){
 
 
-    db.get('stats:'+req.params.uID, function(err, rep) {
+    db.get('stats:'+req.params.user_id, function(err, rep) {
 
 		if (rep) {
 			res.status(200).type('json').send(rep);
@@ -163,16 +163,16 @@ if( val.genre.toLowerCase().contains( req.params.genre_name.toLowerCase() )){
 //[OK]
 //Gibt eine Liste der Referenzen aus.
 router.get('/ref', jsonParser, function(req, res) {
-    
+
     db.keys('refs:*',function(err,rep) {
 
 		var refs = [];
 
 		if (rep.length == 0) {
-			
+
             console.log('keine refs vorhanden');
             res.status(404).type('text').send('no refs found');
-			
+
 		} else if (rep.length > 0) {
             db.mget(rep, function(err,rep) {
                 rep.forEach(function(val){
@@ -181,7 +181,7 @@ router.get('/ref', jsonParser, function(req, res) {
 
                 res.status(200).type('json').send(refs);
                 //res.set("Content-Type", 'application/json').status(200).json(anime).end();
-                
+
             });
         }
 	});
@@ -190,15 +190,15 @@ router.get('/ref', jsonParser, function(req, res) {
 //[OK]
 //Gibt eine bestimmte Referenz aus.
 router.get('/ref/:ref_name', jsonParser, function(req, res){
-        
+
     db.keys('refs:*',function(err,rep) {
 
 
 		if (rep.length == 0) {
-			
+
             console.log('keine refs vorhanden');
             res.status(404).type('text').send('no refs found');
-			
+
 		} else if (rep.length > 0) {
             db.get('refs:' + req.params.ref_name, function(err,rep) {
                 var refs = JSON.parse(rep);
