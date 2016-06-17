@@ -3,9 +3,8 @@ var router = express.Router();
 //[OK]
 //Trägt einen neuen Anime in die DB ein.
 router.put('/anime', jsonParser, function( req, res){
-
     var newAnime = req.body;
-    db.set('anime:'+newAnime.name, JSON.stringify(newAnime), function(err, rep) {
+    db.set('anime:'+newAnime.name.toLowerCase().replace(/ /g,'-'), JSON.stringify(newAnime), function(err, rep) {
         res.status(201).type('text').send('new anime: ' +newAnime.name);
     });
 
@@ -116,7 +115,14 @@ router.put('/animes', jsonParser, function( req, res ){
     res.status(201).type('text').send('added');
 })
 ///////////////////////////////////////////////
-*/
 
+//////// PUT STATS ONLY ONCE //////////////////
+router.put('/stats', jsonParser, function( req, res ){
+    var stats = require('./input/stats.json');
+    db.set('stats:1', JSON.stringify(stats));
+    res.status(201).type('text').send('added');
+})
+///////////////////////////////////////////////
+*/
 console.log('loaded put.js.')
 module.exports = router;

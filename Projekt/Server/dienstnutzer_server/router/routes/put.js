@@ -3,9 +3,9 @@ var router = express.Router();
 //[OK]
 //Trägt einen neuen Anime in die DB ein.
 router.put('/anime', jsonParser, function( req, res){
-    
+
     var newAnime = req.body;
-    db.set('anime:'+newAnime.name, JSON.stringify(newAnime), function(err, rep) {
+    db.set('anime:'+newAnime.name.toLowerCase().replace(/ /g,'-'), JSON.stringify(newAnime), function(err, rep) {
         res.status(201).type('text').send('new anime: ' +newAnime.name);
     });
 
@@ -26,7 +26,7 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 		} else {
 			res.status(404).type('text').send('Anime not exists!');
         }
-		
+
 	});
 });
 
@@ -35,7 +35,7 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 router.put('/user', jsonParser, function(req, res){
 
     var newUser = req.body;
-    
+
     //Inkrement wird nicht zurückgesetzt wenn bspw. alle User gelöscht werden!!!
 	db.incr('uID:user', function (err, rep) {
 
@@ -53,7 +53,7 @@ router.put('/user', jsonParser, function(req, res){
 //[OK]
 //Ändert die Daten eines Benutzers.
 router.put( '/user/:uID', jsonParser, function(req, res){
-    
+
     	db.exists('user:'+req.params.uID, function(err, rep) {
 		if (rep == 1) {
 			var updatedUser = req.body;
@@ -71,8 +71,8 @@ router.put( '/user/:uID', jsonParser, function(req, res){
 //[NOT OK]
 //Ändert die Statistik eines Nutzers.
 router.put( '/user/:id/stats', jsonParser, function(req, res){
-    
-    
+
+
 
 });
 

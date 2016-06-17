@@ -1,0 +1,41 @@
+<!-- views/pages/stats.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container" id="body">
+
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+    <main>
+        <div class="jumbotron">
+            <h2>Stats</h2>
+
+
+            <ul>
+              <section>
+                <p><%= statData.stats[0].user_id %></p>
+                <p><%= statData.stats[0].username %></p>
+              </section>
+              <% for(var i=1; i<statData.stats.length; i++){ %>
+                <li><%= statData.stats[i].name %></li>
+                <li><%= statData.stats[i].episodes %></li>
+              <% } %>
+            </ul>
+
+        </div>
+
+
+
+    </main>
+
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
+
+</body>
+</html>

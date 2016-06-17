@@ -1,13 +1,18 @@
 {
-  "stat":[
-    {
-      "username":"",
-      "seen_ep":23,
-      "seen_anime":20
-    },
-    {
-      "name":"shingeki-no-kyojin",
-      "episodes":25
-    }
-  ]
+    "stats":[
+      {
+        "user_id":1,
+        "username":"eXeLuis",
+        "seen_ep":450,
+        "seen_anime":2,
+      },
+      {
+        "name":"shingeki-no-kyojin",
+        "episodes":25
+      },
+      {
+        "name":"naruto-shippuuden",
+        "episodes":425
+      }
+    ]
 }
