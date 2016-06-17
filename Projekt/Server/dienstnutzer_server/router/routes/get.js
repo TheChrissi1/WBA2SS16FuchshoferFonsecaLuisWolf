@@ -261,15 +261,30 @@ router.get('/user/:uID', jsonParser, function(req, res){
 router.get( '/user/:uID/stats', jsonParser, function(req, res){
 
 
-    db.get('stats:'+req.params.uID, function(err, rep) {
-
-		if (rep) {
-			res.status(200).type('json').send(rep);
-		} else {
-			res.status(404).type('text').send('Stats/User not found!');
+	var options = {
+			host: "localhost",
+			port: 3000,
+			path: "/user/" + req.params.uID + "/stats",
+			method:"GET",
+			headers:{
+					accept:"application/json"
+			}
+	}
+	var exReq = http.request(options, function(exRes){
+		if( exRes.statusCode == 404 ){
+				res.statusCode = 404;
+				res.render('pages/error');
+				res.end();
+		}else {
+			exRes.on("data", function(chunk){
+					//Ist schon geparst??!
+					var statData = JSON.parse(chunk);
+					res.render('pages/stats',{statData:statData});
+					res.end();
+			});
 		}
 	});
-
+	exReq.end();
 
 });
 
