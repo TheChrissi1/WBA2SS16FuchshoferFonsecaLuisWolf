@@ -38,10 +38,79 @@ router.get('/anime', function(req, res){
 
 });
 
+
+//[NOT OK]
+//Gibt eine spezifizierung der Animetabelle aus.
+router.get('/anime/filter:para', jsonParser, function(req, res) {
+
+    //Anhand der querry parameter kann die profil.json nach bestimmten
+    //kriterien wie genre, anzahl folgen etc. durchsucht werden.
+    // localhost.de/anime/filter/?genre=action&folgen=500
+    // genre=name, episodes=zahl, name, release?date, dub, sub
+    var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/anime",
+        method:"GET",
+        headers:{
+            accept:"application/json"
+        }
+    }
+
+    var query = req.params.para;
+    var queryL = query.length;
+    //console.log(query);
+    query = query.substring(1, query.length);
+    //console.log(query);
+    var erg = queryString.parse(query);
+
+
+    var exReq = http.request(options, function(exRes){
+
+        exRes.on("data", function(chunk){
+
+            var exAnimeList = JSON.parse(chunk);
+            var animeList = [];
+
+            if (erg.episodes == null) {
+            } else {
+                for (var h=0; h<erg.episodes.length; h++) {
+
+                    for (var i=0; i<exAnimeList.length; i++) {
+
+                        if (exAnimeList[i].episodes == erg.episodes[h]) {
+                            animeList.push(exAnimeList[i]);
+                        }
+                    }
+                }
+            }
+
+            if (erg.genre == null) {
+            } else {
+                for (var h=0; h<erg.genre.length; h++) {
+
+                    for (var i=0; i<exAnimeList.length; i++) {
+
+                        if (exAnimeList[i].genre == erg.genre[h]) {
+                            animeList.push(exAnimeList[i]);
+                        }
+                    }
+                }
+            }
+            if (animeList == '') {
+                res.render('pages/noResult');
+                res.end;
+            } else {
+                res.render('pages/anime',{animeList:animeList});
+                res.end();
+            }
+        });
+    });
+    exReq.end();
+});
+
 //[OK]
 //Gibt einen Anime anhand seines Namens (querry-parameter) zurück.
-
-
 router.get('/anime/:anime_name', jsonParser, function(req, res){
     console.log(req.params.anime_name);
     var options = {
@@ -266,15 +335,7 @@ router.get('/ref', jsonParser, function(req, res) {
 });
 
 
-//[NOT OK]
-//Gibt eine spezifizierung der Animetabelle aus.
-router.get('/anime/filter/:para', jsonParser, function(req, res) {
 
-    //Anhand der querry parameter kann die profil.json nach bestimmten
-    //kriterien wie genre, anzahl folgen etc. durchsucht werden.
-    // localhost.de/anime/filter/?genre=action&folgen=500
-
-});
 
 
 console.log('loaded get.js');

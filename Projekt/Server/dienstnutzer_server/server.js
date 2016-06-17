@@ -10,6 +10,8 @@ global.db = redis.createClient(); //Creates a new Client
 global.bodyParser = require('body-parser');
 global.jsonParser = bodyParser.json();
 
+global.queryString = require('querystring');
+
 app.set('port', 8080);
 
 console.log('*************************************');
