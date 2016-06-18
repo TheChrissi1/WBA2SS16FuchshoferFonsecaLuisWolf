@@ -24,19 +24,22 @@ router.get('/anime', function(req, res){
         }
     }
     var exReq = http.request(options, function(exRes){
-
-        exRes.on("data", function(chunk){
-
-            //wird nich automatisch geparst!??
-            var animeList = JSON.parse(chunk);
-            res.render('pages/anime',{animeList:animeList});
-            res.end();
-        });
+            if (exRes.statusCode == 404) {
+                res.statusCode = 404;
+                res.render('pages/error');
+                res.end();
+            } else {
+                exRes.on("data", function(chunk){
+                    //wird nich automatisch geparst!??
+                    var animeList = JSON.parse(chunk);
+                    res.render('pages/anime',{animeList:animeList});
+                    res.end();
+                });
+            }
     });
     exReq.end();
-
-
 });
+    
 
 
 //[NOT OK]
@@ -95,32 +98,36 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
     var erg = queryString.parse(query);
 
     var exReq = http.request(options, function(exRes){
-
-        exRes.on("data", function(chunk){
-
-            var exAnimeList = JSON.parse(chunk);
-            var animeList = [];
+        if( exRes.statusCode == 404 ){
+            res.statusCode = 404;
+            res.render('pages/error');
+            res.end();
+        }else {
+            exRes.on("data", function(chunk){
+    
+                var exAnimeList = JSON.parse(chunk);
+                var animeList = [];
             
-             // Überprüfen ob Filter "Episodes" mit mindestens einem Anime übereinstimmt.
-            if (countEpisodes == 1) {
+                // Überprüfen ob Filter "Episodes" mit mindestens einem Anime übereinstimmt.
+                if (countEpisodes == 1) {
                     for (var i=0; i<exAnimeList.length; i++) {
                         if (exAnimeList[i].episodes == erg.episodes) {
                             animeList.push(exAnimeList[i]);
                         }
                     }      
-            } else if( countEpisodes > 1) {
-                for (var j=0; j<=countEpisodes; j++) {
-                    for (var k=0; k<exAnimeList.length; k++) {
-                        if (exAnimeList[k].episodes == erg.episodes[j]) {
-                            animeList.push(exAnimeList[k]);
+                } else if( countEpisodes > 1) {
+                    for (var j=0; j<=countEpisodes; j++) {
+                        for (var k=0; k<exAnimeList.length; k++) {
+                            if (exAnimeList[k].episodes == erg.episodes[j]) {
+                                animeList.push(exAnimeList[k]);
+                            }
                         }
-                    }
-                }    
-            }
+                    }    
+                }
                
-            // Überprüfen ob Filter "Genre" mit mindestens einem Anime übereinstimmt.
-            if (countGenre == 1) {
-
+                // Überprüfen ob Filter "Genre" mit mindestens einem Anime übereinstimmt.
+                if (countGenre == 1) {
+                    
                     for (var m=0; m<exAnimeList.length; m++) {
                         /***************************************++
                         *Problem: bei genre "Art" wird auch "Martial Arts"  *ausgegeben! Lösen durch eingrenzung des indexOf?!
@@ -130,27 +137,21 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                             animeList.push(exAnimeList[m]);
                         }
                     }          
-            } else if (countGenre > 1) {    
-                for (var n=0; n<=countGenre; n++) {
-                    for (var o=0; o<exAnimeList.length; o++) {
-                        if (exAnimeList[o].genre.indexOf(erg.genre[n]) > -1) {
-                            animeList.push(exAnimeList[o]);
+                } else if (countGenre > 1) {    
+                    for (var n=0; n<=countGenre; n++) {
+                        for (var o=0; o<exAnimeList.length; o++) {
+                            if (exAnimeList[o].genre.indexOf(erg.genre[n]) > -1) {
+                                animeList.push(exAnimeList[o]);
+                            }
                         }
                     }
-                }
-            }   
-            if (animeList == '') {
-                res.render('pages/noResult');
-                res.end;
-            } else {
+                }   
                 res.render('pages/anime',{animeList:animeList});
                 res.end();
-            }
-        });
+            });
+        }
     });
-    exReq.end();
-
-    
+    exReq.end(); 
 });
 
 //[OK]
@@ -258,13 +259,18 @@ router.get('/user', jsonParser, function(req, res){
         }
     }
     var exReq = http.request(options, function(exRes){
-        exRes.on("data", function(chunk){
-
-            //wird nich automatisch geparst!??
-            var userList = JSON.parse(chunk);
-            res.render('pages/user',{userList:userList});
-            res.end();
-        });
+            if (exRes.statusCode == 404) {
+                res.statusCode = 404;
+                res.render('pages/error');
+                res.end();
+            } else {
+                exRes.on("data", function(chunk){
+                    //wird nich automatisch geparst!??
+                    var userList = JSON.parse(chunk);
+                    res.render('pages/user',{userList:userList});
+                    res.end();
+                });
+            }
     });
     exReq.end();
 });
@@ -288,16 +294,15 @@ router.get('/user/:user_id', jsonParser, function(req, res){
 					res.render('pages/error');
 					res.end();
 			}else {
-        exRes.on("data", function(chunk){
-            //Ist schon geparst??!
-            var userData = JSON.parse(chunk);
-            res.render('pages/userID',{userData:userData});
-            res.end();
-        });
+                exRes.on("data", function(chunk){
+                //Ist schon geparst??!
+                var userData = JSON.parse(chunk);
+                res.render('pages/userID',{userData:userData});
+                res.end();
+                });
 			}
     });
     exReq.end();
-
 });
 
 //[OK]
