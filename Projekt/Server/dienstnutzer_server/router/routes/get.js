@@ -133,21 +133,26 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         *Problem: bei genre "Art" wird auch "Martial Arts"  *ausgegeben! Lösen durch eingrenzung des indexOf?!
                         *...indexOf(' '+erg.genre) || (erg.genre+',')
                         ****************************************/
-                        if (exAnimeList[m].genre.indexOf(erg.genre) > -1) {
+                        if (exAnimeList[m].genre.toLowerCase().indexOf(erg.genre.toLowerCase()) > -1) {
                             animeList.push(exAnimeList[m]);
                         }
                     }          
                 } else if (countGenre > 1) {    
                     for (var n=0; n<=countGenre; n++) {
                         for (var o=0; o<exAnimeList.length; o++) {
-                            if (exAnimeList[o].genre.indexOf(erg.genre[n]) > -1) {
+                            if (exAnimeList[o].genre.toLowerCase().indexOf(erg.genre[n].toLowerCase()) > -1) {
                                 animeList.push(exAnimeList[o]);
                             }
                         }
                     }
-                }   
-                res.render('pages/anime',{animeList:animeList});
-                res.end();
+                }
+                if (animeList == '') {
+                    res.render('pages/noResult');
+                    res.end();
+                } else { 
+                    res.render('pages/anime',{animeList:animeList});
+                    res.end();
+                }
             });
         }
     });
