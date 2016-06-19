@@ -7,6 +7,8 @@ app.set('view engine', 'ejs');
 global.redis = require( 'redis' );
 global.db = redis.createClient(); //Creates a new Client
 
+global.http = require('http');
+
 global.bodyParser = require('body-parser');
 global.jsonParser = bodyParser.json();
 

@@ -33,37 +33,60 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 //[OK]
 //Trägt einen neuen Benutzer in die DB ein.
 router.put('/user', jsonParser, function(req, res){
-  console.log("IN USER PUT");
-  //console.log("req.body: " + JSON.stringify(req.body));
-  //console.log('');
-  var newUser = req.body;
-
-  var bodyString = JSON.stringify(newUser);
-  //console.log("bodyString: " + bodyString);
-  //console.log('');
+  // console.log("IN USER PUT");
+  // console.log("req.body: " + JSON.stringify(req.body));
+  // console.log('');
+   var newUser = req.body;
+  //
+   var bodyString = JSON.stringify(newUser);
+  //
   var options = {
       host: "localhost",
       port: 3000,
       path: "/user",
       method:"PUT",
       headers: {
-        accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Content-Length': bodyString.length
       }
-  }
-  //console.log("options: " + JSON.stringify(options));
-  //console.log('');
-  var newUserRequest = http.request(options, function(res){
-    console.log("IN CALLBACK");
-    var str = '';
-    res.on('data', function(chunk){
-      str += chunk;
+  };
+  // console.log("options: " + JSON.stringify(options));
+  // console.log('');
+  // var request = http.request(options, function(res){
+  //   console.log("IN CALLBACK");
+  //   var str = '';
+  //   res.on('data', function(chunk){
+  //     console.log("Response: " + chunk);
+  //   });
+  // }).write({"name":"body"});
+  // request.end();
+  // console.log("END OF PUT");
+  // res.status(200).send("User: " + JSON.stringify(newUser) + " added.");
+  var put_req = http.request(options, function (res) {
+    res.on("data", function (chunk) {
+        console.log('Response: ' + chunk);
     });
-    res.on('end', function(){
-      console.log(str);
-    });
-    console.log(res.body);
-  })
-  newUserRequest.end();
+  });
+  var reqBody = "someText";
+  put_req.write(bodyString);
+  put_req.end();
+  res.status(200).send("OK");
+
+
+
+
+  // var newUserRequest = http.request(options, function(res){
+  //   console.log("IN CALLBACK");
+  //   var str = '';
+  //   res.on('data', function(chunk){
+  //     str += chunk;
+  //   });
+  //   res.on('end', function(){
+  //     console.log(str);
+  //   });
+  //   console.log(res.body);
+  // });
+
 });
   //Inkrement wird nicht zurückgesetzt wenn bspw. alle User gelöscht werden!!!
 // 	db.incr('user_id:user', function (err, rep) {

@@ -35,6 +35,7 @@ router.put('/user', jsonParser, function(req, res){
 
 
   console.log("IN USER PUT");
+  console.log(req.body);
   console.log("req.body: " + JSON.stringify(req.body));
   var User = req.body;
   var newUser = {
@@ -48,12 +49,13 @@ router.put('/user', jsonParser, function(req, res){
     "birthdate":User.birthdate,
     "active":true
   }
+  console.log("newUser: " + JSON.stringify(newUser));
   //Inkrement wird nicht zurückgesetzt wenn bspw. alle User gelöscht werden!!!
   db.incr('user_id:user', function (err, rep) {
 
 		newUser.user_id = rep;
 		db.set('user:'+newUser.user_id, JSON.stringify(newUser), function(err, rep) {
-			res.status(201).type('text').send(newUser.user_id);
+			res.sendStatus(201).type('text').send(newUser.user_id);
 		});
     var newStat = {
         "stats":[
