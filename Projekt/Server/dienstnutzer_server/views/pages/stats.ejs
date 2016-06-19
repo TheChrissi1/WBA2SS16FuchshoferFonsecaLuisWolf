@@ -13,23 +13,23 @@
 
     <main>
         <div class="jumbotron">
-            <h2>Stats</h2>
-
-
-
-            <section id="user_info">
-
-              <li><%= statData.stats[0].user_id %></li>
-              <li><%= statData.stats[0].username %></li>
-            </section>
-            <section id="user_stats">
-              <ul>
-              <% for(var i=1; i<statData.stats.length; i++){ %>
-                <li><%= statData.stats[i].name %></li>
-                <li><%= statData.stats[i].episodes %></li>
-              <% } %>
-              </ul>
-            </section>
+          <section>
+            <p id="user_stats"><span id="stats_username"><%= statData.stats[0].username %></span>
+              <span id="aditional_user_info">EPISODES WATCHED:<span id="info_number"><%= statData.stats[0].seen_ep %></span>
+              | ANIME WATCHED:<span id="info_number"><%= statData.stats[0].seen_anime %></span><p>
+          </section>
+          <section class="content">
+            <div>
+              <section id="user_stats">
+                <ul>
+                  <% for(var i=1; i<statData.stats.length; i++){ %>
+                    <li><%= statData.stats[i].name %></li>
+                    <li><%= statData.stats[i].episodes %></li>
+                  <% } %>
+                </ul>
+              </section>
+            </div>
+          </section>
         </div>
 
 

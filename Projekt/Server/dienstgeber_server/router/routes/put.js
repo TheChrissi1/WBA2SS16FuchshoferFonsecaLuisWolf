@@ -10,8 +10,6 @@ router.put('/anime', jsonParser, function( req, res){
 
 });
 
-
-
 //[OK]
 // Ändert die Daten eines Animes.
 router.put( '/anime/:anime_name', jsonParser, function(req, res){
@@ -35,28 +33,41 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 //Trägt einen neuen Benutzer in die DB ein.
 router.put('/user', jsonParser, function(req, res){
 
-    var newUser = req.body;
 
-    //Inkrement wird nicht zurückgesetzt wenn bspw. alle User gelöscht werden!!!
-	db.incr('user_id:user', function (err, rep) {
+  console.log("IN USER PUT");
+  console.log("req.body: " + JSON.stringify(req.body));
+  var User = req.body;
+  var newUser = {
+    "user_id":0,
+    "name":User.name,
+    "lastname":User.lastname,
+    "username":User.username,
+    "authority":3,
+    "email":User.email,
+    "gender":User.gender,
+    "birthdate":User.birthdate,
+    "active":true
+  }
+  //Inkrement wird nicht zurückgesetzt wenn bspw. alle User gelöscht werden!!!
+  db.incr('user_id:user', function (err, rep) {
 
 		newUser.user_id = rep;
 		db.set('user:'+newUser.user_id, JSON.stringify(newUser), function(err, rep) {
-			res.status(201).type('text').send('new user: ' +newUser.user_id);
+			res.status(201).type('text').send(newUser.user_id);
 		});
-        var newStat = {
-            "stats":[
-              {
-                "user_id":newUser.user_id,
-                "username":newUser.username,
-                "seen_ep":0,
-                "seen_anime":0,
-              }
-            ]
-        };
-        db.set('stats:'+newUser.user_id, JSON.stringify(newStat), function(err, rep) {
-            console.log('new statistic for user: ' +newUser.user_id);
-        });
+    var newStat = {
+        "stats":[
+          {
+            "user_id":newUser.user_id,
+            "username":newUser.username,
+            "seen_ep":0,
+            "seen_anime":0,
+          }
+        ]
+    };
+    db.set('stats:'+newUser.user_id, JSON.stringify(newStat), function(err, rep) {
+        console.log('new statistic for user: ' +newUser.user_id);
+    });
 	});
 });
 
@@ -64,7 +75,7 @@ router.put('/user', jsonParser, function(req, res){
 //Ändert die Daten eines Benutzers.
 router.put( '/user/:user_id', jsonParser, function(req, res){
 
-    	db.exists('user:'+req.params.user_id, function(err, rep) {
+  db.exists('user:'+req.params.user_id, function(err, rep) {
 		if (rep == 1) {
 			var updatedUser = req.body;
 			updatedUser.user_id = req.params.user_id;
@@ -82,12 +93,37 @@ router.put( '/user/:user_id', jsonParser, function(req, res){
 //Ändert die Statistik eines Nutzers.
 router.put( '/user/:user_id/stats', jsonParser, function(req, res){
 
-
-
+  db.exists('stats:'+req.params.user_id, function(err, rep){
+    if(rep == 1){
+      db.get('stats:'+req.params.user_id, function(err, rep2) {
+    		if (rep2) {
+          var exists = 0;
+          rep2 = JSON.parse(rep2);
+          for(var i = 1; i<rep2.stats.length; i++){
+            if(rep2.stats[i].name == req.body.name) exists = i;
+          }
+          if( exists > 0 ){
+            var tmp = rep2.stats[exists].episodes;
+            rep2.stats[exists].episodes = req.body.episodes;
+            rep2.stats[0].seen_ep += (tmp-req.body.episodes);
+          } else if (exists == 0){
+            rep2.stats.push(req.body);
+            rep2.stats[0].seen_ep += req.body.episodes;
+            rep2.stats[0].seen_anime += 1;
+          }
+          db.set('stats:' + req.params.user_id, JSON.stringify(rep2), function(err, rep) {
+    				res.status(200).type('json').send(rep2);
+    			});
+    		} else {
+    			res.status(404).type('text').send();
+    		}
+    	});
+    }
+  });
 });
 
 
-
+/*
 ///////// PUT GENRE ONLY ONCE /////////////////
 router.put('/genre', jsonParser, function( req, res ){
 
@@ -135,6 +171,6 @@ router.put('/stats', jsonParser, function( req, res ){
     res.status(201).type('text').send('added');
 })
 ///////////////////////////////////////////////
-
+*/
 console.log('loaded put.js.')
 module.exports = router;

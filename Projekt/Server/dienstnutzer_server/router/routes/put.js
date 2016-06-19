@@ -33,31 +33,47 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 //[OK]
 //Trägt einen neuen Benutzer in die DB ein.
 router.put('/user', jsonParser, function(req, res){
+  console.log("IN USER PUT");
+  //console.log("req.body: " + JSON.stringify(req.body));
+  //console.log('');
+  var newUser = req.body;
 
-    var newUser = req.body;
-
-    //Inkrement wird nicht zurückgesetzt wenn bspw. alle User gelöscht werden!!!
-	db.incr('user_id:user', function (err, rep) {
-
-		newUser.user_id = rep;
-		db.set('user:'+newUser.user_id, JSON.stringify(newUser), function(err, rep) {
-			res.status(201).type('text').send('new user: ' +newUser.user_id);
-		});
-      var newStat = {
-          "stats":[
-            {
-              "user_id":newUser.user_id,
-              "username":newUser.username,
-              "seen_ep":0,
-              "seen_anime":0,
-            }
-          ]
-      };
-      db.set('stats:'+newUser.user_id, JSON.stringify(newStat), function(err, rep) {
-          console.log('new statistic for user: ' +newUser.user_id);
-      });
-	});
+  var bodyString = JSON.stringify(newUser);
+  //console.log("bodyString: " + bodyString);
+  //console.log('');
+  var options = {
+      host: "localhost",
+      port: 3000,
+      path: "/user",
+      method:"PUT",
+      headers: {
+        accept: 'application/json',
+      }
+  }
+  //console.log("options: " + JSON.stringify(options));
+  //console.log('');
+  var newUserRequest = http.request(options, function(res){
+    console.log("IN CALLBACK");
+    var str = '';
+    res.on('data', function(chunk){
+      str += chunk;
+    });
+    res.on('end', function(){
+      console.log(str);
+    });
+    console.log(res.body);
+  })
+  newUserRequest.end();
 });
+  //Inkrement wird nicht zurückgesetzt wenn bspw. alle User gelöscht werden!!!
+// 	db.incr('user_id:user', function (err, rep) {
+//
+// 		newUser.user_id = rep;
+// 		db.set('user:'+newUser.user_id, JSON.stringify(newUser), function(err, rep) {
+// 			res.status(201).type('text').send('new user: ' +newUser.user_id);
+// 		});
+// 	});
+// });
 
 //[OK]
 //Ändert die Daten eines Benutzers.

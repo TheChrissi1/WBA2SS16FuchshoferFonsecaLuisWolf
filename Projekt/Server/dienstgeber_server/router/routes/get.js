@@ -11,9 +11,9 @@ router.get('/', function(req, res){
 //Gibt eine Liste aller Animes aus.
 router.get('/anime', jsonParser, function(req, res){
 
-    db.keys('anime:*',function(err,rep) {
+	db.keys('anime:*',function(err,rep) {
 
-		var anime = [];
+	var anime = [];
 
 		if (rep.length == 0) {
 
@@ -21,16 +21,14 @@ router.get('/anime', jsonParser, function(req, res){
             res.status(404).type('text').send('no Animes found');
 
 		} else if (rep.length > 0) {
-            db.mget(rep, function(err,rep) {
-                rep.forEach(function(val){
-                    anime.push(JSON.parse(val));
-			    });
-
-                res.status(200).type('json').send(anime);
-                //res.set("Content-Type", 'application/json').status(200).json(anime).end();
-
-            });
-        }
+    	db.mget(rep, function(err,rep) {
+	    	rep.forEach(function(val){
+        	anime.push(JSON.parse(val));
+	    	});
+        res.status(200).type('json').send(anime);
+        //res.set("Content-Type", 'application/json').status(200).json(anime).end();
+			});
+    }
 	});
 
 });
@@ -53,7 +51,6 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
 //[OK] - kein json format?
 //Gibt eine Liste aller Benutzer aus.
 router.get('/user', jsonParser, function(req, res){
-
     db.keys('user:*',function(err,rep) {
 
 		var users = [];
@@ -92,18 +89,13 @@ router.get('/user/:user_id', jsonParser, function(req, res){
 //[OK]
 //Gibt die Statistik eines Benutzers aus.
 router.get( '/user/:user_id/stats', jsonParser, function(req, res){
-
-
-    db.get('stats:'+req.params.user_id, function(err, rep) {
-
+	db.get('stats:'+req.params.user_id, function(err, rep) {
 		if (rep) {
 			res.status(200).type('json').send(rep);
 		} else {
 			res.status(404).type('text').send();
 		}
 	});
-
-
 });
 
 //[OK]
@@ -219,6 +211,38 @@ router.get('/anime/filter/:para', jsonParser, function(req, res) {
 
 });
 
+//[NOT OK]
+//Gibt das Formular für die registrierung aus.
+router.get('/registration', jsonParser, function(req, res){
+	res.status(200).send();
+});
+
+router.get('/registration/:user_name', jsonParser, function(req, res){
+	console.log("Asking for Username: " + req.params.user_name);
+	db.keys('user:*',function(err,rep) {
+		var result = false;
+		var user_id = -1;
+		if (rep.length == 0) {
+					console.log('keine user vorhanden');
+					res.status(404).type('text').send('no user found');
+
+		} else if (rep.length > 0) {
+			db.mget(rep, function(err,rep) {
+				rep.forEach(function(val){
+					if(JSON.parse(val).username.toLowerCase() == req.params.user_name.toLowerCase()){
+						user_id = JSON.parse(val).user_id;
+						result = true;
+					}
+				});
+				if(result){
+					res.sendStatus(422).send();
+				} else {
+					res.sendStatus(200).send();
+				}
+			});
+		}
+	});
+})
 
 console.log('loaded get.js');
 module.exports = router;

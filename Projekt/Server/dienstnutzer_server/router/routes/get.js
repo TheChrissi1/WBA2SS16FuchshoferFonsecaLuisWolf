@@ -9,7 +9,6 @@ router.get('/', function(req, res){
     console.log('Projekt der TH Köln, Medieninformatik 4. Semester.');
 });
 
-
 //[OK]
 //Gibt eine Liste aller Animes aus.
 router.get('/anime', function(req, res){
@@ -37,7 +36,6 @@ router.get('/anime', function(req, res){
 
 
 });
-
 
 //[NOT OK]
 //Gibt eine spezifizierung der Animetabelle aus.
@@ -260,7 +258,7 @@ router.get('/user/:user_id', jsonParser, function(req, res){
 //Gibt die Statistik eines Benutzers aus.
 router.get( '/user/:user_id/stats', jsonParser, function(req, res){
 
-
+	console.log("Stats for ID: " + req.params.user_id);
 	var options = {
 			host: "localhost",
 			port: 3000,
@@ -346,10 +344,52 @@ router.get('/ref', jsonParser, function(req, res) {
             });
         }
     });
-    exReq.end()
+    exReq.end();
 });
 
+//[NOT OK]
+//Öffnet das Formular zur registrierung.
+router.get('/registration', jsonParser, function(req, res){
+	var options = {
+			host: "localhost",
+			port: 3000,
+			path: "/registration",
+			method:"GET",
+			headers:{
+			}
+	}
+	var exReq = http.request(options, function(exRes){
+			if( exRes.statusCode == 404 ){
+				res.statusCode = 404;
+				res.render('pages/error');
+				res.end();
+			}else {
+				res.render('pages/registration');
+				res.end();
+			}
+	});
+	exReq.end();
+})
 
+//[NOT OK]
+//
+router.get('/registration/:user_name', jsonParser, function(req, res){
+	var options = {
+		host: "localhost",
+		port: 3000,
+		path: "/registration/" + req.params.user_name,
+		method: "GET",
+		headers:{
+
+		}
+	}
+	var exReq = http.request(options, function(exRes){
+		console.log("Status Code: " + exRes.statusCode);
+		res.status(exRes.statusCode).send();
+		res.end();
+	});
+	exReq.end()
+})
 
 
 

@@ -13,19 +13,22 @@
 
     <main>
         <div class="jumbotron">
-            <h1>User</h1>
-            <p>Liste aller User:</p>
-
-            <% userList.forEach(function(user) { %>
-
-            <p>ID: <%= user.uID %></p>
-            <p>Name: <%= user.name %></p>
-            <p>E-Mail: <%= user.email %></p>
-            <p>Alias: <%= user.alias %></p>
-            <p>Wohnort: <%= user.wohnort %></p>
-            <p>Geschlecht: <%= user.gender %></p>
-            <p>Alter: <%= user.alter %></p>
-            <% });  %>
+            <h2 class="headline">User List</h1>
+            <section class="content">
+              <div>
+                <% userList.forEach(function(user) { %>
+                <section id="user_info">
+                  <p>ID: <%= user.user_id %></p>
+                  <p>Name: <%= user.name %></p>
+                  <p>E-Mail: <%= user.email %></p>
+                  <p>Alias: <%= user.username %></p>
+                  <p>Wohnort: <%= user.wohnort %></p>
+                  <p>Geschlecht: <%= user.gender %></p>
+                  <p>Alter: <%= user.alter %></p>
+                </section>
+                <% });  %>
+              </div>
+            </section>
         </div>
 
 
