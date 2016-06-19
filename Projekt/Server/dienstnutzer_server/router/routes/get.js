@@ -23,24 +23,27 @@ router.get('/anime', function(req, res){
         }
     }
     var exReq = http.request(options, function(exRes){
-
-        exRes.on("data", function(chunk){
-
-            //wird nich automatisch geparst!??
-            var animeList = JSON.parse(chunk);
-            res.render('pages/anime',{animeList:animeList});
-            res.end();
-        });
+            if (exRes.statusCode == 404) {
+                res.statusCode = 404;
+                res.render('pages/error');
+                res.end();
+            } else {
+                exRes.on("data", function(chunk){
+                    //wird nich automatisch geparst!??
+                    var animeList = JSON.parse(chunk);
+                    res.render('pages/anime',{animeList:animeList});
+                    res.end();
+                });
+            }
     });
     exReq.end();
-
-
 });
+    
 
 //[NOT OK]
 //Gibt eine spezifizierung der Animetabelle aus.
 router.get('/anime/filter:para', jsonParser, function(req, res) {
-
+    
     //Anhand der querry parameter kann die profil.json nach bestimmten
     //kriterien wie genre, anzahl folgen etc. durchsucht werden.
     // localhost.de/anime/filter/?genre=action&folgen=500
@@ -55,56 +58,103 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
         }
     }
 
+    
+    var countEpisodes = 0;
+    var countGenre = 0;
     var query = req.params.para;
     var queryL = query.length;
-    //console.log(query);
-    query = query.substring(1, query.length);
-    //console.log(query);
+
+    //Bestimmt die Anzahl vom substring "episodes"
+    var tmpEpisodes = query;
+    for (var t=0; t<tmpEpisodes.length; t++ ) {
+        var posEpi;
+        tmpEpisodes = tmpEpisodes.substr(posEpi+t,tmpEpisodes.length);
+        posEpi = tmpEpisodes.indexOf("episodes");
+        if (posEpi == -1) {
+            break;
+        } else {
+            countEpisodes++;
+        }
+    }
+
+    //Bestimmt die Anzahl vom substring "genre"
+    var tmpGenre = query;
+    for (var u=0; u<tmpGenre.length; u++ ) {
+        var posGen;
+        tmpGenre = tmpGenre.substr(posGen+u,tmpGenre.length);
+        posGen = tmpGenre.indexOf("genre");
+        if (posGen == -1) {
+            break;
+        } else {
+            countGenre++;
+        }
+    }
+    //console.log('cEpi: ' +countEpisodes);
+    //console.log('cGen: ' +countGenre);
+    
+    query = query.substr(1,query.length);
     var erg = queryString.parse(query);
 
-
     var exReq = http.request(options, function(exRes){
-
-        exRes.on("data", function(chunk){
-
-            var exAnimeList = JSON.parse(chunk);
-            var animeList = [];
-
-            if (erg.episodes == null) {
-            } else {
-                for (var h=0; h<erg.episodes.length; h++) {
-
+        if( exRes.statusCode == 404 ){
+            res.statusCode = 404;
+            res.render('pages/error');
+            res.end();
+        }else {
+            exRes.on("data", function(chunk){
+    
+                var exAnimeList = JSON.parse(chunk);
+                var animeList = [];
+            
+                // Überprüfen ob Filter "Episodes" mit mindestens einem Anime übereinstimmt.
+                if (countEpisodes == 1) {
                     for (var i=0; i<exAnimeList.length; i++) {
-
-                        if (exAnimeList[i].episodes == erg.episodes[h]) {
+                        if (exAnimeList[i].episodes == erg.episodes) {
                             animeList.push(exAnimeList[i]);
+                        }
+                    }      
+                } else if( countEpisodes > 1) {
+                    for (var j=0; j<=countEpisodes; j++) {
+                        for (var k=0; k<exAnimeList.length; k++) {
+                            if (exAnimeList[k].episodes == erg.episodes[j]) {
+                                animeList.push(exAnimeList[k]);
+                            }
+                        }
+                    }    
+                }
+               
+                // Überprüfen ob Filter "Genre" mit mindestens einem Anime übereinstimmt.
+                if (countGenre == 1) {
+                    
+                    for (var m=0; m<exAnimeList.length; m++) {
+                        /***************************************++
+                        *Problem: bei genre "Art" wird auch "Martial Arts"  *ausgegeben! Lösen durch eingrenzung des indexOf?!
+                        *...indexOf(' '+erg.genre) || (erg.genre+',')
+                        ****************************************/
+                        if (exAnimeList[m].genre.toLowerCase().indexOf(erg.genre.toLowerCase()) > -1) {
+                            animeList.push(exAnimeList[m]);
+                        }
+                    }          
+                } else if (countGenre > 1) {    
+                    for (var n=0; n<=countGenre; n++) {
+                        for (var o=0; o<exAnimeList.length; o++) {
+                            if (exAnimeList[o].genre.toLowerCase().indexOf(erg.genre[n].toLowerCase()) > -1) {
+                                animeList.push(exAnimeList[o]);
+                            }
                         }
                     }
                 }
-            }
-
-            if (erg.genre == null) {
-            } else {
-                for (var h=0; h<erg.genre.length; h++) {
-
-                    for (var i=0; i<exAnimeList.length; i++) {
-
-                        if (exAnimeList[i].genre == erg.genre[h]) {
-                            animeList.push(exAnimeList[i]);
-                        }
-                    }
+                if (animeList == '') {
+                    res.render('pages/noResult');
+                    res.end();
+                } else { 
+                    res.render('pages/anime',{animeList:animeList});
+                    res.end();
                 }
-            }
-            if (animeList == '') {
-                res.render('pages/noResult');
-                res.end;
-            } else {
-                res.render('pages/anime',{animeList:animeList});
-                res.end();
-            }
-        });
+            });
+        }
     });
-    exReq.end();
+    exReq.end(); 
 });
 
 //[OK]
@@ -212,13 +262,18 @@ router.get('/user', jsonParser, function(req, res){
         }
     }
     var exReq = http.request(options, function(exRes){
-        exRes.on("data", function(chunk){
-
-            //wird nich automatisch geparst!??
-            var userList = JSON.parse(chunk);
-            res.render('pages/user',{userList:userList});
-            res.end();
-        });
+            if (exRes.statusCode == 404) {
+                res.statusCode = 404;
+                res.render('pages/error');
+                res.end();
+            } else {
+                exRes.on("data", function(chunk){
+                    //wird nich automatisch geparst!??
+                    var userList = JSON.parse(chunk);
+                    res.render('pages/user',{userList:userList});
+                    res.end();
+                });
+            }
     });
     exReq.end();
 });
@@ -242,16 +297,15 @@ router.get('/user/:user_id', jsonParser, function(req, res){
 					res.render('pages/error');
 					res.end();
 			}else {
-        exRes.on("data", function(chunk){
-            //Ist schon geparst??!
-            var userData = JSON.parse(chunk);
-            res.render('pages/userID',{userData:userData});
-            res.end();
-        });
+                exRes.on("data", function(chunk){
+                //Ist schon geparst??!
+                var userData = JSON.parse(chunk);
+                res.render('pages/userID',{userData:userData});
+                res.end();
+                });
 			}
     });
     exReq.end();
-
 });
 
 //[OK]
