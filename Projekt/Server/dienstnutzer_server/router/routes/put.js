@@ -38,6 +38,7 @@ router.put('/user', jsonParser, function(req, res){
   // console.log('');
    var newUser = req.body;
   //
+  console.log(req.body);
    var bodyString = JSON.stringify(newUser);
   //
   var options = {
@@ -50,43 +51,23 @@ router.put('/user', jsonParser, function(req, res){
         'Content-Length': bodyString.length
       }
   };
-  // console.log("options: " + JSON.stringify(options));
-  // console.log('');
-  // var request = http.request(options, function(res){
-  //   console.log("IN CALLBACK");
-  //   var str = '';
-  //   res.on('data', function(chunk){
-  //     console.log("Response: " + chunk);
-  //   });
-  // }).write({"name":"body"});
-  // request.end();
-  // console.log("END OF PUT");
-  // res.status(200).send("User: " + JSON.stringify(newUser) + " added.");
-  var put_req = http.request(options, function (res) {
-    res.on("data", function (chunk) {
+  var resBody;
+  var put_req = http.request(options, function (put_res) {
+    put_res.on("data", function (chunk) {
         console.log('Response: ' + chunk);
+        console.log('StatusCode: ' + put_res.statusCode);
+        console.log('StatusText: ' + JSON.parse(chunk).user_id);
+        resBody = {"user_id":JSON.parse(chunk).user_id};
+        console.log(resBody);
+        console.log('--------------------------------------');
     });
+    put_res.on("end", function(){
+      console.log(JSON.stringify(newUser));
+      res.status(201).type('json').send(resBody);
+    })
   });
-  var reqBody = "someText";
   put_req.write(bodyString);
   put_req.end();
-  res.status(200).send("OK");
-
-
-
-
-  // var newUserRequest = http.request(options, function(res){
-  //   console.log("IN CALLBACK");
-  //   var str = '';
-  //   res.on('data', function(chunk){
-  //     str += chunk;
-  //   });
-  //   res.on('end', function(){
-  //     console.log(str);
-  //   });
-  //   console.log(res.body);
-  // });
-
 });
   //Inkrement wird nicht zurückgesetzt wenn bspw. alle User gelöscht werden!!!
 // 	db.incr('user_id:user', function (err, rep) {

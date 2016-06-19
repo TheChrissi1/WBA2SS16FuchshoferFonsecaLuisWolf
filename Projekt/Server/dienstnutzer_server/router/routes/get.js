@@ -385,7 +385,7 @@ router.get('/registration/:user_name', jsonParser, function(req, res){
 	}
 	var exReq = http.request(options, function(exRes){
 		console.log("Status Code: " + exRes.statusCode);
-		res.status(exRes.statusCode).send();
+		res.status(exRes.statusCode).type('json').send();
 		res.end();
 	});
 	exReq.end()
