@@ -1,0 +1,37 @@
+{
+    "reference":[
+        {
+            "ref_id":"narutotube",
+            "name":"naruto-tube.org",
+            "address":"http://naruto-tube.org/",
+            "address_ep_en":"default",
+            "address_ep_de":"http://naruto-tube.org/",
+            "disjoin":"-",
+            "querry":"sub",
+            "lang":"DE",
+            "active":true
+        },
+        {
+            "ref_id":"anilinkz",
+            "name":"anilinkz.tv",
+            "address":"http://anilinkz.tv/",
+            "address_ep_en":"http://anilinkz.io/",
+            "address_ep_de":"default",
+            "disjoin":"-",
+            "querry":"episode",
+            "lang":"EN",
+            "active":true
+        },
+        {
+            "ref_id":"gogoanime",
+            "name":"gogoanime.tv",
+            "address":"http://gogoanime.tv/",
+            "address_ep_en":"http://gogoanime.io/",
+            "address_ep_de":"default",
+            "disjoin":"-",
+            "querry":"episode",
+            "lang":"EN",
+            "active":true
+        }
+    ]
+}
