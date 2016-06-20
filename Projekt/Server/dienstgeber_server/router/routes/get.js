@@ -224,7 +224,7 @@ router.get('/registration/:user_name', jsonParser, function(req, res){
 		var user_id = -1;
 		if (rep.length == 0) {
 					console.log('keine user vorhanden');
-					res.status(404).type('text').send('no user found');
+					res.status(200).type('text').send('no user found');
 
 		} else if (rep.length > 0) {
 			db.mget(rep, function(err,rep) {

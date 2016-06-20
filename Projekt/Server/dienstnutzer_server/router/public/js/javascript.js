@@ -25,7 +25,7 @@ function getJSON(url) {
 function validateUsername(){
   var string = document.getElementById("username").value;
   var return_value = 0;
-  var url = 'http://192.168.2.108:8080/registration/' + string.toLowerCase();
+  var url = 'http://localhost:8080/registration/' + string.toLowerCase();
   var result = getJSON(url);
   return result;
 };
@@ -53,9 +53,8 @@ function putUser(){
     "gender":"",
     "birthdate":""
   }
-  alert(JSON.stringify(user));
   var xhr = new XMLHttpRequest();
-  xhr.open("PUT", 'http://192.168.2.108:8080/user', false);
+  xhr.open("PUT", 'http://localhost:8080/user', false);
   xhr.setRequestHeader('Content-Type','application/json');
   xhr.setRequestHeader('Content-Length', JSON.stringify(user).length);
   xhr.setRequestHeader('Connection', 'close');
@@ -83,10 +82,13 @@ function register(){
 
 function openProfile(){
   //alert("HI");
-  var url = 'http://192.168.2.108:8080/user/' + user_id + '/stats';
+  var url = 'http://localhost:8080/user/' + user_id + '/stats';
   //window.location.href="http://192.168.2.108:8080/user/3/stats"
-  window.location = url;
-  alert('Loading User-Profile');
+  alert("LOADING: " + url);
+  // xhr = new XMLHttpRequest();
+  // xhr.open("GET", url, true);
+  // xhr.send();
+  self.location = "http://localhost:8080/"
 }
 
-//document.getElementById("save_button").addEventListener("click", openProfile);
+//document.getElementById("save_button").addActionListener("click", setTimeout(openProfile(),3000));

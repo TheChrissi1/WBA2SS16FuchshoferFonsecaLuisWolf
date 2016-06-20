@@ -24,13 +24,20 @@ router.get('/anime', function(req, res){
     }
     var exReq = http.request(options, function(exRes){
 
+			if(exRes.statusCode != 404){
         exRes.on("data", function(chunk){
-
             //wird nich automatisch geparst!??
             var animeList = JSON.parse(chunk);
             res.render('pages/anime',{animeList:animeList});
             res.end();
         });
+			} else {
+				exRes.on("data", function(chunk){
+					var animeList = [];
+					res.render('pages/anime',{animeList:animeList});
+					res.end();
+				});
+			}
     });
     exReq.end();
 
@@ -213,11 +220,16 @@ router.get('/user', jsonParser, function(req, res){
     }
     var exReq = http.request(options, function(exRes){
         exRes.on("data", function(chunk){
-
+					if(exRes.statusCode != 404){
             //wird nich automatisch geparst!??
             var userList = JSON.parse(chunk);
             res.render('pages/user',{userList:userList});
             res.end();
+					} else {
+						var userList = [];
+						res.render('pages/user',{userList:userList});
+						res.end();
+					}
         });
     });
     exReq.end();

@@ -36,10 +36,9 @@ router.put('/user', jsonParser, function(req, res){
   // console.log("IN USER PUT");
   // console.log("req.body: " + JSON.stringify(req.body));
   // console.log('');
-   var newUser = req.body;
+  var newUser = req.body;
   //
-  console.log(req.body);
-   var bodyString = JSON.stringify(newUser);
+  var bodyString = JSON.stringify(newUser);
   //
   var options = {
       host: "localhost",
@@ -62,7 +61,6 @@ router.put('/user', jsonParser, function(req, res){
         console.log('--------------------------------------');
     });
     put_res.on("end", function(){
-      console.log(JSON.stringify(newUser));
       res.status(201).type('json').send(resBody);
     })
   });
