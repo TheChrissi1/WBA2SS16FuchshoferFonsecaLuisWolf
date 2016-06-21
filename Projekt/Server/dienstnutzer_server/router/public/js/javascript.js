@@ -25,7 +25,7 @@ function getJSON(url) {
 function validateUsername(){
   var string = document.getElementById("username").value;
   var return_value = 0;
-  var url = 'http://localhost:8080/registration/' + string.toLowerCase();
+  var url = 'http://192.168.2.108:8080/registration/' + string.toLowerCase();
   var result = getJSON(url);
   return result;
 };
@@ -54,7 +54,7 @@ function putUser(){
     "birthdate":""
   }
   var xhr = new XMLHttpRequest();
-  xhr.open("PUT", 'http://localhost:8080/user', false);
+  xhr.open("PUT", 'http://192.168.2.108:8080/user', false);
   xhr.setRequestHeader('Content-Type','application/json');
   xhr.setRequestHeader('Content-Length', JSON.stringify(user).length);
   xhr.setRequestHeader('Connection', 'close');
@@ -62,14 +62,14 @@ function putUser(){
   //alert("Status: " + xhr.status);
   //alert("User ID: " + JSON.parse(xhr.responseText).user_id);
   user_id = JSON.parse(xhr.responseText).user_id;
-  openProfile();
+  return openProfile();
 };
 
 function register(){
   if(userIsValid == 200){
       if(validateEmail()){
         window.alert("ADDING USER");
-        putUser();
+        return putUser();
     } else {
       window.alert("incorrect Email");
     }
@@ -82,13 +82,13 @@ function register(){
 
 function openProfile(){
   //alert("HI");
-  var url = 'http://localhost:8080/user/' + user_id + '/stats';
+  var url = 'http://192.168.2.108:8080/user/' + user_id + '/stats';
   //window.location.href="http://192.168.2.108:8080/user/3/stats"
-  alert("LOADING: " + url);
   // xhr = new XMLHttpRequest();
   // xhr.open("GET", url, true);
   // xhr.send();
-  self.location = "http://localhost:8080/"
+  window.location = url;
+  return false;
 }
 
 //document.getElementById("save_button").addActionListener("click", setTimeout(openProfile(),3000));

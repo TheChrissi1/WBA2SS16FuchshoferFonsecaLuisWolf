@@ -218,7 +218,7 @@ router.get('/registration', jsonParser, function(req, res){
 });
 
 router.get('/registration/:user_name', jsonParser, function(req, res){
-	console.log("Asking for Username: " + req.params.user_name);
+	//console.log("Asking for Username: " + req.params.user_name);
 	db.keys('user:*',function(err,rep) {
 		var result = false;
 		var user_id = -1;

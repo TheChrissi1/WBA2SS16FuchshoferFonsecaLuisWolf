@@ -53,12 +53,12 @@ router.put('/user', jsonParser, function(req, res){
   var resBody;
   var put_req = http.request(options, function (put_res) {
     put_res.on("data", function (chunk) {
-        console.log('Response: ' + chunk);
-        console.log('StatusCode: ' + put_res.statusCode);
-        console.log('StatusText: ' + JSON.parse(chunk).user_id);
+        // console.log('Response: ' + chunk);
+        // console.log('StatusCode: ' + put_res.statusCode);
+        // console.log('StatusText: ' + JSON.parse(chunk).user_id);
         resBody = {"user_id":JSON.parse(chunk).user_id};
-        console.log(resBody);
-        console.log('--------------------------------------');
+        // console.log(resBody);
+        // console.log('--------------------------------------');
     });
     put_res.on("end", function(){
       res.status(201).type('json').send(resBody);
@@ -98,9 +98,6 @@ router.put( '/user/:user_id', jsonParser, function(req, res){
 //[NOT OK]
 //Ändert die Statistik eines Nutzers.
 router.put( '/user/:user_id/stats', jsonParser, function(req, res){
-
-
-
 });
 
 

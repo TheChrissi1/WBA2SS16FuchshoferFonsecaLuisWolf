@@ -270,7 +270,7 @@ router.get('/user/:user_id', jsonParser, function(req, res){
 //Gibt die Statistik eines Benutzers aus.
 router.get( '/user/:user_id/stats', jsonParser, function(req, res){
 
-	console.log("Stats for ID: " + req.params.user_id);
+	// console.log("Stats for ID: " + req.params.user_id);
 	var options = {
 			host: "localhost",
 			port: 3000,
@@ -396,7 +396,6 @@ router.get('/registration/:user_name', jsonParser, function(req, res){
 		}
 	}
 	var exReq = http.request(options, function(exRes){
-		console.log("Status Code: " + exRes.statusCode);
 		res.status(exRes.statusCode).type('json').send();
 		res.end();
 	});

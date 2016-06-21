@@ -34,7 +34,7 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 router.put('/user', jsonParser, function(req, res){
 
   var User = req.body;
-  console.log(User);
+  // console.log(User);
   var newUser = {
     "user_id":0,
     "name":User.name,
@@ -46,12 +46,12 @@ router.put('/user', jsonParser, function(req, res){
     "birthdate":User.birthdate,
     "active":true
   }
-  console.log(newUser);
+  // console.log(newUser);
   db.incr('user_id:user', function (err, rep) {
 
 		newUser.user_id = rep;
 		db.set('user:'+newUser.user_id, JSON.stringify(newUser), function(err, rep) {
-      console.log("New User with ID: " + newUser.user_id);
+      // console.log("New User with ID: " + newUser.user_id);
 		});
     var newStat = {
         "stats":[
@@ -64,7 +64,8 @@ router.put('/user', jsonParser, function(req, res){
         ]
     };
     db.set('stats:'+newUser.user_id, JSON.stringify(newStat), function(err, rep) {
-        console.log('new statistic for user: ' + newUser.user_id);
+      if( err ) throw err;
+        // console.log('new statistic for user: ' + newUser.user_id);
     });
     res.status(201).type('text').send({"user_id":newUser.user_id});
 	});
