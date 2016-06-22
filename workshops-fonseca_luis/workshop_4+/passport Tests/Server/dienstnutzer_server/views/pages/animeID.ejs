@@ -1,0 +1,45 @@
+<!-- views/pages/anime.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container" id="body">
+
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+    <main>
+        <div class="jumbotron">
+            <h2 class="headline"><%= animeData.name %></h2>
+
+            <section class="content">
+              <div>
+                <ul>
+                  <p>Name_Jap: <%= animeData.name_jap %></p>
+                  <p>Episodes: <%= animeData.episodes %></p>
+                  <p>Release: <%= animeData.release %></p>
+                  <p>Release_Jap: <%= animeData.release_jap %></p>
+                  <p>License: <%= animeData.license %></p>
+                  <p>status: <%= animeData.status %></p>
+                </ul>
+              </div>
+            </section>
+            <% refData.forEach(function(refs) { %>
+                <p><a href=<%= refs.address %>><%= refs.name %></a></p>
+            <% }); %>
+
+        </div>
+
+
+
+    </main>
+
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
+
+</body>
+</html>

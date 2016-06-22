@@ -1,0 +1,18 @@
+{
+    "stats":[
+      {
+        "user_id":1,
+        "username":"eXeLuis",
+        "seen_ep":450,
+        "seen_anime":2,
+      },
+      {
+        "name":"Shingeki no Kyojin",
+        "episodes":25,
+      },
+      {
+        "name":"Naruto Shippuuden",
+        "episodes":425,
+      }
+    ]
+}
