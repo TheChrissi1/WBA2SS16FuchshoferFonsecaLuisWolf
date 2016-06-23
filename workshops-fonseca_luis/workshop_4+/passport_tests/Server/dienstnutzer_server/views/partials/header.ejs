@@ -15,15 +15,27 @@
             <li><a href="/anime">Anime</a></li>
             <li><a href="/user">User</a></li>
             <li><a href="/genre">Genre</a></li>
-            <li><a href="/signin">Login</a></li>
-            <li><a href="/ref">References</a></li>
-
-            <li><a href="/user/1/stats">Profile</a></li>
+            <li><a id="userProfil" href="" onclick="return openProfile()">Profile</a></li>
             <li><a href="/about">About</a></li>
-
             <li><a href="/ref">Referenz</a></li>
-
+            <li><a href="/login">Login</a></li>
+            <li><a href="/logout">Logout</a></li>
         </ul>
 
     </div>
+    <script>
+    function openProfile(){
+      var cookie = document.cookie;
+      var c1 = cookie.split(';');
+      var value = c1[1].split('=');
+      if(value[1] != 0){
+        var str = '/user/'+value[1]+'/stats';
+        window.location = str;
+      } else {
+        alert("You are not Logged In");
+        window.location = '/login';
+      }
+      return false;
+    };
+    </script>
 </nav>

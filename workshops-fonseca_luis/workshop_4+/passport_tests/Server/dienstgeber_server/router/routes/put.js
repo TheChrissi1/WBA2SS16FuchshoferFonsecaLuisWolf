@@ -128,13 +128,13 @@ router.put( '/user/:user_id/stats', jsonParser, function(req, res){
 router.put('/signup', passport.authenticate('local-signup',
   {
 	   successRedirect: '/',
-	   failureRedirect: '192.168.2.108:8080/signin'
+	   failureRedirect: '/login'
   }
 ));
 
 router.put('/login', passport.authenticate('local-signin', {
   successRedirect: '/',
-  failureRedirect: '/signin'
+  failureRedirect: '/'
 }));
 
 

@@ -3,8 +3,8 @@ var http = require('http');
 
 
 function isAuthenticated( req, res, next){
-	console.log(req.isAuthenticated());
-	if(req.isAuthenticated()){
+	console.log(req.isAuthenticated);
+	if(req.isAuthenticated){
 		return next();
 	} else {
 		router.get('/index');
@@ -14,6 +14,7 @@ function isAuthenticated( req, res, next){
 //Index
 
 router.get('/', function(req, res){
+	console.log("User: " + req.cookie);
 	res.render('pages/index');
     // console.log('Projekt der TH Köln, Medieninformatik 4. Semester.');
 });
@@ -277,7 +278,7 @@ router.get('/user/:user_id', jsonParser, function(req, res){
 
 //[OK]
 //Gibt die Statistik eines Benutzers aus.
-router.get( '/user/:user_id/stats', isAuthenticated, function(req, res){
+router.get( '/user/:user_id/stats', function(req, res){
 
 	// console.log("Stats for ID: " + req.params.user_id);
 	var options = {
@@ -411,12 +412,12 @@ router.get('/registration/:user_name', jsonParser, function(req, res){
 	exReq.end()
 })
 
-router.get('/signin', jsonParser, function(req, res){
-	res.render('pages/signin');
+router.get('/login', jsonParser, function(req, res){
+	res.render('pages/login');
 	res.end();
 })
 
-router.get('/signout', jsonParser, function( req, res){
+router.get('/logout', jsonParser, function( req, res){
 	var options = {
 			host: "localhost",
 			port: 3000,
@@ -427,7 +428,9 @@ router.get('/signout', jsonParser, function( req, res){
 	}
 	var exReq = http.request(options);
 	exReq.end();
-	res.sendStatus(200);
+	res.clearCookie('username');
+	res.clearCookie('user_id');
+	res.render('pages/index');
 });
 // console.log('loaded get.js');
 

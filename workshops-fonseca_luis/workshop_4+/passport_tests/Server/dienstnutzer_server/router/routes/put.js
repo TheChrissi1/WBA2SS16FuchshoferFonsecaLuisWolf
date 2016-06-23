@@ -122,7 +122,7 @@ router.put('/user_reg', jsonParser, function(req, res){
     };
     var pwd_req = http.request(options, function(pwd_res){
       var result = '';
-      console.log("StatusCode: " + pwd_res.statusCode);
+      console.log("StatusCode for User Reqgistration: " + pwd_res.statusCode);
       pwd_res.on('data', function (chunk){
         result += chunk;
       });
@@ -140,40 +140,74 @@ router.put('/user_reg', jsonParser, function(req, res){
 });
 
 router.put('/login', jsonParser, function(req, res){
-  var newAuth = req.body;
-  console.log(JSON.stringify(newAuth.username));
-  var postData = querystring.stringify({
-    username: newAuth.username,
-    password: newAuth.password
-  });
 
-  var options = {
+
+  var tmp = 0;
+  var newAuth = {
+    "username": req.body.username,
+    "password": req.body.password,
+    "user_id": tmp
+  };
+  var user_id_req = http.request({
     host: "localhost",
     port: 3000,
-    path: "/login",
-    method: "PUT",
-    headers:{
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': postData.length
+    path: "/user",
+    method: "GET",
+    headers: {
+      accept: 'application/json'
     }
-  };
-  var pwd_req = http.request(options, function(pwd_res){
-    var result = '';
-    console.log("StatusCode: " + pwd_res.statusCode);
-    pwd_res.on('data', function (chunk){
-      result += chunk;
+  }, function( user_id_res ){
+    user_id_res.on('data', function(chunk){
+      var userList = JSON.parse(chunk);
+      for(var i = 0; i<userList.length;i++){
+        if(userList[i].username == req.body.username){
+          console.log(userList[i].user_id);
+          tmp = userList[i].user_id;
+        }
+      }
     });
-    pwd_res.on('end', function(){
-      console.log(result);
+    user_id_res.on('end',function(){
+      console.log(tmp);
+      newAuth.user_id = tmp;
+      console.log(newAuth);
+      var postData = querystring.stringify({
+        username: newAuth.username,
+        password: newAuth.password
+      });
+      console.log(postData);
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/login",
+        method: "PUT",
+        headers:{
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': postData.length
+        }
+      };
+      var pwd_req = http.request(options, function(pwd_res){
+        var result = '';
+        console.log("StatusCode: " + pwd_res.statusCode);
+        pwd_res.on('data', function (chunk){
+          result += chunk;
+        });
+        pwd_res.on('end', function(){
+          console.log(result);
+          pwd_req.end();
+        });
+        pwd_res.on('error', function(err){
+          console.log(err);
+        });
+      });
+      pwd_req.write(postData);
       pwd_req.end();
-    });
-    pwd_res.on('error', function(err){
-      console.log(err);
+      res.cookie('username', newAuth.username);
+      res.cookie('user_id', tmp);
+      res.sendStatus(200);
     });
   });
-  pwd_req.write(postData);
-  pwd_req.end();
-  res.sendStatus(200);
+
+  user_id_req.end();
 });
 
 

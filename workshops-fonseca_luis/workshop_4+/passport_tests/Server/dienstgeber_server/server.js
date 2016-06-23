@@ -17,11 +17,11 @@ global.methodOverride = require('method-override');
 global.session = require('express-session');
 global.passport = require('passport');
 
-app.use(logger('combined'));
+//app.use(logger('combined'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(methodOverride('X-HTTP-Method-Override'));
-app.use(session({secret:'supernova', saveUninitialized: true, resave: true}));
+app.use(session({secret:'secret', saveUninitialized: true, resave: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 

@@ -6,6 +6,11 @@ var Q = require('q');
 passport.use('local-signin', new LocalStrategy(
   {usernameField: 'username', passwordField: 'password', passReqToCallback : true},
   function( req, username, password, done ){
+    console.log(req.body);
+    var user = {
+      "username":username,
+      "password":password
+    };
     localAuth( username, password ).then(function( pw ){
       if( pw ){
         var user = {
@@ -15,15 +20,15 @@ passport.use('local-signin', new LocalStrategy(
         console.log(pw);
         console.log('Logged in as User ID: ' + username );
         req.session.success = 'You are successfully logged in ' + username + '!';
-        done( null, user );
+        done( null, username );
       }
-      if( !user ){
+      if( !pw ){
         console.log('Could not login');
         req.session.error = 'Could not Login. Please try again.';
         done(null, user);
       }
     }).fail(function( err ){
-      console.log(err.body);
+      console.log("ERR.BODY: " + err.body);
     });
   }));
 //passport.use local-signup
@@ -49,7 +54,7 @@ passport.use('local-signup', new LocalStrategy( {usernameField: 'username', pass
 console.log('loaded passport_functions.js');
 
 passport.serializeUser(function(user, done){
-  done( null, user.username);
+  done( null, user);
 });
 passport.deserializeUser(function(username, done){
   User.findByID(username, function( err, user){

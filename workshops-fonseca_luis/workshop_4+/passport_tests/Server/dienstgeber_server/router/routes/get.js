@@ -244,9 +244,9 @@ router.get('/registration/:user_name', jsonParser, function(req, res){
 	});
 })
 
-router.get('/signout', jsonParser, function( req, res){
+router.get('/logout', jsonParser, function( req, res){
 	req.logout();
-	res.redirect('/');
+	res.redirect('pages/indedx');
 });
 
 // console.log('loaded get.js');
