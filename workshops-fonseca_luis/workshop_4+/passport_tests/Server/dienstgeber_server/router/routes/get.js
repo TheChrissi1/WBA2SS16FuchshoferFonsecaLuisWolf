@@ -38,7 +38,7 @@ router.get('/anime', jsonParser, function(req, res){
 router.get('/anime/:anime_name', jsonParser, function(req, res){
 
     db.get('anime:'+req.params.anime_name, function(err, rep) {
-
+		console.log(rep);
 		if (rep) {
 			res.status(200).type('json').send( JSON.parse( rep ));
 		} else {

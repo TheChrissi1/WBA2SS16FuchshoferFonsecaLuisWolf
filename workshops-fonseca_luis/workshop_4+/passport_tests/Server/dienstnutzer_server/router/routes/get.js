@@ -127,7 +127,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
 //[OK]
 //Gibt einen Anime anhand seines Namens (querry-parameter) zurück.
 router.get('/anime/:anime_name', jsonParser, function(req, res){
-    // console.log(req.params.anime_name);
+    console.log(req.params.anime_name);
     var options = {
         host: "localhost",
         port: 3000,
@@ -151,64 +151,73 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
             var refData = [];
             exRes.on("data", function(chunk){
                 //Ist schon geparst??!
-                // console.log(JSON.parse(chunk));
+								console.log(JSON.parse(chunk));
                 animeData = JSON.parse(chunk);
                 var refs = animeData.refs;
-                var ref_ids = [];
-                var index = 0;
-                var i = -1;
 
 
             exRes.on("end", function(){
-                while( refs.indexOf("|"+(i+1)+"|") > -1 ){
-                    // console.log("IN WHILE | INDEX: " + i);
-                    i++;
-                    if( i == 0 ){
-                        options.path = "/ref/" + refs.substring(0, refs.indexOf("|"+(0)+"|"));
-                        ref_ids.push(options.path);
-                        var axReq = http.request(options, function(axRes){
-                            axRes.setEncoding('utf8');
-                            var content;
-                            axRes.on("data", function(chunk){
-                                content = chunk;
-                            });
-                            axRes.on("end", function(){
-                                refData.push(JSON.parse(content));
-                                index++;
-                                if(index == ref_ids.length){
-                                    exReq.end();
-                                    res.render('pages/animeID',{animeData:animeData, refData:refData});
-                                    res.end();
-                                }
-                            });
-                        });
-                        axReq.end();
-                    } else if( i > 0){
-                        var str1 = refs.indexOf("|"+(i-1)+"|");
-                        var str2 = refs.indexOf("|"+(i)+"|");
-                        options.path = "/ref/" + refs.substring(str1 + 3, str2);
-                        ref_ids.push(options.path);
-
-                        var axReq = http.request(options, function(axRes){
-                            axRes.setEncoding('utf8');
-                            var content;
-                            axRes.on("data", function(chunk){
-                                content = chunk;
-                            });
-                            axRes.on("end", function(){
-                                refData.push(JSON.parse(content));
-                                index++;
-                                if(index == ref_ids.length){
-                                    exReq.end();
-                                    res.render('pages/animeID',{animeData:animeData, refData:refData});
-                                    res.end();
-                                }
-                            });
-                        });
-                        axReq.end();
-                    }
-                };
-            });
+                // while( refs.indexOf("|"+(i+1)+"|") > -1 ){
+                //     // console.log("IN WHILE | INDEX: " + i);
+                //     i++;
+                //     if( i == 0 ){
+                //         options.path = "/ref/" + refs.substring(0, refs.indexOf("|"+(0)+"|"));
+                //         ref_ids.push(options.path);
+                //         var axReq = http.request(options, function(axRes){
+                //             axRes.setEncoding('utf8');
+                //             var content;
+                //             axRes.on("data", function(chunk){
+                //                 content = chunk;
+                //             });
+                //             axRes.on("end", function(){
+                //                 refData.push(JSON.parse(content));
+                //                 index++;
+                //                 if(index == ref_ids.length){
+                //                     exReq.end();
+                //                     res.render('pages/animeID',{animeData:animeData, refData:refData});
+                //                     res.end();
+                //                 }
+                //             });
+                //         });
+                //         axReq.end();
+                //     } else if( i > 0){
+                //         var str1 = refs.indexOf("|"+(i-1)+"|");
+                //         var str2 = refs.indexOf("|"+(i)+"|");
+                //         options.path = "/ref/" + refs.substring(str1 + 3, str2);
+                //         ref_ids.push(options.path);
+								//
+                //         var axReq = http.request(options, function(axRes){
+                //             axRes.setEncoding('utf8');
+                //             var content;
+                //             axRes.on("data", function(chunk){
+                //                 content = chunk;
+                //             });
+                //             axRes.on("end", function(){
+                //                 refData.push(JSON.parse(content));
+                //                 index++;
+                //                 if(index == ref_ids.length){
+                //                     exReq.end();
+                //                     res.render('pages/animeID',{animeData:animeData, refData:refData});
+                //                     res.end();
+                //                 }
+                //             });
+                //         });
+                //         axReq.end();
+                //     }
+                // };
+								var ref_ids = [];
+								var tmp = 0;
+								for(var index = 0; index<refs.length; index++){
+									if(refs[index]=='|'){
+										ref_ids.push(refs.substring(tmp,index));
+										tmp = index + 1;
+									}
+								}
+								refData = ref_ids;
+								res.render('pages/animeID',{animeData:animeData, refData:refData});
+								res.end();
+								console.log(ref_ids);
+						});
             });
         }
     });
