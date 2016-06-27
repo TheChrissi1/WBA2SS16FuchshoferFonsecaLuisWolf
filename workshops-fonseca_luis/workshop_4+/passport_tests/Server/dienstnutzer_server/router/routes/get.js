@@ -33,7 +33,7 @@ router.get('/anime', function(req, res){
         }
     }
     var exReq = http.request(options, function(exRes){
-
+        console.log("in get");
 			if(exRes.statusCode != 404){
         exRes.on("data", function(chunk){
             //wird nich automatisch geparst!??
