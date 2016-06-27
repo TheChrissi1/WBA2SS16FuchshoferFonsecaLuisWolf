@@ -36,6 +36,7 @@ router.get('/anime', function(req, res){
 
 			if(exRes.statusCode != 404){
         exRes.on("data", function(chunk){
+						console.log(JSON.parse(chunk));
             //wird nich automatisch geparst!??
             var animeList = JSON.parse(chunk);
             res.render('pages/anime',{animeList:animeList});
