@@ -4,7 +4,7 @@ var router = express.Router();
 //Index
 router.get('/', function(req, res){
 	res.status(200).type('text').send('Projekt der TH Köln, Medieninformatik 4. Semester.');
-    // console.log('Projekt der TH Köln, Medieninformatik 4. Semester.');
+    // // console.log('Projekt der TH Köln, Medieninformatik 4. Semester.');
 });
 
 //[OK]
@@ -17,7 +17,7 @@ router.get('/anime', jsonParser, function(req, res){
 
 		if (rep.length == 0) {
 
-            //// console.log('keine animes vorhanden');
+            //// // console.log('keine animes vorhanden');
             res.status(404).type('text').send('no Animes found');
 
 		} else if (rep.length > 0) {
@@ -37,8 +37,7 @@ router.get('/anime', jsonParser, function(req, res){
 //Gibt einen Anime anhand seines Namens (querry-parameter) zurück.
 router.get('/anime/:anime_name', jsonParser, function(req, res){
 
-    db.get('anime:'+req.params.anime_name, function(err, rep) {
-		console.log(rep);
+  db.get('anime:'+req.params.anime_name, function(err, rep) {
 		if (rep) {
 			res.status(200).type('json').send( JSON.parse( rep ));
 		} else {
@@ -54,10 +53,9 @@ router.get('/user', jsonParser, function(req, res){
     db.keys('user:*',function(err,rep) {
 
 		var users = [];
-
 		if (rep.length == 0) {
-            // // console.log('keine user vorhanden');
-            res.status(404).type('text').send('no user found');
+            // // // console.log('keine user vorhanden');
+            res.sendStatus(404);
 
         } else if (rep.length > 0) {
             db.mget(rep, function(err,rep) {
@@ -74,7 +72,7 @@ router.get('/user', jsonParser, function(req, res){
 //[OK]
 //Gibt einen Benutzer anhand seiner ID (querry-parameter) zurück.
 router.get('/user/:user_id', jsonParser, function(req, res){
-    // // console.log(req.params.user_id);
+    // // // console.log(req.params.user_id);
     db.get('user:'+req.params.user_id, function(err, rep) {
 
 		if (rep) {
@@ -107,7 +105,7 @@ router.get('/genre', jsonParser, function(req, res) {
         if( err ) throw error;
 
         if( rep.length == 0 ){
-            // // console.log( 'Keine Genre vorhanden' );
+            // // // console.log( 'Keine Genre vorhanden' );
             res.status( 404 ).type( 'text' ).send( 'No Genre found' );
         } else if( rep.length > 0 ){
             rep.forEach( function( val ){
@@ -127,7 +125,7 @@ router.get('/genre/:genre_name', jsonParser, function( req, res ){
 
 		if (rep.length == 0) {
 
-            // // console.log('keine animes vorhanden');
+            // // // console.log('keine animes vorhanden');
             res.status(404).type('text').send('no Animes found');
 
 		} else if (rep.length > 0) {
@@ -162,7 +160,7 @@ router.get('/ref', jsonParser, function(req, res) {
 
 		if (rep.length == 0) {
 
-            // // console.log('keine refs vorhanden');
+            // // // console.log('keine refs vorhanden');
             res.status(404).type('text').send('no refs found');
 
 		} else if (rep.length > 0) {
@@ -188,7 +186,7 @@ router.get('/ref/:ref_name', jsonParser, function(req, res){
 
 		if (rep.length == 0) {
 
-            // // console.log('keine refs vorhanden');
+            // // // console.log('keine refs vorhanden');
             res.status(404).type('text').send('no refs found');
 
 		} else if (rep.length > 0) {
@@ -218,12 +216,12 @@ router.get('/registration', jsonParser, function(req, res){
 });
 
 router.get('/registration/:user_name', jsonParser, function(req, res){
-	//// console.log("Asking for Username: " + req.params.user_name);
+	//// // console.log("Asking for Username: " + req.params.user_name);
 	db.keys('user:*',function(err,rep) {
 		var result = false;
 		var user_id = -1;
 		if (rep.length == 0) {
-					// // console.log('keine user vorhanden');
+					// // // console.log('keine user vorhanden');
 					res.status(200).type('text').send('no user found');
 
 		} else if (rep.length > 0) {
@@ -249,5 +247,5 @@ router.get('/logout', jsonParser, function( req, res){
 	res.redirect('pages/indedx');
 });
 
-// console.log('loaded get.js');
+// // console.log('loaded get.js');
 module.exports = router;

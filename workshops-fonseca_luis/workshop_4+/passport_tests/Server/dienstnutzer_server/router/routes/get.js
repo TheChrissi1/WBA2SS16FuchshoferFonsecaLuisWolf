@@ -3,7 +3,7 @@ var http = require('http');
 
 
 function isAuthenticated( req, res, next){
-	console.log(req.isAuthenticated);
+	// console.log(req.isAuthenticated);
 	if(req.isAuthenticated){
 		return next();
 	} else {
@@ -14,9 +14,8 @@ function isAuthenticated( req, res, next){
 //Index
 
 router.get('/', function(req, res){
-	console.log("User: " + req.cookie);
 	res.render('pages/index');
-    // console.log('Projekt der TH Köln, Medieninformatik 4. Semester.');
+    // // console.log('Projekt der TH Köln, Medieninformatik 4. Semester.');
 });
 
 //[OK]
@@ -74,9 +73,9 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
 
     var query = req.params.para;
     var queryL = query.length;
-    //// console.log(query);
+    //// // console.log(query);
     query = query.substring(1, query.length);
-    //// console.log(query);
+    //// // console.log(query);
     var erg = queryString.parse(query);
 
 
@@ -127,7 +126,6 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
 //[OK]
 //Gibt einen Anime anhand seines Namens (querry-parameter) zurück.
 router.get('/anime/:anime_name', jsonParser, function(req, res){
-    console.log(req.params.anime_name);
     var options = {
         host: "localhost",
         port: 3000,
@@ -140,71 +138,22 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
     var refData = [];
     var exReq = http.request(options, function(exRes){
         if( exRes.statusCode == 404 ){
-            // console.log("IN IF");
+            // // console.log("IN IF");
             res.statusCode = 404;
             res.render('pages/error');
             res.end();
 
         }else {
-            // console.log("IN ELSE");
+            // // console.log("IN ELSE");
             var animeData;
             var refData = [];
             exRes.on("data", function(chunk){
                 //Ist schon geparst??!
-								console.log(JSON.parse(chunk));
                 animeData = JSON.parse(chunk);
                 var refs = animeData.refs;
 
 
             exRes.on("end", function(){
-                // while( refs.indexOf("|"+(i+1)+"|") > -1 ){
-                //     // console.log("IN WHILE | INDEX: " + i);
-                //     i++;
-                //     if( i == 0 ){
-                //         options.path = "/ref/" + refs.substring(0, refs.indexOf("|"+(0)+"|"));
-                //         ref_ids.push(options.path);
-                //         var axReq = http.request(options, function(axRes){
-                //             axRes.setEncoding('utf8');
-                //             var content;
-                //             axRes.on("data", function(chunk){
-                //                 content = chunk;
-                //             });
-                //             axRes.on("end", function(){
-                //                 refData.push(JSON.parse(content));
-                //                 index++;
-                //                 if(index == ref_ids.length){
-                //                     exReq.end();
-                //                     res.render('pages/animeID',{animeData:animeData, refData:refData});
-                //                     res.end();
-                //                 }
-                //             });
-                //         });
-                //         axReq.end();
-                //     } else if( i > 0){
-                //         var str1 = refs.indexOf("|"+(i-1)+"|");
-                //         var str2 = refs.indexOf("|"+(i)+"|");
-                //         options.path = "/ref/" + refs.substring(str1 + 3, str2);
-                //         ref_ids.push(options.path);
-								//
-                //         var axReq = http.request(options, function(axRes){
-                //             axRes.setEncoding('utf8');
-                //             var content;
-                //             axRes.on("data", function(chunk){
-                //                 content = chunk;
-                //             });
-                //             axRes.on("end", function(){
-                //                 refData.push(JSON.parse(content));
-                //                 index++;
-                //                 if(index == ref_ids.length){
-                //                     exReq.end();
-                //                     res.render('pages/animeID',{animeData:animeData, refData:refData});
-                //                     res.end();
-                //                 }
-                //             });
-                //         });
-                //         axReq.end();
-                //     }
-                // };
 								var ref_ids = [];
 								var tmp = 0;
 								for(var index = 0; index<refs.length; index++){
@@ -216,7 +165,6 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
 								refData = ref_ids;
 								res.render('pages/animeID',{animeData:animeData, refData:refData});
 								res.end();
-								console.log(ref_ids);
 						});
             });
         }
@@ -289,7 +237,7 @@ router.get('/user/:user_id', jsonParser, function(req, res){
 //Gibt die Statistik eines Benutzers aus.
 router.get( '/user/:user_id/stats', function(req, res){
 
-	// console.log("Stats for ID: " + req.params.user_id);
+	// // console.log("Stats for ID: " + req.params.user_id);
 	var options = {
 			host: "localhost",
 			port: 3000,
@@ -312,9 +260,9 @@ router.get( '/user/:user_id/stats', function(req, res){
 			});
 			exRes.on("end", function(){
 					//if Abfrage verhindert, dass der Dienstnutzer-server abstürzt, wenn zu viele Anfragen gestellt werden
-					console.log("CHUNK: " + data);
+					// console.log("CHUNK: " + data);
 					if(data == "}"){
-						console.log("Server ist tot");
+						// console.log("Server ist tot");
 					} else {
 						statData = JSON.parse(data);
 					}
@@ -451,7 +399,7 @@ router.get('/logout', jsonParser, function( req, res){
 	res.clearCookie('user_id');
 	res.render('pages/index');
 });
-// console.log('loaded get.js');
+// // console.log('loaded get.js');
 
 router.get('/addanime', jsonParser, function( req, res ){
 	var options = {
@@ -469,12 +417,22 @@ router.get('/addanime', jsonParser, function( req, res ){
 				res.render('pages/error');
 				res.end();
 		}else {
-							exRes.on("data", function(chunk){
-									//wird nich automatisch geparst!??
-									var genreList = JSON.parse(chunk);
-									res.render('pages/addanime',{genreList:genreList});
+				exRes.on("data", function(chunk){
+						//wird nich automatisch geparst!??
+						var genreList = JSON.parse(chunk);
+						options.path = "/ref";
+						var otherReq = http.request(options, function( otherRes ){
+							if( otherRes.statusCode != 404 ){
+								otherRes.on("data", function(chunk){
+									var refList = JSON.parse(chunk);
+									res.render('pages/addanime',{genreList:genreList, refList:refList});
 									res.end();
-							});
+
+								});
+							}
+						});
+						otherReq.end();
+				});
 		}
 	});
 	exReq.end();

@@ -21,10 +21,14 @@
           <section class="content">
             <div>
               <section id="user_stats">
-                <ul>
+                <ul id="list">
                   <% for(var i=1; i<statData.stats.length; i++){ %>
-                    <li><%= statData.stats[i].name %></li>
-                    <li><%= statData.stats[i].episodes %></li>
+                    <div id="info">
+                      <a id="" href="/anime/<%= statData.stats[i].name.toLowerCase().replace(/ /g,'-') %>">
+                        <li id="info1"><%= statData.stats[i].name %></li>
+                        <li id="info2"><span>Episodes: </span><%= statData.stats[i].episodes %><span>/<%= statData.stats[i].max_ep %></span></li>
+                      </a>
+                    </div>
                   <% } %>
                 </ul>
               </section>

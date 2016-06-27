@@ -19,7 +19,7 @@ router.delete( '/anime/:anime_name', jsonParser, function(req, res){
 router.delete( '/user/:user_id', jsonParser, function(req, res){
 
     db.del('user:'+req.params.user_id, function(err, rep){
-		if (rep == 1){ 
+		if (rep == 1){
 			res.status(200).type('text').send('User successfully deleted');
 		}  else {
 			res.status(404).type('text').send('User not found!');
@@ -29,7 +29,7 @@ router.delete( '/user/:user_id', jsonParser, function(req, res){
 });
 
 
-// console.log('loaded delete.js')
+// // console.log('loaded delete.js')
 
 
 module.exports = router;

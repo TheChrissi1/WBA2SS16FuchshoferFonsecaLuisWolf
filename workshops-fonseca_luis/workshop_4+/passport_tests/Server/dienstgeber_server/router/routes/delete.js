@@ -29,7 +29,7 @@ router.delete( '/user/:user_id', jsonParser, function(req, res){
 });
 
 
-// console.log('loaded delete.js')
+// // console.log('loaded delete.js')
 
 
 module.exports = router;

@@ -13,27 +13,27 @@
 
     <main>
         <div class="jumbotron">
-            <h2 class="headline"><%= animeData.name %></h2>
+            <h2 id="anime_name_head" class="headline"><%= animeData.name %></h2>
 
             <section class="content">
               <div>
                 <ul>
-                  <p>Name_Jap: <%= animeData.name_jap %></p>
-                  <p id="episodes" value="<%= animeData.episodes %>">Episodes: <%= animeData.episodes %></p>
-                  <p>Release: <%= animeData.release %></p>
-                  <p>Release_Jap: <%= animeData.release_jap %></p>
-                  <p>License: <%= animeData.license %></p>
-                  <p>status: <%= animeData.status %></p>
+                  <li id="episode_number" value="<%= animeData.episodes %>"><span>Episodes:</span> <%= animeData.episodes %></li>
+                  <li>Release: <%= animeData.release %></li>
+                  <li>Release_Jap: <%= animeData.release_jap %></li>
+                  <li>License: <%= animeData.license %></li>
+                  <li value="<%= animeData.status %>">Status: <span id="anime_status"><%= animeData.status %></span></li>
                 </ul>
               </div>
               <section id="episode-section">
+                <ul id="episode_list" onload="loadEpisodes()">
+                </ul>
               </section>
-            </section>
+              <div>.</div>
+            </section class="episode_listing">
+
 
         </div>
-
-
-
         <script src="../js/animeid.js"></script>
     </main>
 
@@ -41,5 +41,5 @@
         <% include ../partials/footer %>
     </footer>
 
-</body>
+</body onload="loadEpisodes()">
 </html>

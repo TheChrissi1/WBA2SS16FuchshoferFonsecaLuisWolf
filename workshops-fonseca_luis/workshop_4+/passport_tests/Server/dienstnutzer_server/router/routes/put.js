@@ -16,27 +16,47 @@ router.put('/anime', jsonParser, function( req, res){
 // Ändert die Daten eines Animes.
 router.put( '/anime/:anime_name', jsonParser, function(req, res){
 
-	db.exists('anime:'+req.params.anime_name, function(err, rep) {
-		if (rep == 1) {
-			var updatedAnime = req.body;
-		//	updatedAnime.name = req.params.anime_name;
-
-			db.set('anime:' + req.params.anime_name, JSON.stringify(updatedAnime), function(err, rep) {
-				res.status(200).type('json').send(updatedAnime);
-			});
-		} else {
-			res.status(404).type('text').send('Anime not exists!');
-        }
-
-	});
+  // // console.log("IN ANIME PUT");
+  // // console.log("req.body: " + JSON.stringify(req.body));
+  // // console.log('');
+  var newAnime = req.body;
+  //
+  var bodyString = JSON.stringify(newAnime);
+  //
+  var options = {
+      host: "localhost",
+      port: 3000,
+      path: "/anime",
+      method:"PUT",
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': bodyString.length
+      }
+  };
+  var resBody;
+  var put_req = http.request(options, function (put_res) {
+    put_res.on("data", function (chunk) {
+        // // console.log('Response: ' + chunk);
+        // // console.log('StatusCode: ' + put_res.statusCode);
+        // // console.log('StatusText: ' + JSON.parse(chunk).name_jp);
+        resBody = {"anime":JSON.parse(chunk).name_jp};
+        // // console.log(resBody);
+        // // console.log('--------------------------------------');
+    });
+    put_res.on("end", function(){
+      res.status(201).type('json').send(resBody);
+    })
+  });
+  put_req.write(bodyString);
+  put_req.end();
 });
 
 //[OK]
 //Trägt einen neuen Benutzer in die DB ein.
 router.put('/user', jsonParser, function(req, res){
-  console.log("IN USER PUT");
-  console.log("req.body: " + JSON.stringify(req.body));
-  console.log('');
+  // // console.log("IN USER PUT");
+  // // console.log("req.body: " + JSON.stringify(req.body));
+  // // console.log('');
   var newUser = req.body;
   //
   var bodyString = JSON.stringify(newUser);
@@ -54,12 +74,12 @@ router.put('/user', jsonParser, function(req, res){
   var resBody;
   var put_req = http.request(options, function (put_res) {
     put_res.on("data", function (chunk) {
-        console.log('Response: ' + chunk);
-        console.log('StatusCode: ' + put_res.statusCode);
-        console.log('StatusText: ' + JSON.parse(chunk).user_id);
+        // // console.log('Response: ' + chunk);
+        // // console.log('StatusCode: ' + put_res.statusCode);
+        // // console.log('StatusText: ' + JSON.parse(chunk).user_id);
         resBody = {"user_id":JSON.parse(chunk).user_id};
-        console.log(resBody);
-        console.log('--------------------------------------');
+        // // console.log(resBody);
+        // // console.log('--------------------------------------');
     });
     put_res.on("end", function(){
       res.status(201).type('json').send(resBody);
@@ -99,12 +119,37 @@ router.put( '/user/:user_id', jsonParser, function(req, res){
 //[NOT OK]
 //Ändert die Statistik eines Nutzers.
 router.put( '/user/:user_id/stats', jsonParser, function(req, res){
+  // // console.log("Updated Stats for ID: " + req.params.user_id);
+  var newStat = JSON.stringify(req.body);
+  var url = '/user/'+req.params.user_id+'/stats';
+  // // console.log(url);
+  var options = {
+      host: "localhost",
+      port: 3000,
+      path: "/user/" + req.params.user_id + "/stats",
+      method:"PUT",
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': newStat.length
+      }
+  };
+  // // console.log(options);
+  var statReq = http.request(options, function( statRes ){
+    statRes.on("data", function(chunk){
+
+    });
+    statRes.on("end", function(){
+      res.sendStatus(201);
+    });
+  });
+  statReq.write(newStat);
+  statReq.end();
 });
 
 router.put('/user_reg', jsonParser, function(req, res){
 
     var newAuth = req.body;
-    console.log(newAuth);
+    // // console.log(newAuth);
     var postData = querystring.stringify({
       username: newAuth.username,
       password: newAuth.password
@@ -122,16 +167,16 @@ router.put('/user_reg', jsonParser, function(req, res){
     };
     var pwd_req = http.request(options, function(pwd_res){
       var result = '';
-      console.log("StatusCode for User Reqgistration: " + pwd_res.statusCode);
+      // // console.log("StatusCode for User Reqgistration: " + pwd_res.statusCode);
       pwd_res.on('data', function (chunk){
         result += chunk;
       });
       pwd_res.on('end', function(){
-        console.log(result);
+        // // console.log(result);
         pwd_req.end();
       });
       pwd_res.on('error', function(err){
-        console.log(err);
+        // // console.log(err);
       });
     });
     pwd_req.write(postData);
@@ -157,59 +202,64 @@ router.put('/login', jsonParser, function(req, res){
       accept: 'application/json'
     }
   }, function( user_id_res ){
-    user_id_res.on('data', function(chunk){
-      var userList = JSON.parse(chunk);
-      for(var i = 0; i<userList.length;i++){
-        if(userList[i].username == req.body.username){
-          console.log(userList[i].user_id);
-          tmp = userList[i].user_id;
+    // // console.log(user_id_res.statusCode);
+    if(user_id_res.statusCode != 404){
+      user_id_res.on('data', function(chunk){
+        var userList = JSON.parse(chunk);
+        for(var i = 0; i<userList.length;i++){
+          if(userList[i].username == req.body.username){
+            // // console.log("UserID Found: " + userList[i].user_id);
+            tmp = userList[i].user_id;
+          }
         }
-      }
-    });
-    user_id_res.on('end',function(){
-      console.log(tmp);
-      newAuth.user_id = tmp;
-      console.log(newAuth);
-      var postData = querystring.stringify({
-        username: newAuth.username,
-        password: newAuth.password
       });
-      console.log(postData);
-      var options = {
-        host: "localhost",
-        port: 3000,
-        path: "/login",
-        method: "PUT",
-        headers:{
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': postData.length
-        }
-      };
-      var pwd_req = http.request(options, function(pwd_res){
-        var result = '';
-        console.log("StatusCode: " + pwd_res.statusCode);
-        pwd_res.on('data', function (chunk){
-          result += chunk;
+      user_id_res.on('end',function(){
+        // // console.log(tmp);
+        newAuth.user_id = tmp;
+        // // console.log(newAuth);
+        var postData = querystring.stringify({
+          username: newAuth.username,
+          password: newAuth.password
         });
-        pwd_res.on('end', function(){
-          console.log(result);
-          pwd_req.end();
+        // // console.log(postData);
+        var options = {
+          host: "localhost",
+          port: 3000,
+          path: "/login",
+          method: "PUT",
+          headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': postData.length
+          }
+        };
+        var pwd_req = http.request(options, function(pwd_res){
+          var result = '';
+          // // console.log("StatusCode: " + pwd_res.statusCode);
+          pwd_res.on('data', function (chunk){
+            result += chunk;
+          });
+          pwd_res.on('end', function(){
+            // // console.log(result);
+            pwd_req.end();
+          });
+          pwd_res.on('error', function(err){
+            // // console.log(err);
+          });
         });
-        pwd_res.on('error', function(err){
-          console.log(err);
-        });
+        pwd_req.write(postData);
+        pwd_req.end();
+        res.cookie('username', newAuth.username);
+        res.cookie('user_id', tmp);
+        res.sendStatus(200);
       });
-      pwd_req.write(postData);
-      pwd_req.end();
-      res.cookie('username', newAuth.username);
-      res.cookie('user_id', tmp);
-      res.sendStatus(200);
-    });
+    } else {
+      res.sendStatus(404);
+    }
   });
 
   user_id_req.end();
 });
 
 
-console.log('loaded put.js.')
+// // console.log('loaded put.js.')
 module.exports = router;

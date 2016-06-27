@@ -37,7 +37,7 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 router.put('/user', jsonParser, function(req, res){
 
   var User = req.body;
-  // console.log(User);
+  // // // console.log(User);
   var newUser = {
     "user_id":0,
     "name":User.name,
@@ -49,12 +49,12 @@ router.put('/user', jsonParser, function(req, res){
     "birthdate":User.birthdate,
     "active":true
   }
-  // console.log(newUser);
+   // // console.log(newUser);
   db.incr('user_id:user', function (err, rep) {
 
 		newUser.user_id = rep;
 		db.set('user:'+newUser.user_id, JSON.stringify(newUser), function(err, rep) {
-      // console.log("New User with ID: " + newUser.user_id);
+      // // // console.log("New User with ID: " + newUser.user_id);
 		});
     var newStat = {
         "stats":[
@@ -68,7 +68,7 @@ router.put('/user', jsonParser, function(req, res){
     };
     db.set('stats:'+newUser.user_id, JSON.stringify(newStat), function(err, rep) {
       if( err ) throw err;
-        // console.log('new statistic for user: ' + newUser.user_id);
+        // // // console.log('new statistic for user: ' + newUser.user_id);
     });
     res.status(201).type('text').send({"user_id":newUser.user_id});
 	});
@@ -106,9 +106,17 @@ router.put( '/user/:user_id/stats', jsonParser, function(req, res){
             if(rep2.stats[i].name == req.body.name) exists = i;
           }
           if( exists > 0 ){
-            var tmp = rep2.stats[exists].episodes;
-            rep2.stats[exists].episodes = req.body.episodes;
-            rep2.stats[0].seen_ep += (tmp-req.body.episodes);
+            if(rep2.stats[exists].episodes > req.body.episodes){
+              var differenz = (rep2.stats[exists].episodes-req.body.episodes);
+              rep2.stats[exists].episodes = req.body.episodes;
+              rep2.stats[0].seen_ep -= differenz;
+              rep2.stats[exists].max_ep = req.body.max_ep;
+            } else {
+              var tmp = rep2.stats[exists].episodes;
+              rep2.stats[exists].episodes = req.body.episodes;
+              rep2.stats[0].seen_ep += (req.body.episodes-tmp);
+              rep2.stats[exists].max_ep = req.body.max_ep;
+            }
           } else if (exists == 0){
             rep2.stats.push(req.body);
             rep2.stats[0].seen_ep += req.body.episodes;
@@ -164,30 +172,30 @@ router.put('/refs', jsonParser, function( req, res ){
     res.status(201).type('text').send('added');
 });
 ///////////////////////////////////////////////
-*/
+
 //////// PUT ANIME ONLY ONCE //////////////////
 router.put('/animes', jsonParser, function( req, res ){
     var animes = require('./input/anime.json');
     animes = animes.anime;
 
     animes.forEach(function(val){
-        // console.log(val.name.toLowerCase().replace(/ /g,'-'));
+        // // // console.log(val.name.toLowerCase().replace(/ /g,'-'));
         db.set('anime:' + val.name.toLowerCase().replace(/ /g,'-'), JSON.stringify(val));
     })
     res.status(201).type('text').send('added');
 })
 
 ///////////////////////////////////////////////
-/*
+
 //////// PUT STATS ONLY ONCE //////////////////
 router.put('/stats', jsonParser, function( req, res ){
-    // console.log("IN PUT STATS");
+    // // // console.log("IN PUT STATS");
     var stat = require('./input/stats.json');
-    // console.log(stat);
+    // // // console.log(stat);
     db.set('stats:1', JSON.stringify(stat));
     res.status(201).type('text').send('added');
 })
 ///////////////////////////////////////////////
 */
-// console.log('loaded put.js.')
+// // // console.log('loaded put.js.')
 module.exports = router;
