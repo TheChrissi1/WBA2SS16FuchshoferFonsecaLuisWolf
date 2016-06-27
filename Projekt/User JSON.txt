@@ -1,0 +1,63 @@
+{
+            "name":"Peter",
+            "lastname":"Lustig",
+            "username":"PeterLoewe98",
+            "authority":3,
+            "email":"peter.lustig@web.de",
+            "gender":"Male",
+            "birthdate":"05101998",
+            "active":true
+}
+
+_________________________________________________________________
+
+{
+            "name":"Alexander",
+            "lastname":"Reichhart",
+            "username":"NarutoFan90",
+            "authority":3,
+            "email":"alex.reich@googlemail.com",
+            "gender":"Male",
+            "birthdate":"111081990",
+            "active":true
+}
+
+_________________________________________________________________
+
+{
+            "name":"Sarah",
+            "lastname":"Kemmerling",
+            "username":"SarahKem",
+            "authority":3,
+            "email":"sarah.kemmerling@gmx.de",
+            "gender":"Female",
+            "birthdate":"03041989",
+            "active":true
+}
+
+_________________________________________________________________
+
+{
+            "name":"Kim",
+            "lastname":"Bruch",
+            "username":"Kimmi29",
+            "authority":2,
+            "email":"kim.bruch@t-online.de",
+            "gender":"Male",
+            "birthdate":"29121994",
+            "active":true
+}
+
+_________________________________________________________________
+
+
+{
+            "name":"Daniel",
+            "lastname":"Grabolle",
+            "username":"GrabDan",
+            "authority":1,
+            "email":"grabdan@grabollegmbh.de",
+            "gender":"Male",
+            "birthdate":"17071992",
+            "active":true
+}

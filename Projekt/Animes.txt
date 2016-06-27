@@ -1,0 +1,121 @@
+Fullmetal Alchemist Brotherhood
+(Hagane no Renkinjutsushi)
+05.04.2009
+Episoden 64
+Gernre: Adventure, Science fantasy
+status: finished
+dub: eng
+sub: eng
+anilinkz|gogoanime|
+
+Attack on Titan
+(Shingeki no Kyojin)
+09.09.2013
+Episoden 25 + 5 OVA
+Genre: Action, Horror, Fantasy
+status: finished
+sub: eng
+anilinkz|gogoanime|
+
+
+One Piece
+(One Piece: Taose! Kaizoku Ganzack)
+20.10.1999
+de: 22.04.2003
+Episoden 747
+Genre: Shonen, Abenteuer, Fantasy, Komödie
+Status: running
+sub: eng
+dub: eng
+anilinkz|gogoanime|
+
+Dragon Ball Z
+(Doragon bôru Z,Dragon Ball Z Kai)
+26.04.1989
+de: 27.08.2001
+Episoden 291
+Genre: Action, Shonen
+status: finished
+sub: en
+anilinkz|
+
+Death Note
+(Desu nôto)
+03.10.2006
+Episoden 37
+Genre: Occult detective, psychological thriller
+status: finished
+sub: eng
+dub: eng
+anilinkz|gogoanime
+
+Sword Art Online
+(Sodo Ato Onrain)
+07.06.2012
+Episoden 25
+Genre: Action, Adventure, Science fiction
+status: finished
+sub: eng
+gogoanime
+
+Detektiv Conan
+(Meitantei Conan)
+08.01.1996
+de 10.04.2002
+Episoden 823
+Genre: Abenteuer, Krimi, Romantik, Shonen, Comedy
+status: running
+sub: eng
+anilinkz
+
+Naruto Shippuden
+(Naruto: Shippûden)
+03.10.2002
+de 18.09.2006
+Episoden 685
+Genre: Action, Abenteuer, Comedy, Fantasy, Shonen
+status: running
+dub: jp, en, de
+sub: de, en
+narutotube|anilinkz|gogoanime
+
+Samurai Champloo
+(Samurai chanpurû)
+19.05.2004
+de 4.09.2006
+Episoden: 26
+Genre: Action, Abenteuer, Drama, Komödie
+status: finished
+sub: en
+dub: en
+anilinkz|gogoanime|
+
+Elfen Lied
+(Erufen rîto)
+25.06.2004
+de 3.05.2008
+Episoden: 13
+Genre: Drama, Psychothriller, Seinen, Splatter, Etchi
+status: finished
+sub: en
+dub: en
+anilinkz|gogoanime| 
+
+
+
+
+{
+            "name":"Naruto Shippuuden",
+            "name_en":"Naruto Shippuuden",
+            "name_de":"Naruto Shippuuden",
+            "genre":"Action, Adventure, Comedy, Drama, Fantasy, Martial Arts, Shounen, Super Power",
+            "episodes":465,
+            "release_jp":"14.02.2007",
+            "release_en":"",
+            "release_de":"",
+            "status":"running",
+            "dub":"JP, EN, DE",
+            "sub":"DE, EN",
+            "license":"JP, EN, DE",
+            "refs":"narutotube|anilinkz|gogoanime|"
+        }
