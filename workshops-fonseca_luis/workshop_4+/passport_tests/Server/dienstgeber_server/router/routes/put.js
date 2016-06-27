@@ -6,9 +6,15 @@ passport.use('/', require('./passport_configure'));
 //[OK]
 //Trägt einen neuen Anime in die DB ein.
 router.put('/anime', jsonParser, function( req, res){
+    
+    
     var newAnime = req.body;
+    
     db.set('anime:'+newAnime.name.toLowerCase().replace(/ /g,'-'), JSON.stringify(newAnime), function(err, rep) {
-        res.status(201).type('text').send('new anime: ' +newAnime.name);
+        
+        //res.status(201).type('text').send('new anime: ' +newAnime.name);
+        res.status(201).type('json').send({"name":newAnime.name});
+        
     });
 
 });
@@ -23,7 +29,7 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 		//	updatedAnime.name = req.params.anime_name;
 
 			db.set('anime:' + req.params.anime_name, JSON.stringify(updatedAnime), function(err, rep) {
-				res.status(200).type('json').send(updatedAnime);
+				res.status(200).type('json').send({"name":updatedAnime.name});
 			});
 		} else {
 			res.status(404).type('text').send('Anime not exists!');
@@ -77,10 +83,11 @@ router.put('/user', jsonParser, function(req, res){
 //[OK]
 //Ändert die Daten eines Benutzers.
 router.put( '/user/:user_id', jsonParser, function(req, res){
-
+   
   db.exists('user:'+req.params.user_id, function(err, rep) {
 		if (rep == 1) {
 			var updatedUser = req.body;
+         
 			updatedUser.user_id = req.params.user_id;
 
 			db.set('user:' + req.params.user_id, JSON.stringify(updatedUser), function(err, rep) {

@@ -1,14 +1,43 @@
 var router = express.Router();
 var querystring = require('querystring');
 
+
 //[OK]
-//Trägt einen neuen Anime in die DB ein.
+//Eintragen eines neuen Animes über Dienstgeber
 router.put('/anime', jsonParser, function( req, res){
 
     var newAnime = req.body;
-    db.set('anime:'+newAnime.name.toLowerCase().replace(/ /g,'-'), JSON.stringify(newAnime), function(err, rep) {
-        res.status(201).type('text').send('new anime: ' +newAnime.name);
+    var bodyString = JSON.stringify(newAnime);
+
+    var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/anime",
+        method:"PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': bodyString.length
+        }
+    };
+
+    var resBody;
+    var put_req = http.request(options, function (put_res) {
+        put_res.on("data", function (chunk) {
+            resBody = {"anime name":JSON.parse(chunk).name};
+        });
+
+        if (put_res.statusCode != 201) {
+            put_res.on("end", function() {
+                res.status(400).type('json').send(resBody);
+            });
+        } else {
+            put_res.on("end", function(){
+                res.status(201).type('json').send(resBody);
+            });
+        }
     });
+    put_req.write(bodyString);
+    put_req.end();
 
 });
 
@@ -16,104 +45,134 @@ router.put('/anime', jsonParser, function( req, res){
 // Ändert die Daten eines Animes.
 router.put( '/anime/:anime_name', jsonParser, function(req, res){
 
-  // // console.log("IN ANIME PUT");
-  // // console.log("req.body: " + JSON.stringify(req.body));
-  // // console.log('');
-  var newAnime = req.body;
-  //
-  var bodyString = JSON.stringify(newAnime);
-  //
-  var options = {
-      host: "localhost",
-      port: 3000,
-      path: "/anime",
-      method:"PUT",
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': bodyString.length
-      }
-  };
-  var resBody;
-  var put_req = http.request(options, function (put_res) {
-    put_res.on("data", function (chunk) {
-        // // console.log('Response: ' + chunk);
-        // // console.log('StatusCode: ' + put_res.statusCode);
-        // // console.log('StatusText: ' + JSON.parse(chunk).name_jp);
-        resBody = {"anime":JSON.parse(chunk).name_jp};
-        // // console.log(resBody);
-        // // console.log('--------------------------------------');
+    var editAnime = req.body;
+    var bodyString = JSON.stringify(editAnime);
+
+    var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/anime/"+req.params.anime_name,
+        method:"PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': bodyString.length
+        }
+    };
+
+    var resBody;
+    var put_req = http.request(options, function (put_res) {
+
+        put_res.on("data", function (chunk) {
+            resBody = {"anime name":JSON.parse(chunk).name};
+        });
+
+        //Falls Anime nicht existiert:
+        if (put_res.statusCode != 200) {
+            put_res.on("data", function (chunk) {
+                resBody = "error: " +chunk;
+            });
+
+            put_res.on("end", function() {
+                res.status(400).type('json').send(resBody);
+            });
+
+        //Wenn Anime existiert:
+        } else {
+            put_res.on("data", function (chunk) {
+                resBody = {"anime name":JSON.parse(chunk).name};
+            });
+
+            put_res.on("end", function(){
+                //Anfrage war erfolgreich, Response enthält aber bewusst keine Daten!
+                res.status(204).type('json').send(resBody);
+            });
+        }
     });
-    put_res.on("end", function(){
-      res.status(201).type('json').send(resBody);
-    })
-  });
-  put_req.write(bodyString);
-  put_req.end();
+    put_req.write(bodyString);
+    put_req.end();
 });
 
 //[OK]
-//Trägt einen neuen Benutzer in die DB ein.
+//Trägt einen neuen Benutzer über den Dienstgeber ein.
 router.put('/user', jsonParser, function(req, res){
-  // // console.log("IN USER PUT");
-  // // console.log("req.body: " + JSON.stringify(req.body));
-  // // console.log('');
-  var newUser = req.body;
-  //
-  var bodyString = JSON.stringify(newUser);
-  //
-  var options = {
-      host: "localhost",
-      port: 3000,
-      path: "/user",
-      method:"PUT",
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': bodyString.length
-      }
-  };
-  var resBody;
-  var put_req = http.request(options, function (put_res) {
-    put_res.on("data", function (chunk) {
-        // // console.log('Response: ' + chunk);
-        // // console.log('StatusCode: ' + put_res.statusCode);
-        // // console.log('StatusText: ' + JSON.parse(chunk).user_id);
-        resBody = {"user_id":JSON.parse(chunk).user_id};
-        // // console.log(resBody);
-        // // console.log('--------------------------------------');
+
+    var newUser = req.body;
+    var bodyString = JSON.stringify(newUser);
+
+    var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/user",
+        method:"PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': bodyString.length
+        }
+    };
+
+    var resBody;
+    var put_req = http.request(options, function (put_res) {
+        put_res.on("data", function (chunk) {
+            resBody = {"user_id":JSON.parse(chunk).user_id};
+        });
+
+        put_res.on("end", function(){
+            res.status(201).type('json').send(resBody);
+        })
     });
-    put_res.on("end", function(){
-      res.status(201).type('json').send(resBody);
-    })
-  });
-  put_req.write(bodyString);
-  put_req.end();
+    put_req.write(bodyString);
+    put_req.end();
 });
-  //Inkrement wird nicht zurückgesetzt wenn bspw. alle User gelöscht werden!!!
-// 	db.incr('user_id:user', function (err, rep) {
-//
-// 		newUser.user_id = rep;
-// 		db.set('user:'+newUser.user_id, JSON.stringify(newUser), function(err, rep) {
-// 			res.status(201).type('text').send('new user: ' +newUser.user_id);
-// 		});
-// 	});
-// });
+
 
 //[OK]
 //Ändert die Daten eines Benutzers.
 router.put( '/user/:user_id', jsonParser, function(req, res){
 
-    	db.exists('user:'+req.params.user_id, function(err, rep) {
-		if (rep == 1) {
-			var updatedUser = req.body;
-			updatedUser.user_id = req.params.user_id;
+    var editUser = req.body;
+    var bodyString = JSON.stringify(editUser);
 
-			db.set('user:' + req.params.user_id, JSON.stringify(updatedUser), function(err, rep) {
-				res.status(200).type('json').send(updatedUser);
-			});
-		} else {
-			res.status(404).type('text').send('User already exists!');
-		}
-	});
+    var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/user/"+req.params.user_id,
+        method:"PUT",
+        headers: {
+             'Content-Type': 'application/json',
+             'Content-Length': bodyString.length
+        }
+    };
+    var resBody;
+    var put_req = http.request(options, function (put_res) {
+
+//        put_res.on("data", function (chunk) {
+//            resBody = {"user id":JSON.parse(chunk).id};
+//        });
+
+        //Falls User nicht existiert:
+        if (put_res.statusCode != 200) {
+            put_res.on("data", function (chunk) {
+                resBody = "error: " +chunk;
+            });
+
+            put_res.on("end", function() {
+                res.status(400).type('json').send(resBody);
+            });
+        //Wenn User existiert:
+        } else {
+            put_res.on("data", function (chunk) {
+                resBody = {"user id":JSON.parse(chunk).id};
+            });
+
+            put_res.on("end", function(){
+                //Anfrage war erfolgreich, Response enthält aber bewusst keine Daten!
+                res.status(204).type('json').send(resBody);
+            });
+        }
+    });
+    put_req.write(bodyString);
+    put_req.end();
+
 });
 
 //[NOT OK]
