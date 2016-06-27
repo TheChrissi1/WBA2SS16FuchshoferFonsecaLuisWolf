@@ -95,7 +95,7 @@ function register(){
 function openProfile(){
   //alert("HI");
   var url = 'http://localhost:8080/user/' + user_id + '/stats';
-  //window.location.href="http://192.168.2.108:8080/user/3/stats"
+  //window.location.href="http://localhost:8080/user/3/stats"
   // xhr = new XMLHttpRequest();
   // xhr.open("GET", url, true);
   // xhr.send();

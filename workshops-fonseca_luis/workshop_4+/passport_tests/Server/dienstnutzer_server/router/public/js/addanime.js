@@ -1,5 +1,6 @@
 var bool = true;
 var genreNum = 0;
+
 function sendAnime(){
   alert("HI");
   var anime = {
@@ -17,21 +18,7 @@ function sendAnime(){
       "license":"",
       "refs":""
   }
-  var anime = {
-      "name":document.getElementsById('name').value,
-      "name_en":document.getElementsById('name_en').value,
-      "name_de":document.getElementsById('name_ger').value,
-      "genre":"",
-      "episodes":document.getElementsById('episodes').value,
-      "release_jp":document.getElementsById('release_jp').value,
-      "release_en":document.getElementsById('release_en').value,
-      "release_de":document.getElementsById('release_de').value,
-      "status":document.getElementsById('status').value,
-      "dub":document.getElementsById('dub').value,
-      "sub":document.getElementsById('sub').value,
-      "license":document.getElementsById('license').value,
-      "refs":document.getElementsById('refs').value
-  }
+  alert(JSON.stringify(anime));
   var tmp = document.getElementsByClassName('genre-param')
   var erg = "";
   for(var i = 0; i<tmp.length-1; i++){

@@ -299,6 +299,8 @@ router.get( '/user/:user_id/stats', function(req, res){
 					accept:"application/json"
 			}
 	}
+	var statData;
+	var data = "";
 	var exReq = http.request(options, function(exRes){
 		if( exRes.statusCode == 404 ){
 				res.statusCode = 404;
@@ -306,11 +308,19 @@ router.get( '/user/:user_id/stats', function(req, res){
 				res.end();
 		}else {
 			exRes.on("data", function(chunk){
-					//Ist schon geparst??!
-					var statData = JSON.parse(chunk);
-					res.render('pages/stats',{statData:statData});
-					res.end();
+				data = chunk;
 			});
+			exRes.on("end", function(){
+					//if Abfrage verhindert, dass der Dienstnutzer-server abstürzt, wenn zu viele Anfragen gestellt werden
+					console.log("CHUNK: " + data);
+					if(data == "}"){
+						console.log("Server ist tot");
+					} else {
+						statData = JSON.parse(data);
+					}
+				res.render('pages/stats',{statData:statData});
+				res.end();
+			})
 		}
 	});
 	exReq.end();
