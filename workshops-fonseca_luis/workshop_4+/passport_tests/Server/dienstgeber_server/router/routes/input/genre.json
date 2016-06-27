@@ -1,8 +1,52 @@
 {
     "genre":[
-        {
-            "name":"Action",
-            "description":"..."
-        }
+      {
+          "name":"Action",
+          "description":"..."
+      },
+      {
+          "name":"Adventure",
+          "description":"..."
+      },
+      {
+          "name":"Comedy",
+          "description":"..."
+      },
+      {
+          "name":"Cooking",
+          "description":"..."
+      },
+      {
+          "name":"Demons",
+          "description":"..."
+      },
+      {
+          "name":"Drama",
+          "description":"..."
+      },
+      {
+          "name":"Fantasy",
+          "description":"..."
+      },
+      {
+          "name":"Game",
+          "description":"..."
+      },
+      {
+          "name":"Horror",
+          "description":"..."
+      },
+      {
+          "name":"Magic",
+          "description":"..."
+      },
+      {
+          "name":"Martial Arts",
+          "description":"..."
+      },
+      {
+          "name":"Mecha",
+          "description":"..."
+      }
     ]
 }

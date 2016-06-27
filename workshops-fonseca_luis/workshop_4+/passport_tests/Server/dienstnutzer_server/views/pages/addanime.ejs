@@ -1,0 +1,100 @@
+<!-- views/pages/addanime.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container" id="body">
+    <header>
+        <% include ../partials/header %>
+    </header>
+    <main>
+        <div class="jumbotron">
+            <h2 id="headline" class="headline">Add Anime</h2>
+
+            <section class="content">
+              <div>
+                <form method="put">
+                  <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" class="form-control" />
+                  </div>
+                  <div class="form-group">
+                    <label for="name_en">Name English *</label>
+                    <input type="text" id="name_en" class="form-control" required/>
+                  </div>
+                  <div class="form-group">
+                    <label for="name_ger">Name German</label>
+                    <input type="text" id="name_ger" class="form-control"/>
+                  </div>
+                  <div class="form-group" id="genre-menu">
+                    <label for="genre">Genre *</label>
+                    <button id="genre-button" class="form-control" onclick="genreToggle()">Genre</button>
+                    <% genreList.forEach(function(genre){ %>
+                      <div class="genre-param" style="visibility: hidden; display:none">
+                        <div class="form-control">
+                          <input type="checkbox" id="<%= genre.name.toLowerCase().replace(/ /g,'-') %>" name="genre" value="<%= genre.name %>">
+                          <label for="<%= genre.name.toLowerCase().replace(/ /g,'-') %>"><%= genre.name %></label><br>
+                        </div>
+                      </div>
+                    <% }) %>
+                  </div>
+                  <div class="form-group">
+                    <label for="episodes">Episodes *</label>
+                    <input type="text" id="episodes" class="form-control" required/>
+                  </div>
+                  <div class="form-group">
+                    <label for="release_jp">Release *</label>
+                    <input type="text" id="release_jp" class="form-control" required/>
+                  </div>
+                  <div class="form-group">
+                    <label for="release_en">Release English</label>
+                    <input type="text" id="release_en" class="form-control"  />
+                  </div>
+                  <div class="form-group">
+                    <label for="release_de">Release German</label>
+                    <input type="text" id="release_de" class="form-control" />
+                  </div>
+                  <div class="form-group">
+                    <label for="status">Status</label>
+                    <select name="status" size="1" class="form-control" id="status">
+                      <option>Running</option>
+                      <option>On Hold</option>
+                      <option>Finished</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="dub">Dub</label>
+                    <input type="text" id="dub" class="form-control" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="sub">Sub</label>
+                    <input type="text" id="sub" class="form-control" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="license">License</label>
+                    <input type="text" id="license" class="form-control" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="refs">References</label>
+                    <input type="text" id="refs" class="form-control" />
+                  </div>
+                  <div class="form-group">
+                    <button id="save_button" class="btn btn-primary" onclick="sendAnime()">Save</button>
+                  </div>
+                </form>
+              </div>
+            </section>
+        </div>
+
+
+        <script src="../js/addanime.js"></script>
+    </main>
+
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
+
+</body>
+</html>

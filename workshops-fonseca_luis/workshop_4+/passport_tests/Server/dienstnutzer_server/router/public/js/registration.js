@@ -25,7 +25,7 @@ function getJSON(url) {
 function validateUsername(){
   var string = document.getElementById("username").value;
   var return_value = 0;
-  var url = 'http://192.168.178.40:8080/registration/' + string.toLowerCase();
+  var url = 'http://localhost:8080/registration/' + string.toLowerCase();
   var result = getJSON(url);
   return result;
 };
@@ -59,7 +59,7 @@ function putUser(){
 
   var xhr = new XMLHttpRequest();
   // SEND USER INFO
-  xhr.open("PUT", 'http://192.168.178.40:8080/user', false);
+  xhr.open("PUT", 'http://localhost:8080/user', false);
   xhr.setRequestHeader('Content-Type','application/json');
   xhr.setRequestHeader('Content-Length', JSON.stringify(user).length);
   xhr.setRequestHeader('Connection', 'close');
@@ -67,7 +67,7 @@ function putUser(){
   user_id = JSON.parse(xhr.responseText).user_id;
   // SEND AUTH INFO
   var xhr2 = new XMLHttpRequest();
-  xhr2.open("PUT", 'http://192.168.178.40:8080/user_reg', false);
+  xhr2.open("PUT", 'http://localhost:8080/user_reg', false);
   xhr2.setRequestHeader('Content-Type','application/json');
   xhr2.setRequestHeader('Content-Length', JSON.stringify(auth).length);
   xhr2.setRequestHeader('Connection', 'close');
@@ -95,7 +95,7 @@ function register(){
 function openProfile(){
   //alert("HI");
   var url = 'http://localhost:8080/user/' + user_id + '/stats';
-  //window.location.href="http://192.168.2.108:8080/user/3/stats"
+  //window.location.href="http://localhost:8080/user/3/stats"
   // xhr = new XMLHttpRequest();
   // xhr.open("GET", url, true);
   // xhr.send();
