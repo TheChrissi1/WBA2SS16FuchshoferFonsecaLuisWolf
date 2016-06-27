@@ -164,7 +164,7 @@ router.put('/refs', jsonParser, function( req, res ){
     res.status(201).type('text').send('added');
 });
 ///////////////////////////////////////////////
-
+*/
 //////// PUT ANIME ONLY ONCE //////////////////
 router.put('/animes', jsonParser, function( req, res ){
     var animes = require('./input/anime.json');
@@ -178,7 +178,7 @@ router.put('/animes', jsonParser, function( req, res ){
 })
 
 ///////////////////////////////////////////////
-
+/*
 //////// PUT STATS ONLY ONCE //////////////////
 router.put('/stats', jsonParser, function( req, res ){
     // console.log("IN PUT STATS");

@@ -1,8 +1,7 @@
 var bool = true;
 var genreNum = 0;
-
-function send(){
-  alert(HI);
+function sendAnime(){
+  alert("HI");
   var anime = {
       "name":"",
       "name_en":"",
