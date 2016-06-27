@@ -443,5 +443,31 @@ router.get('/logout', jsonParser, function( req, res){
 });
 // console.log('loaded get.js');
 
+router.get('/addanime', jsonParser, function( req, res ){
+	var options = {
+			host: "localhost",
+			port: 3000,
+			path: "/genre",
+			method:"GET",
+			headers:{
+					accept:"application/json"
+			}
+	}
+	var exReq = http.request(options, function(exRes){
+		if( exRes.statusCode == 404 ){
+				res.statusCode = 404;
+				res.render('pages/error');
+				res.end();
+		}else {
+							exRes.on("data", function(chunk){
+									//wird nich automatisch geparst!??
+									var genreList = JSON.parse(chunk);
+									res.render('pages/addanime',{genreList:genreList});
+									res.end();
+							});
+		}
+	});
+	exReq.end();
+})
 
 module.exports = router;

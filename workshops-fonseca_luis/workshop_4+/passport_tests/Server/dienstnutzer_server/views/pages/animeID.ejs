@@ -30,6 +30,10 @@
             <% refData.forEach(function(refs) { %>
                 <p><a href=<%= refs.address %>><%= refs %></a></p>
             <% }); %>
+            <%= for(var i = 1; i<= animeData.episodes; i++){ %>
+              <section>
+                <p><%= i %></p>
+            <% } %>
 
         </div>
 

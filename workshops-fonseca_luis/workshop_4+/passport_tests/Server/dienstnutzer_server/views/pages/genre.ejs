@@ -13,14 +13,23 @@
 
     <main>
         <div class="jumbotron">
-            <h1>Genre</h1>
-            <p>Liste aller Genre:</p>
-
-            <% genreList.forEach(function(genre) { %>
-
-            <p>Name: <%= genre.name %></p>
-            <p>Beschreibung: <%= genre.description %></p>
-            <% });  %>
+            <h2>Liste aller Genre:</h2>
+            <section class="content">
+              <div id="list">
+                <% genreList.forEach(function(genre) { %>
+                <section id="genre">
+                  <ul id="genre_list">
+                    <div id="info1">
+                      <li class="genre_name"><%= genre.name %></li>
+                    </div>
+                    <div id="info2">
+                      <li class="genre_info"><span>Beschreibung:</span> <%= genre.description %></li>
+                    </div>
+                  </ul>
+                </section>
+                <% });  %>
+              </div>
+            </section>
         </div>
 
 
