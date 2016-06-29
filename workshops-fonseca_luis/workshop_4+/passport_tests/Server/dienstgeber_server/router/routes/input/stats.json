@@ -9,10 +9,12 @@
       {
         "name":"Shingeki no Kyojin",
         "episodes":25,
+        "max_ep":25,
       },
       {
         "name":"Naruto Shippuuden",
         "episodes":425,
+        "max_ep":"--"
       }
     ]
 }
