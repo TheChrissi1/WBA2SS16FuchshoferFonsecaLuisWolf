@@ -218,8 +218,7 @@ router.get('/ref/:ref_name', jsonParser, function(req, res){
 
   db.keys('refs:' + req.params.ref_name ,function(err, rep) {
 		if(err) throw err;
-		var result = rep;
-		if (result.length > 0) {
+		if (rep.length > 0) {
       db.get('refs:' + req.params.ref_name, function(err, rep) {
 				if(err) throw err;
 
@@ -228,7 +227,7 @@ router.get('/ref/:ref_name', jsonParser, function(req, res){
 				console.log('OK');
 
       });
-    } else if (result.length == 0) {
+    } else if (rep.length == 0) {
 
  			res.status(404).type('text').send('No refs found');
 
@@ -247,7 +246,7 @@ router.get('/registration/:user_name', jsonParser, function(req, res){
 	db.keys('user:*',function(err, rep) {
 		if(err) throw err;
 		var result = rep;
-		var return_value = true;
+		var available = true;
 		var user_id = -1;
 		if (result.length == 0) {
 
@@ -261,10 +260,10 @@ router.get('/registration/:user_name', jsonParser, function(req, res){
 				rep.forEach(function(val){
 					if(JSON.parse(val).username.toLowerCase() == req.params.user_name.toLowerCase()){
 						user_id = JSON.parse(val).user_id;
-						return_value = false;
+						available = false;
 					}
 				});
-				if(return_value){
+				if(available){
 					res.status(200).type('text').send('Username available');
 
 					console.log('OK');

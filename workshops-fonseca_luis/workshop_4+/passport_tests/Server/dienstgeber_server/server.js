@@ -9,6 +9,7 @@ global.jsonParser = bodyParser.json();
 
 
 global.cookieParser = require('cookie-parser');
+global.bcrypt = require('bcryptjs');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}));
 
