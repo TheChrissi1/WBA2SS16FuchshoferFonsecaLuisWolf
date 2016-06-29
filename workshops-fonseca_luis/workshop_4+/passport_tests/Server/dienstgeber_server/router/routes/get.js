@@ -14,7 +14,7 @@ router.get('/', function(req, res){
 
 //[OK]
 //Gibt eine Liste aller Animes aus.
-router.get('/anime', jsonParser, function(req, res){
+router.get('/anime',  function(req, res){
 
 	console.log('GET /anime');
 
@@ -47,7 +47,7 @@ router.get('/anime', jsonParser, function(req, res){
 
 //[OK]
 //Gibt einen Anime anhand seines Namens (querry-parameter) zurück.
-router.get('/anime/:anime_name', jsonParser, function(req, res){
+router.get('/anime/:anime_name',  function(req, res){
 
 	console.log('GET /anime/' + req.params.anime_name);
 
@@ -72,7 +72,7 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
 
 //[OK]
 //Gibt eine Liste aller Benutzer aus.
-router.get('/user', jsonParser, function(req, res){
+router.get('/user',  function(req, res){
 
 	console.log('GET /user');
 
@@ -103,7 +103,7 @@ router.get('/user', jsonParser, function(req, res){
 
 //[OK]
 //Gibt einen Benutzer anhand seiner ID (querry-parameter) zurück.
-router.get('/user/:user_id', jsonParser, function(req, res){
+router.get('/user/:user_id',  function(req, res){
 
 	console.log('GET /user/'+ req.params.user_id);
 
@@ -127,7 +127,7 @@ router.get('/user/:user_id', jsonParser, function(req, res){
 
 //[OK]
 //Gibt die Statistik/das Profil eines Benutzers aus.
-router.get( '/user/:user_id/stats', jsonParser, function(req, res){
+router.get( '/user/:user_id/stats',  function(req, res){
 
 	console.log('GET /user/' + req.params.user_id + '/stats');
 
@@ -151,7 +151,7 @@ router.get( '/user/:user_id/stats', jsonParser, function(req, res){
 
 //[OK]
 //Gibt eine Liste der Genres aus.
-router.get('/genre', jsonParser, function(req, res) {
+router.get('/genre',  function(req, res) {
 
 	console.log('GET /genre');
 
@@ -179,7 +179,7 @@ router.get('/genre', jsonParser, function(req, res) {
 
 //[OK]
 //Gibt eine Liste der Referenzen aus.
-router.get('/ref', jsonParser, function(req, res) {
+router.get('/ref',  function(req, res) {
 
 	console.log('GET /ref');
 
@@ -212,7 +212,7 @@ router.get('/ref', jsonParser, function(req, res) {
 
 //[OK]
 //Gibt eine bestimmte Referenz aus.
-router.get('/ref/:ref_name', jsonParser, function(req, res){
+router.get('/ref/:ref_name',  function(req, res){
 
 	console.log('GET /ref/' + req.params.ref_name);
 
@@ -239,7 +239,7 @@ router.get('/ref/:ref_name', jsonParser, function(req, res){
 
 //[OK]
 //Gibt einen bestimmten Status Code zurück, wenn ein Username vergeben bzw. frei ist.
-router.get('/registration/:user_name', jsonParser, function(req, res){
+router.get('/registration/:user_name',  function(req, res){
 
 	console.log('GET /registration/' + req.params.user_name);
 

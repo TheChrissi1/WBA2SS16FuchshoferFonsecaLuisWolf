@@ -250,7 +250,7 @@ router.put('/signup', jsonParser, function(req, res){
     if( !rep ){
       db.set('auth:' + user.username , user.password, function ( err ){
         if( err ) throw err;
-        res.sendStatus(200);
+        res.sendStatus(204);
 
         console.log('OK');
 
@@ -276,7 +276,7 @@ router.put('/login', jsonParser, function(req, res){
     if( rep ){
       var hash = rep;
       if( bcrypt.compareSync( User.password, hash )){
-        res.sendStatus(200);
+        res.sendStatus(204);
 
         console.log('OK');
 
