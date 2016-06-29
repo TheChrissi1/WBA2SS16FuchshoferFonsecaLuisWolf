@@ -41,6 +41,8 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
 		if (rep) {
 			res.status(200).type('json').send( JSON.parse( rep ));
 		} else {
+            
+            //Was sendet er zurück???
 			res.status(404).type('text').send();
 		}
 	});
@@ -78,6 +80,8 @@ router.get('/user/:user_id', jsonParser, function(req, res){
 		if (rep) {
 			res.status(200).type('json').send(rep);
 		} else {
+            
+            //Was sendet er zurück???
 			res.status(404).type('text').send();
 		}
 	});
@@ -91,6 +95,8 @@ router.get( '/user/:user_id/stats', jsonParser, function(req, res){
 		if (rep) {
 			res.status(200).type('json').send(rep);
 		} else {
+            
+            //Was sendet er zurück???
 			res.status(404).type('text').send();
 		}
 	});

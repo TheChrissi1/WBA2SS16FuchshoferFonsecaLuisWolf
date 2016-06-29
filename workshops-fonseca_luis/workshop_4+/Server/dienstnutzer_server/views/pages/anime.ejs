@@ -37,6 +37,14 @@
               </div>
             </section>
         </div>
+        
+        <div class="well">
+            <h2>Nutzer haben heute auch gesehen:</h2>
+            <% suggestions.data.forEach(function(data) { %>
+            <a href='/anime/<%= data.name.toLowerCase().replace(/ /g,'-') %>'>
+                <p><%= data.name %></p>
+                <% });  %>
+        </div>
 
 
 
