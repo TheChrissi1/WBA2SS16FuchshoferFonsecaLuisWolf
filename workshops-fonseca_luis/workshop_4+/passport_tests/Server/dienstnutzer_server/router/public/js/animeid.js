@@ -47,7 +47,7 @@ function updateStats( id ){
   };
   var user_id = getUserID();
   var request = new XMLHttpRequest();
-  var url = 'http://localhost:8080/user/'+user_id+'/stats';
+  var url = 'http://192.168.2.108:8080/user/'+user_id+'/stats';
   request.open("PUT", url, true);
   request.setRequestHeader('Content-Type','application/json');
   request.send(JSON.stringify(newStats));

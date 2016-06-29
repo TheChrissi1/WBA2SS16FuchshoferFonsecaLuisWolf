@@ -20,18 +20,21 @@
             <li><a href="/about">About</a></li>
             <li><a href="/ref">Referenz</a></li>
             <li><a id="login-out" href="/login">Login</a></li>
-            <li><a href="/registration">Signup</a></li>
+            <li><a id="signup" href="/registration">Signup</a></li>
         </ul>
 
     </div>
     <script>
     var d = document.getElementById('login-out');
+    var e = document.getElementById('signup');
     if(document.cookie == ""){
       d.href = "/login";
       d.innerHTML = "Login";
+      e.style.visibility = "visible";
     } else {
       d.href = "/logout";
       d.innerHTML = "Logout";
+      e.style.visibility = "hidden";
     }
     function openProfile(){
       var cookie = document.cookie;

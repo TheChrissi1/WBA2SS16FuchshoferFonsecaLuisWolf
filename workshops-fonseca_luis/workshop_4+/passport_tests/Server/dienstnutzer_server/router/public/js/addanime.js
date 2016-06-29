@@ -39,7 +39,7 @@ function sendAnime(){
       "checked":false
   }
   var request = new XMLHttpRequest();
-  request.open("PUT", 'http://localhost:8080/anime', true);
+  request.open("PUT", 'http://192.168.2.108:8080/anime', true);
   request.setRequestHeader('Content-Type','application/json');
   request.send(JSON.stringify(anime));
 }

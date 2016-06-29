@@ -273,6 +273,7 @@ router.put('/login', jsonParser, function(req, res){
           }
         }
       });
+      console.log(active);
       user_id_res.on('end',function(){
         // // console.log(tmp);
         newAuth.user_id = tmp;
@@ -305,7 +306,7 @@ router.put('/login', jsonParser, function(req, res){
                 res.cookie('user_id', tmp);
                 res.cookie('active', active);
                 res.cookie('authority', authority);
-                res.status(200).end("Logged In!");
+                res.status(200).end(tmp);
               } else {
                 res.status(423).end("Account deactivated!");
               }
