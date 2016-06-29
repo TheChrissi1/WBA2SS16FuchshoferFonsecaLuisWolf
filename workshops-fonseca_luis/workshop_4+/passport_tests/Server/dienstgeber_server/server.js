@@ -8,44 +8,9 @@ global.bodyParser = require('body-parser');
 global.jsonParser = bodyParser.json();
 
 
-
-// PASSPORT TESTS
-//global.exphbs = require('express-handlebars');
-global.logger = require('morgan');
 global.cookieParser = require('cookie-parser');
-global.methodOverride = require('method-override');
-global.session = require('express-session');
-global.passport = require('passport');
-
-//app.use(logger('combined'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(methodOverride('X-HTTP-Method-Override'));
-app.use(session({secret:'secret', saveUninitialized: true, resave: true}));
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use(function( req, res, next){
-  var err = req.session.error;
-  var msg = req.session.notice;
-  var success = req.session.success;
-
-  delete req.session.error;
-  delete req.session.success;
-  delete req.session.notice;
-
-  if( err ) res.locals.error = err;
-  if( msg ) res.locals.notice = msg;
-  if( success ) res.locals.success = success;
-
-  next();
-});
-
-
-
-// --------------
-
-
 
 
 app.set('port', 3000);

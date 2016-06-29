@@ -37,7 +37,6 @@ function check (data, newData) {
 
 router.get('/', function(req, res){
 	res.render('pages/index');
-    // // console.log('Projekt der TH Köln, Medieninformatik 4. Semester.');
 });
 
 //[OK]
@@ -57,7 +56,6 @@ router.get('/anime', function(req, res){
         console.log("in get");
 			if(exRes.statusCode != 404){
         exRes.on("data", function(chunk){
-            //wird nich automatisch geparst!??
             var animeList = JSON.parse(chunk);
             res.render('pages/anime',{animeList:animeList,suggestions:suggestions});
             res.end();
@@ -514,25 +512,8 @@ router.get('/ref', jsonParser, function(req, res) {
 //[NOT OK]
 //Öffnet das Formular zur registrierung.
 router.get('/registration', jsonParser, function(req, res){
-	var options = {
-			host: "localhost",
-			port: 3000,
-			path: "/registration",
-			method:"GET",
-			headers:{
-			}
-	}
-	var exReq = http.request(options, function(exRes){
-			if( exRes.statusCode == 404 ){
-				res.statusCode = 404;
-				res.render('pages/error');
-				res.end();
-			}else {
-				res.render('pages/registration');
-				res.end();
-			}
-	});
-	exReq.end();
+	res.render('pages/registration');
+	res.end();
 })
 
 //[NOT OK]

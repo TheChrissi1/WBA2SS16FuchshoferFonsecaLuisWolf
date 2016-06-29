@@ -1,8 +1,6 @@
 var router = express.Router();
 var bcrypt = require('bcryptjs');
-var Q = require('q');
 
-passport.use('/', require('./passport_configure'));
 
 
 //[OK]
