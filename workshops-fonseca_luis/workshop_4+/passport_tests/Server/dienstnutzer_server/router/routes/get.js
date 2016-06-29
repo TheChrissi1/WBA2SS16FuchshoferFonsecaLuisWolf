@@ -357,9 +357,9 @@ router.get('/anime/:anime_name', jsonParser, function(req, res){
 								}
 
                 //Überprüft ob Vorschlag bereits existiert, sonst wird er eingetragen
-                                    if (check(suggestions, {"name":animeData.name}) == 1) {
-                                        suggestions.data.push({"name":animeData.name});
-                                    }
+                if (check(suggestions, {"name":animeData.name}) == 1) {
+                    suggestions.data.push({"name":animeData.name});
+                }
 
 								refData = ref_ids;
 								res.render('pages/animeID',{animeData:animeData, refData:refData,suggestions:suggestions});
@@ -596,6 +596,8 @@ router.get('/logout', jsonParser, function( req, res){
 	exReq.end();
 	res.clearCookie('username');
 	res.clearCookie('user_id');
+  res.clearCookie('active');
+  res.clearCookie('authority');
 	res.render('pages/index');
 });
 // // console.log('loaded get.js');
@@ -636,5 +638,60 @@ router.get('/addanime', jsonParser, function( req, res ){
 	});
 	exReq.end();
 })
+
+router.get('/edit/:anime_name', jsonParser, function( req, res ){
+  var options = {
+      host: "localhost",
+      port: 3000,
+      path: "/anime/" + req.params.anime_name,
+      method:"GET",
+      headers:{
+          accept:"application/json"
+      }
+  }
+  var exReq = http.request(options, function(exRes){
+      if( exRes.statusCode == 404 ){
+          // // console.log("IN IF");
+          res.statusCode = 404;
+          res.render('pages/error');
+          res.end();
+
+      }else {
+          // // console.log("IN ELSE");
+          var animeData;
+          exRes.on("data", function(chunk){
+              //Ist schon geparst??!
+              animeData = JSON.parse(chunk);
+              options.path = "/genre";
+              var genreReq = http.request(options, function(genreRes){
+            		if( genreRes.statusCode == 404 ){
+            				res.statusCode = 404;
+            				res.render('pages/error');
+            				res.end();
+            		}else {
+            				genreRes.on("data", function(chunk){
+            						//wird nich automatisch geparst!??
+            						var genreList = JSON.parse(chunk);
+            						options.path = "/ref";
+            						var otherReq = http.request(options, function( otherRes ){
+            							if( otherRes.statusCode != 404 ){
+            								otherRes.on("data", function(chunk){
+            									var refList = JSON.parse(chunk);
+            									res.render('pages/editanime',{animeData:animeData, genreList:genreList, refList:refList});
+            									res.end();
+
+            								});
+            							}
+            						});
+            						otherReq.end();
+            				});
+            		}
+            	});
+            genreReq.end();
+          });
+      }
+  });
+  exReq.end();
+});
 
 module.exports = router;

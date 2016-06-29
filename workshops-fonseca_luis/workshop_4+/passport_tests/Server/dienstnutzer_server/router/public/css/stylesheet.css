@@ -88,6 +88,54 @@
 /* ********************************************
  *          ANIME                             *
  ******************************************** */
+.linfo{
+  float: left;
+  width: 50%; /* optionale Weitenangabe */
+  font-size: 16px;
+  border-right: 1px solid #0066ff;
+}
+.rinfo{
+  padding-left: 10px;
+  float: right;
+  width: 50%;
+  font-size: 16px;
+}
+.infos{
+  width: 100%;
+  display: inline-block;
+}
+.infos ul{
+  list-style: none;
+}
+.descr{
+  display:table-cell;
+  font-size: 10px;
+  color: #0066ff;
+}
+.descr_val{
+  display: table-cell;
+}
+
+.linfo{
+  display: table;
+}
+.linfo li{
+  display: table-row;
+}
+
+
+
+
+
+/*
+*/
+#edit_anime{
+  display:inline-block;
+  background-color: #c0c0c0;
+  float:right;
+  width: 15px;
+  height: 15px;
+}
 #anime {
   width: 100%;
   background-color: #c0c0c0;

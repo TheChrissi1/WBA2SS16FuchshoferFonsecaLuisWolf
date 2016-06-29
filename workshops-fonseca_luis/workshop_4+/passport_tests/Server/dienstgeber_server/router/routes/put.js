@@ -1,4 +1,6 @@
 var router = express.Router();
+var bcrypt = require('bcryptjs');
+var Q = require('q');
 
 passport.use('/', require('./passport_configure'));
 
@@ -6,15 +8,15 @@ passport.use('/', require('./passport_configure'));
 //[OK]
 //Trägt einen neuen Anime in die DB ein.
 router.put('/anime', jsonParser, function( req, res){
-    
-    
+
+
     var newAnime = req.body;
-    
+
     db.set('anime:'+newAnime.name.toLowerCase().replace(/ /g,'-'), JSON.stringify(newAnime), function(err, rep) {
-        
+
         //res.status(201).type('text').send('new anime: ' +newAnime.name);
         res.status(201).type('json').send({"name":newAnime.name});
-        
+
     });
 
 });
@@ -83,11 +85,11 @@ router.put('/user', jsonParser, function(req, res){
 //[OK]
 //Ändert die Daten eines Benutzers.
 router.put( '/user/:user_id', jsonParser, function(req, res){
-   
+
   db.exists('user:'+req.params.user_id, function(err, rep) {
 		if (rep == 1) {
 			var updatedUser = req.body;
-         
+
 			updatedUser.user_id = req.params.user_id;
 
 			db.set('user:' + req.params.user_id, JSON.stringify(updatedUser), function(err, rep) {
@@ -140,17 +142,55 @@ router.put( '/user/:user_id/stats', jsonParser, function(req, res){
   });
 });
 
-router.put('/signup', passport.authenticate('local-signup',
-  {
-	   successRedirect: '/',
-	   failureRedirect: '/login'
-  }
-));
+router.put('/signup', function(req, res){
+  console.log("IN SIGNUP");
+  var newUser = req.body;
+  var hash = bcrypt.hashSync( newUser.password, 8 );
+  var user = {
+    "username" : newUser.username,
+    "password": hash
+  };
+  console.log(user);
+  db.get('auth:' + user.username, function( result ){
+    console.log("in db.get auth");
+    if( result ){
+      console.log("Username taken!");
+      res.sendStatus(422);
+    } else {
+      db.set('auth:' + user.username , user.password, function ( err ){
+        console.log("in db.set auth");
+        if( err ){
+          console.log("Unexpected Error!");
+          res.sendStatus(500);
+        } else {
+          console.log("Successfull");
+          res.sendStatus(200);
+        }
+      });
+    }
+  });
+});
 
-router.put('/login', passport.authenticate('local-signin', {
-  successRedirect: '/',
-  failureRedirect: '/'
-}));
+router.put('/login', jsonParser, function(req, res){
+  console.log(req.body);
+  var User = req.body;
+  db.get('auth:' + User.username, function( err, result ){
+    console.log(err);
+    if( result ){
+      console.log('Found User');
+      var hash = result;
+      if( bcrypt.compareSync( User.password, hash )){
+        res.sendStatus(200);
+      } else {
+        console.log('Wrong Password');
+        res.sendStatus(423);
+      }
+    } else {
+      console.log( 'Could not find User');
+      res.sendStatus(404);
+    }
+  });
+});
 
 
 

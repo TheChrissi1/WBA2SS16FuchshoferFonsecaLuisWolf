@@ -10,7 +10,7 @@ function login(){
   xhr.setRequestHeader('Content-Length', JSON.stringify(auth).length);
   xhr.setRequestHeader('Connection', 'close');
   xhr.send(JSON.stringify(auth));
-
+  alert(xhr.status);
   window.location = '/';
   return false;
 }

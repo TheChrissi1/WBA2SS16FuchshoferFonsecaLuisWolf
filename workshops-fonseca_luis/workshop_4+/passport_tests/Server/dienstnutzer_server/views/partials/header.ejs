@@ -35,11 +35,13 @@
     }
     function openProfile(){
       var cookie = document.cookie;
-      var c1 = cookie.split(';');
-      var value = c1[1].split('=');
-      if(value[1] != 0){
-        var str = '/user/'+value[1]+'/stats';
-        window.location = str;
+        if(cookie != ""){
+        var c1 = cookie.split(';');
+        var value = c1[1].split('=');
+        if(value[1] != 0){
+          var str = '/user/'+value[1]+'/stats';
+          window.location = str;
+        }
       } else {
         alert("You are not Logged In");
         window.location = '/login';

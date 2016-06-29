@@ -17,15 +17,17 @@ passport.use('local-signin', new LocalStrategy(
           "username":username,
           "password":pw
         };
-        // console.log(pw);
+         console.log(pw);
         // console.log('Logged in as User ID: ' + username );
         req.session.success = 'You are successfully logged in ' + username + '!';
         done( null, username );
+        return 200;
       }
       if( !pw ){
         // console.log('Could not login');
         req.session.error = 'Could not Login. Please try again.';
         done(null, user);
+        return 404;
       }
     }).fail(function( err ){
       // console.log("ERR.BODY: " + err.body);
@@ -94,18 +96,18 @@ function localAuth( username, password ){
   var deferred = Q.defer();
   db.get('auth:' + username, function( err, result ){
     if( result ){
-      // console.log('Found User');
+      console.log('Found User');
       var hash = result;
 
       if( bcrypt.compareSync( password, hash )){
         deferred.resolve( result );
       } else {
-        // console.log('Wrong Password');
+        console.log('Wrong Password');
         deferred.resolve( false );
       }
     } else {
-      // console.log( err );
-      // console.log( 'Could not find User');
+      console.log( err );
+      console.log( 'Could not find User');
     }
   });
   return deferred.promise;

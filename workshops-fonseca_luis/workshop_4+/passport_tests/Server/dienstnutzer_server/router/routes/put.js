@@ -9,6 +9,8 @@ router.put('/anime', jsonParser, function( req, res){
     var newAnime = req.body;
     var bodyString = JSON.stringify(newAnime);
 
+    newAnime.checked = false;
+
     var options = {
         host: "localhost",
         port: 3000,
@@ -145,10 +147,6 @@ router.put( '/user/:user_id', jsonParser, function(req, res){
     var resBody;
     var put_req = http.request(options, function (put_res) {
 
-//        put_res.on("data", function (chunk) {
-//            resBody = {"user id":JSON.parse(chunk).id};
-//        });
-
         //Falls User nicht existiert:
         if (put_res.statusCode != 200) {
             put_res.on("data", function (chunk) {
@@ -206,47 +204,48 @@ router.put( '/user/:user_id/stats', jsonParser, function(req, res){
 });
 
 router.put('/user_reg', jsonParser, function(req, res){
+  console.log(req.body);
+  var newAuth = req.body;
+  // // console.log(newAuth);
+  var postData = querystring.stringify({
+    username: newAuth.username,
+    password: newAuth.password
+  });
 
-    var newAuth = req.body;
-    // // console.log(newAuth);
-    var postData = querystring.stringify({
-      username: newAuth.username,
-      password: newAuth.password
+  var options = {
+    host: "localhost",
+    port: 3000,
+    path: "/signup",
+    method: "PUT",
+    headers:{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': postData.length
+    }
+  };
+  var pwd_req = http.request(options, function(pwd_res){
+    var result = '';
+    // // console.log("StatusCode for User Reqgistration: " + pwd_res.statusCode);
+    pwd_res.on('data', function (chunk){
+      result += chunk;
     });
-
-    var options = {
-      host: "localhost",
-      port: 3000,
-      path: "/signup",
-      method: "PUT",
-      headers:{
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': postData.length
-      }
-    };
-    var pwd_req = http.request(options, function(pwd_res){
-      var result = '';
-      // // console.log("StatusCode for User Reqgistration: " + pwd_res.statusCode);
-      pwd_res.on('data', function (chunk){
-        result += chunk;
-      });
-      pwd_res.on('end', function(){
-        // // console.log(result);
-        pwd_req.end();
-      });
-      pwd_res.on('error', function(err){
-        // // console.log(err);
-      });
+    pwd_res.on('end', function(){
+      console.log(result);
     });
-    pwd_req.write(postData);
-    pwd_req.end();
-    res.sendStatus(200);
+    pwd_res.on('error', function(err){
+      // // console.log(err);
+    });
+  });
+  pwd_req.write(postData);
+  pwd_req.end();
+  res.sendStatus(200);
 });
 
 router.put('/login', jsonParser, function(req, res){
 
 
   var tmp = 0;
+  var active = false;
+  var authority = 4;
   var newAuth = {
     "username": req.body.username,
     "password": req.body.password,
@@ -269,6 +268,8 @@ router.put('/login', jsonParser, function(req, res){
           if(userList[i].username == req.body.username){
             // // console.log("UserID Found: " + userList[i].user_id);
             tmp = userList[i].user_id;
+            active = userList[i].active;
+            authority = userList[i].authority;
           }
         }
       });
@@ -298,7 +299,21 @@ router.put('/login', jsonParser, function(req, res){
             result += chunk;
           });
           pwd_res.on('end', function(){
-            // // console.log(result);
+            if(pwd_res.statusCode == 200){
+              if(active == true){
+                res.cookie('username', newAuth.username);
+                res.cookie('user_id', tmp);
+                res.cookie('active', active);
+                res.cookie('authority', authority);
+                res.status(200).end("Logged In!");
+              } else {
+                res.status(423).end("Account deactivated!");
+              }
+            } else if(pwd_res.statusCode == 423){
+              res.status(401).end("Wrong Password!");
+            } else if(pwd_res.statusCode == 404){
+              res.status(404).end("User not found!");
+            }
             pwd_req.end();
           });
           pwd_res.on('error', function(err){
@@ -307,9 +322,6 @@ router.put('/login', jsonParser, function(req, res){
         });
         pwd_req.write(postData);
         pwd_req.end();
-        res.cookie('username', newAuth.username);
-        res.cookie('user_id', tmp);
-        res.sendStatus(200);
       });
     } else {
       res.sendStatus(404);

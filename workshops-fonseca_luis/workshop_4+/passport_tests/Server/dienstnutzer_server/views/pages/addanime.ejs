@@ -29,13 +29,12 @@
                     <input type="text" id="name_ger" class="form-control" required/>
                   </div>
                   <div class="form-group" id="genre-menu">
-                    <label for="genre">Genre *</label>
-                    <button id="genre-button" class="form-control" onclick="genreToggle()">Show</button>
+                    <label for="genre">Genre *</label><br>
                     <% genreList.forEach(function(genre){ %>
-                      <div class="genre-param" style="visibility: hidden; display:none">
-                        <div class="form-control">
+                      <div class="genre-param"  style="display:inline-block;">
+                        <div class="form-control" style="margin: 0px; min-width: 150px;">
                           <input class="genre-select" type="checkbox" id="<%= genre.name.toLowerCase().replace(/ /g,'-') %>" name="genre" value="<%= genre.name %>">
-                          <label for="<%= genre.name.toLowerCase().replace(/ /g,'-') %>"><%= genre.name %></label><br>
+                          <label for="<%= genre.name.toLowerCase().replace(/ /g,'-') %>"><%= genre.name %></label>
                         </div>
                       </div>
                     <% }) %>
@@ -66,14 +65,13 @@
                   </div>
                   <div class="form-group" id="refs_menu">
                     <label for="refs">References *</label>
-                    <button id="refs-button" class="form-control" onclick="refToggle()">Show</button>
                     <% refList.forEach(function(refs){ %>
-                      <div class="refs-param" style="visibility: hidden; display:none">
-                        <div class="form-control">
-                          <input class="refs-select" type="checkbox" id="<%= refs.name.toLowerCase().replace(/ /g,'-') %>" name="refs" value="<%= refs.ref_id %>">
-                          <label for="<%= refs.name.toLowerCase().replace(/ /g,'-') %>"><%= refs.name %></label>
+                        <div class="refs-param">
+                          <div class="form-control">
+                            <input class="refs-select" type="checkbox" id="<%= refs.name.toLowerCase().replace(/ /g,'-') %>" name="refs" value="<%= refs.ref_id %>">
+                            <label for="<%= refs.name.toLowerCase().replace(/ /g,'-') %>"><%= refs.name %></label>
+                          </div>
                         </div>
-                      </div>
                     <% }) %>
                   </div>
                   <div class="form-group">

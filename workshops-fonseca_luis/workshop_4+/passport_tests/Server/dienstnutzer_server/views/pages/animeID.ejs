@@ -14,17 +14,27 @@
     <main>
         <div class="jumbotron">
             <h2 id="anime_name_head" class="headline"><%= animeData.name %></h2>
-
+            <a id="edit_anime" href="/edit/<%= animeData.name.toLowerCase().replace(/ /g, '-') %>"></a>
             <section class="content">
-              <div>
+              <section class="infos">
                 <ul>
-                  <li id="episode_number" value="<%= animeData.episodes %>"><span>Episodes:</span> <%= animeData.episodes %></li>
-                  <li>Release: <%= animeData.release %></li>
-                  <li>Release_Jap: <%= animeData.release_jap %></li>
-                  <li>License: <%= animeData.license %></li>
-                  <li value="<%= animeData.status %>">Status: <span id="anime_status"><%= animeData.status %></span></li>
+                  <div class="linfo">
+                    <li><span class="descr">ALTERNATIVE NAMES:</span><span class="descr_val"><%= animeData.name_en %>, <%=animeData.name_de %></span></li>
+                    <li id="episode_number" value="<%= animeData.episodes %>"><span class="descr">EPISODES:</span><span class="descr_val"><%= animeData.episodes %></span></li>
+                    <li><span class="descr">GENRE:</span><span class="descr_val"><%= animeData.genre %></span></li>
+                    <li value="<%= animeData.status %>"><span class="descr">STATUS:</span><span id="anime_status" class="descr_val"><%= animeData.status %></span></li>
+                    <li><span class="descr">DUB:</span><span class="descr_val"><%= animeData.dub %></span></li>
+                    <li><span class="descr">SUB:</span><span class="descr_val"><%= animeData.sub %></span></li>
+                    <li><span class="descr">RELEASE [JP]:</span><span class="descr_val"><%= animeData.release_jp %></span></li>
+                    <li><span class="descr">RELEASE [EN]:</span><span class="descr_val"><%= animeData.release_en %></span></li>
+                    <li><span class="descr">RELEASE [DE]:</span><span class="descr_val"><%= animeData.release_de %></span></li>
+                    <li><span class="descr">LICENSE:</span><span class="descr_val"><%= animeData.license %></span></li>
+                  </div>
+                  <div class="rinfo">
+                    <li><%= animeData.descritpion %></li>
+                  </div>
                 </ul>
-              </div>
+              </section>
               <section id="episode-section">
                 <ul id="episode_list" onload="loadEpisodes()">
                 </ul>
