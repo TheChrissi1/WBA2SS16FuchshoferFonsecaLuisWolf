@@ -59,7 +59,7 @@ router.get('/anime', function(req, res){
         exRes.on("data", function(chunk){
             //wird nich automatisch geparst!??
             var animeList = JSON.parse(chunk);
-            res.render('pages/anime',{animeList:animeList});
+            res.render('pages/anime',{animeList:animeList,suggestions:suggestions});
             res.end();
         });
 			} else {
@@ -195,10 +195,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[i].episodes == erg.episodes) {
                             animeList.push(exAnimeList[i]);
 
-//                            //Überprüft ob Vorschlag bereits existiert, sonst wird er eingetragen
-//                            if (check(suggestions, {"name":exAnimeList[i].name}) == 1) {
-//                                suggestions.data.push({"name":exAnimeList[i].name});
-//                            }
+                         
                         }
                     }
             } else if( countEpisodes > 1) {
@@ -207,10 +204,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[k].episodes == erg.episodes[j]) {
                             animeList.push(exAnimeList[k]);
 
-//                            //Überprüft ob Vorschlag bereits existiert, sonst wird er eingetragen
-//                            if (check(suggestions, {"name":exAnimeList[k].name}) == 1) {
-//                                suggestions.data.push({"name":exAnimeList[k].name});
-//                            }
+                          
                         }
                     }
                 }
@@ -222,10 +216,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[a].episodes <= erg.maxEpisodes) {
                             animeList.push(exAnimeList[a]);
 
-//                            //Überprüft ob Vorschlag bereits existiert, sonst wird er eingetragen
-//                            if (check(suggestions, {"name":exAnimeList[a].name}) == 1) {
-//                                suggestions.data.push({"name":exAnimeList[a].name});
-//                            }
+                           
                         }
                     }
             }
@@ -236,10 +227,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[b].episodes >= erg.minEpisodes) {
                             animeList.push(exAnimeList[b]);
 
-//                            //Überprüft ob Vorschlag bereits existiert, sonst wird er eingetragen
-//                            if (check(suggestions, {"name":exAnimeList[b].name}) == 1) {
-//                                suggestions.data.push({"name":exAnimeList[b].name});
-//                            }
+                          
                         }
                     }
             }
@@ -251,10 +239,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[m].genre.indexOf(erg.genre) > -1) {
                             animeList.push(exAnimeList[m]);
 
-//                            //Überprüft ob Vorschlag bereits existiert, sonst wird er eingetragen
-//                            if (check(suggestions, {"name":exAnimeList[m].name}) == 1) {
-//                                suggestions.data.push({"name":exAnimeList[m].name});
-//                            }
+                         
                         }
                     }
 
@@ -264,10 +249,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[o].genre.indexOf(erg.genre[n]) > -1) {
                             animeList.push(exAnimeList[o]);
 
-//                            //Überprüft ob Vorschlag bereits existiert, sonst wird er eingetragen
-//                            if (check(suggestions, {"name":exAnimeList[o].name}) == 1) {
-//                                suggestions.data.push({"name":exAnimeList[o].name});
-//                            }
+                        
                         }
                     }
                 }
@@ -280,10 +262,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[m].name.indexOf(erg.name) > -1 || exAnimeList[m].name_en.indexOf(erg.name) > -1 ||      exAnimeList[m].name_de.indexOf(erg.name) > -1){
                             animeList.push(exAnimeList[m]);
 
-//                            //Überprüft ob Vorschlag bereits existiert, sonst wird er eingetragen
-//                            if (check(suggestions, {"name":exAnimeList[m].name}) == 1) {
-//                                suggestions.data.push({"name":exAnimeList[m].name});
-//                            }
+                       
                         }
                     }
 
@@ -294,10 +273,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[o].name.indexOf(erg.name[n]) > -1 || exAnimeList[o].name_en.indexOf(erg.name[n]) > -1 || exAnimeList[o].name_de.indexOf(erg.name[n]) > -1) {
                             animeList.push(exAnimeList[o]);
 
-//                            //Überprüft ob Vorschlag bereits existiert, sonst wird er eingetragen
-//                            if (check(suggestions, {"name":exAnimeList[o].name}) == 1) {
-//                                suggestions.data.push({"name":exAnimeList[o].name});
-//                            }
+                      
                         }
                     }
                 }
@@ -308,7 +284,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                 res.end;
             } else {
                 //Wirklich auf /anime rendern?? Eventuell neue .ejs mit /anime/filter machen??
-                res.render('pages/anime',{animeList:animeList,suggestions:suggestions});
+                res.render('pages/anime',{animeList:animeList});
                 res.end();
             }
         });
