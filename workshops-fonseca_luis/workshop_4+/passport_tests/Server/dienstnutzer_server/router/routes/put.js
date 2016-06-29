@@ -273,11 +273,11 @@ router.put('/login', jsonParser, function(req, res){
           }
         }
       });
-      console.log(active);
       user_id_res.on('end',function(){
         // // console.log(tmp);
         newAuth.user_id = tmp;
         // // console.log(newAuth);
+        console.log(active);
         var postData = querystring.stringify({
           username: newAuth.username,
           password: newAuth.password
@@ -306,7 +306,7 @@ router.put('/login', jsonParser, function(req, res){
                 res.cookie('user_id', tmp);
                 res.cookie('active', active);
                 res.cookie('authority', authority);
-                res.status(200).end(tmp);
+                res.status(200).end();
               } else {
                 res.status(423).end("Account deactivated!");
               }

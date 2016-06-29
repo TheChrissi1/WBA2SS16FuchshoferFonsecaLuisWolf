@@ -10,7 +10,6 @@ function login(){
   xhr.send(JSON.stringify(auth));
   var url = "http://192.168.2.108:8080/";
   if(xhr.status == 200){
-    url += "user/"+xhr.responseText+"/stats";
   } else if( xhr.status == 404){
     alert("Account not Found! Please register");
     url += "registration";

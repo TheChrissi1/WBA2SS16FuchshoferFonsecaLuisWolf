@@ -195,7 +195,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[i].episodes == erg.episodes) {
                             animeList.push(exAnimeList[i]);
 
-                         
+
                         }
                     }
             } else if( countEpisodes > 1) {
@@ -204,7 +204,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[k].episodes == erg.episodes[j]) {
                             animeList.push(exAnimeList[k]);
 
-                          
+
                         }
                     }
                 }
@@ -216,7 +216,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[a].episodes <= erg.maxEpisodes) {
                             animeList.push(exAnimeList[a]);
 
-                           
+
                         }
                     }
             }
@@ -227,7 +227,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[b].episodes >= erg.minEpisodes) {
                             animeList.push(exAnimeList[b]);
 
-                          
+
                         }
                     }
             }
@@ -239,7 +239,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[m].genre.indexOf(erg.genre) > -1) {
                             animeList.push(exAnimeList[m]);
 
-                         
+
                         }
                     }
 
@@ -249,7 +249,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[o].genre.indexOf(erg.genre[n]) > -1) {
                             animeList.push(exAnimeList[o]);
 
-                        
+
                         }
                     }
                 }
@@ -262,7 +262,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[m].name.indexOf(erg.name) > -1 || exAnimeList[m].name_en.indexOf(erg.name) > -1 ||      exAnimeList[m].name_de.indexOf(erg.name) > -1){
                             animeList.push(exAnimeList[m]);
 
-                       
+
                         }
                     }
 
@@ -273,7 +273,7 @@ router.get('/anime/filter:para', jsonParser, function(req, res) {
                         if (exAnimeList[o].name.indexOf(erg.name[n]) > -1 || exAnimeList[o].name_en.indexOf(erg.name[n]) > -1 || exAnimeList[o].name_de.indexOf(erg.name[n]) > -1) {
                             animeList.push(exAnimeList[o]);
 
-                      
+
                         }
                     }
                 }
@@ -560,16 +560,6 @@ router.get('/login', jsonParser, function(req, res){
 })
 
 router.get('/logout', jsonParser, function( req, res){
-	var options = {
-			host: "localhost",
-			port: 3000,
-			path: "/signout",
-			method:"GET",
-			headers:{
-			}
-	}
-	var exReq = http.request(options);
-	exReq.end();
 	res.clearCookie('username');
 	res.clearCookie('user_id');
   res.clearCookie('active');
