@@ -74,11 +74,13 @@ function sendFilter(){
       }
     }
   }
-  if(count == 0){
-    query += "name=" + document.getElementById('filter_name').value;
-    count++;
-  } else {
-    query += "&name=" + document.getElementById('filter_name').value;
+  if(document.getElementById('filter_name').value != ''){
+    if(count != 0){
+      query += "name=" + document.getElementById('filter_name').value;
+      count++;
+    } else {
+      query += "&name=" + document.getElementById('filter_name').value;
+    }
   }
   window.location = 'http://localhost:8080/anime/' + query;
   return false;
