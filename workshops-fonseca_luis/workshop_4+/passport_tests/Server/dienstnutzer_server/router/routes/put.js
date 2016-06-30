@@ -272,10 +272,6 @@ router.put('/login', jsonParser, function(req, res){
         newAuth.user_id = tmp;
         // // console.log(newAuth);
         console.log(active);
-        var postData = querystring.stringify({
-          username: newAuth.username,
-          password: newAuth.password
-        });
         // // console.log(postData);
         var options = {
           host: "localhost",
@@ -283,8 +279,7 @@ router.put('/login', jsonParser, function(req, res){
           path: "/login",
           method: "PUT",
           headers:{
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': postData.length
+            'Content-Type': 'application/json'
           }
         };
         var pwd_req = http.request(options, function(pwd_res){
@@ -309,13 +304,12 @@ router.put('/login', jsonParser, function(req, res){
             } else if(pwd_res.statusCode == 404){
               res.status(404).end("User not found!");
             }
-            pwd_req.end();
           });
           pwd_res.on('error', function(err){
             // // console.log(err);
           });
         });
-        pwd_req.end(postData);
+        pwd_req.end(JSON.stringify(newAuth));
       });
     } else {
       res.sendStatus(404);

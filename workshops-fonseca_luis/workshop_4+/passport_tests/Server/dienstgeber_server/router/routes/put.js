@@ -9,7 +9,6 @@ router.put('/anime', jsonParser, function( req, res){
   var newAnime = req.body;
   var available = true;
   db.keys('anime:*', function(err, rep){
-    console.log(rep);
     if(err) throw err;
     for(var i = 0; i<rep.length; i++){
       if( rep[i] == 'anime:' + newAnime.name.toLowerCase().replace(/ /g,'-')){
