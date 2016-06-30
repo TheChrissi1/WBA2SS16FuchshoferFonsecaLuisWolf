@@ -18,23 +18,21 @@ router.put('/anime', jsonParser, function( req, res){
         method:"PUT",
         headers: {
             'Content-Type': 'application/json',
-            'Content-Length': bodyString.length
         }
     };
 
     var resBody;
     var put_req = http.request(options, function (put_res) {
         put_res.on("data", function (chunk) {
-            resBody = {"anime name":JSON.parse(chunk).name};
         });
 
         if (put_res.statusCode != 201) {
             put_res.on("end", function() {
-                res.status(400).type('json').send(resBody);
+                res.status(422).type('text').send('Anime does already exist');
             });
         } else {
             put_res.on("end", function(){
-                res.status(201).type('json').send(resBody);
+                res.status(201).type('json').send('Anime added');
             });
         }
     });
@@ -57,25 +55,21 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
         method:"PUT",
         headers: {
             'Content-Type': 'application/json',
-            'Content-Length': bodyString.length
         }
     };
 
     var resBody;
     var put_req = http.request(options, function (put_res) {
-
         put_res.on("data", function (chunk) {
-            resBody = {"anime name":JSON.parse(chunk).name};
         });
 
         //Falls Anime nicht existiert:
         if (put_res.statusCode != 200) {
             put_res.on("data", function (chunk) {
-                resBody = "error: " +chunk;
             });
 
             put_res.on("end", function() {
-                res.status(400).type('json').send(resBody);
+                res.status(404).type('text').send('Anime does not exists');
             });
 
         //Wenn Anime existiert:
@@ -86,7 +80,7 @@ router.put( '/anime/:anime_name', jsonParser, function(req, res){
 
             put_res.on("end", function(){
                 //Anfrage war erfolgreich, Response enthält aber bewusst keine Daten!
-                res.status(204).type('json').send(resBody);
+                res.status(200).type('json').send(resBody);
             });
         }
     });
@@ -300,7 +294,7 @@ router.put('/login', jsonParser, function(req, res){
             result += chunk;
           });
           pwd_res.on('end', function(){
-            if(pwd_res.statusCode == 200){
+            if(pwd_res.statusCode == 204){
               if(active == true){
                 res.cookie('username', newAuth.username);
                 res.cookie('user_id', tmp);
@@ -321,8 +315,7 @@ router.put('/login', jsonParser, function(req, res){
             // // console.log(err);
           });
         });
-        pwd_req.write(postData);
-        pwd_req.end();
+        pwd_req.end(postData);
       });
     } else {
       res.sendStatus(404);

@@ -5,10 +5,10 @@ function login(){
     "password":document.getElementById('password').value
   };
   var xhr = new XMLHttpRequest();
-  xhr.open("PUT", 'http://192.168.2.108:8080/login', false);
+  xhr.open("PUT", 'http://localhost:8080/login', false);
   xhr.setRequestHeader('Content-Type','application/json');
   xhr.send(JSON.stringify(auth));
-  var url = "http://192.168.2.108:8080/";
+  var url = "http://localhost:8080/";
   if(xhr.status == 200){
   } else if( xhr.status == 404){
     alert("Account not Found! Please register");

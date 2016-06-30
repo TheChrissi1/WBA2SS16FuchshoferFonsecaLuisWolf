@@ -19,8 +19,24 @@ for(var i = episodes ; i>0; i--){
   d.appendChild(button);
 }
 
+
+var edit_anime_link = document.getElementById('edit_anime');
+var cookie = document.cookie;
+if(cookie != ""){
+  var c1 = cookie.split(';');
+  var cookie_value = c1[3].split('=');
+  if(cookie_value[1] == 1 || cookie_value[1] == 2){
+    edit_anime_link.style.visibility = "visible";
+  } else {
+    edit_anime_link.style.visibility = "hidden";
+  }
+} else {
+  edit_anime_link.style.visibility = "hidden";
+}
+
+
 function getUserID(){
-  var cookie = document.cookie;
+  var value = document.cookie;
   var c1 = cookie.split(';');
   var value = c1[1].split('=');
   if(value[1] != 0){
@@ -47,7 +63,7 @@ function updateStats( id ){
   };
   var user_id = getUserID();
   var request = new XMLHttpRequest();
-  var url = 'http://192.168.2.108:8080/user/'+user_id+'/stats';
+  var url = 'http://localhost:8080/user/'+user_id+'/stats';
   request.open("PUT", url, true);
   request.setRequestHeader('Content-Type','application/json');
   request.send(JSON.stringify(newStats));

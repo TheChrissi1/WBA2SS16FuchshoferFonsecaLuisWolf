@@ -28,6 +28,7 @@ function sendAnime(){
       "name_de": document.getElementById('name_ger').value,
       "genre": genre_erg,
       "episodes": document.getElementById('episodes').value,
+      "description": document.getElementById('description').value,
       "release_jp": document.getElementById('release_jp').value,
       "release_en": document.getElementById('release_en').value,
       "release_de": document.getElementById('release_de').value,
@@ -39,7 +40,7 @@ function sendAnime(){
       "checked":false
   }
   var request = new XMLHttpRequest();
-  request.open("PUT", 'http://192.168.2.108:8080/anime', true);
+  request.open("PUT", 'http://localhost:8080/anime', true);
   request.setRequestHeader('Content-Type','application/json');
   request.send(JSON.stringify(anime));
 }
