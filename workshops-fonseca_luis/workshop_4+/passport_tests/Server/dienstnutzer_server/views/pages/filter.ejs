@@ -1,0 +1,65 @@
+<!-- views/pages/filter.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container" id="body">
+    <header>
+        <% include ../partials/header %>
+    </header>
+    <main>
+        <div class="jumbotron">
+            <h2 id="headline" class="headline">Filter</h2>
+
+            <section class="content">
+              <div>
+                <form method="put">
+                  <select type="text" onchange="toggle(this.selectedIndex);">
+                    <option value="1" id="episodes">Exact Episodes</option>
+                    <option value="2" id="min_max">Min/Max Episodes</option>
+                  </select>
+                  <div id="select1">
+                    <div class="form-group">
+                      <label for="filter_episodes">Episodes:</label>
+                      <input type="text" id="filter_episode" class="filter_episodes"/>
+                      <a href="#" onclick="addEpisode()" id="filter_episodes_button">+</a>
+                    </div>
+                  </div>
+                  <div id="select2" style="visibility: hidden; display: none;">
+                    <div>
+                      <label for="filter_min"> Min Episodes: </label>
+                      <input type="text" id="filter_min"/>
+                    </div>
+                    <div>
+                      <label for="filter_max"> Max Episodes: </label>
+                      <input type="text" id="filter_max"/>
+                    </div>
+                  </div>
+                  <div>
+                    <label for="filter_genre"> Genre     :</label>
+                    <input type="text" id="filter_genre" class="filter_genres"/>
+                    <a href="#" onclick="addGenre()" id="filter_genre_button">+</a>
+                  </div>
+                  <div class="form-group">
+                    <label for="filter_name"> Name:</label>
+                    <input type="text" id="filter_name"/>
+                  </div>
+                  <div class="form-group">
+                    <button onclick="return sendFilter()">Save</button>
+                  </div>
+                </form>
+              </div>
+            </section>
+        </div>
+        <script src="../js/filter.js"></script>
+
+    </main>
+
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
+
+</body>
+</html>

@@ -1,10 +1,14 @@
 var router = express.Router();
+
 var querystring = require('querystring');
 
 
+
 //[OK]
-//Eintragen eines neuen Animes über Dienstgeber
+//Eintragen eines neuen Animes in Redis.
 router.put('/anime', jsonParser, function( req, res){
+
+    console.log('PUT /anime');
 
     var newAnime = req.body;
     var bodyString = JSON.stringify(newAnime);
@@ -12,32 +16,39 @@ router.put('/anime', jsonParser, function( req, res){
     newAnime.checked = false;
 
     var options = {
-        host: "localhost",
+        host: 'localhost',
         port: 3000,
-        path: "/anime",
-        method:"PUT",
+        path: '/anime',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         }
     };
 
     var resBody;
-    var put_req = http.request(options, function (put_res) {
-        put_res.on("data", function (chunk) {
+    var exReq = http.request(options, function (exRes) {
+        exRes.on('data', function (chunk) {
+            resBody = {'name':JSON.parse(chunk).name};
         });
 
-        if (put_res.statusCode != 201) {
-            put_res.on("end", function() {
+        if (exRes.statusCode == 201) {
+            exRes.on('end', function(){
+
+                res.status(201).type('json').send(resBody);
+            });
+
+            console.log('CREATED');
+
+        } else {
+            exRes.on('end', function() {
                 res.status(422).type('text').send('Anime does already exist');
             });
-        } else {
-            put_res.on("end", function(){
-                res.status(201).type('json').send('Anime added');
-            });
+
+            console.log('UNPROCESSABLE ENTITY');
         }
     });
-    put_req.write(bodyString);
-    put_req.end();
+    exReq.write(bodyString);
+    exReq.end();
 
 });
 
@@ -45,280 +56,307 @@ router.put('/anime', jsonParser, function( req, res){
 // Ändert die Daten eines Animes.
 router.put( '/anime/:anime_name', jsonParser, function(req, res){
 
+    console.log('PUT /anime/' +req.params.anime_name);
+
     var editAnime = req.body;
     var bodyString = JSON.stringify(editAnime);
 
     var options = {
-        host: "localhost",
+        host: 'localhost',
         port: 3000,
-        path: "/anime/"+req.params.anime_name,
-        method:"PUT",
+        path: '/anime/'+req.params.anime_name,
+        method:'PUT',
         headers: {
             'Content-Type': 'application/json',
         }
     };
 
     var resBody;
-    var put_req = http.request(options, function (put_res) {
-        put_res.on("data", function (chunk) {
+    var exReq = http.request(options, function (exRes) {
+        exRes.on('data', function (chunk) {
         });
 
+        //Wenn Anime existiert:
+        if (exRes.statusCode == 200) {
+            exRes.on('data', function (chunk) {
+                resBody = {'anime name':JSON.parse(chunk).name};
+            });
+            exRes.on('end', function() {
+                res.status(200).type('json').send(resBody);
+            });
+            console.log('OK');
+
         //Falls Anime nicht existiert:
-        if (put_res.statusCode != 200) {
-            put_res.on("data", function (chunk) {
+        } else {
+            exRes.on('data', function (chunk) {
             });
 
-            put_res.on("end", function() {
+            exRes.on('end', function() {
                 res.status(404).type('text').send('Anime does not exists');
             });
 
-        //Wenn Anime existiert:
-        } else {
-            put_res.on("data", function (chunk) {
-                resBody = {"anime name":JSON.parse(chunk).name};
-            });
-
-            put_res.on("end", function(){
-                //Anfrage war erfolgreich, Response enthält aber bewusst keine Daten!
-                res.status(200).type('json').send(resBody);
-            });
+            console.log('NOT FOUND');
         }
     });
-    put_req.write(bodyString);
-    put_req.end();
+    exReq.write(bodyString);
+    exReq.end();
 });
 
 //[OK]
-//Trägt einen neuen Benutzer über den Dienstgeber ein.
+//Eintragen eines neuen Benutzers in Redis.
 router.put('/user', jsonParser, function(req, res){
 
-    var newUser = req.body;
-    var bodyString = JSON.stringify(newUser);
+    console.log('PUT /user');
+
+    var bodyString = JSON.stringify(req.body);
 
     var options = {
-        host: "localhost",
+        host: 'localhost',
         port: 3000,
-        path: "/user",
-        method:"PUT",
+        path: '/user',
+        method: 'PUT',
         headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': bodyString.length
+            'Content-Type': 'application/json'
         }
     };
 
     var resBody;
-    var put_req = http.request(options, function (put_res) {
-        put_res.on("data", function (chunk) {
-            resBody = {"user_id":JSON.parse(chunk).user_id};
+    var exReq = http.request(options, function (exRes) {
+
+        exRes.on('data', function (chunk) {
+            resBody = {'user_id':JSON.parse(chunk).user_id};
         });
 
-        put_res.on("end", function(){
-            res.status(201).type('json').send(resBody);
-        })
-    });
-    put_req.write(bodyString);
-    put_req.end();
-});
+        if (exRes.statusCode == 201) {
+            exRes.on('end', function() {
 
+                res.status(201).type('json').send(resBody);
+            });
+
+            console.log('CREATED');
+
+        } else {
+            exRes.on('end', function() {
+                res.status(422).type('text').send('User does already exist');
+            });
+
+            console.log('UNPROCESSABLE ENTITY');
+        }
+
+    });
+    exReq.write(bodyString);
+    exReq.end();
+});
 
 //[OK]
 //Ändert die Daten eines Benutzers.
 router.put( '/user/:user_id', jsonParser, function(req, res){
 
+    console.log('PUT /user/' +req.params.user_id);
+
     var editUser = req.body;
     var bodyString = JSON.stringify(editUser);
 
     var options = {
-        host: "localhost",
+        host: 'localhost',
         port: 3000,
-        path: "/user/"+req.params.user_id,
-        method:"PUT",
+        path: '/user/'+req.params.user_id,
+        method: 'PUT',
         headers: {
-             'Content-Type': 'application/json',
-             'Content-Length': bodyString.length
+             'Content-Type': 'application/json'
         }
     };
+
     var resBody;
-    var put_req = http.request(options, function (put_res) {
+    var exReq = http.request(options, function (exRes) {
 
-        //Falls User nicht existiert:
-        if (put_res.statusCode != 200) {
-            put_res.on("data", function (chunk) {
-                resBody = "error: " +chunk;
-            });
-
-            put_res.on("end", function() {
-                res.status(400).type('json').send(resBody);
-            });
         //Wenn User existiert:
-        } else {
-            put_res.on("data", function (chunk) {
-                resBody = {"user id":JSON.parse(chunk).id};
+        if (exRes.statusCode == 200) {
+            exRes.on('data', function (chunk) {
+                resBody = {'user id':JSON.parse(chunk).id};
             });
 
-            put_res.on("end", function(){
-                //Anfrage war erfolgreich, Response enthält aber bewusst keine Daten!
+            exRes.on('end', function(){
                 res.status(204).type('json').send(resBody);
             });
+
+            console.log('NO CONTENT');
+
+        //Falls User nicht existiert:
+        } else {
+            exRes.on('data', function (chunk) {
+                resBody = 'error: ' +chunk;
+            });
+
+            exRes.on('end', function() {
+                res.status(404).type('json').send(resBody);
+            });
+
+            console.log('NOT FOUND');
+
         }
     });
-    put_req.write(bodyString);
-    put_req.end();
+    exReq.write(bodyString);
+    exReq.end();
 
 });
 
-//[NOT OK]
+//[OK]
 //Ändert die Statistik eines Nutzers.
 router.put( '/user/:user_id/stats', jsonParser, function(req, res){
-  // // console.log("Updated Stats for ID: " + req.params.user_id);
-  var newStat = JSON.stringify(req.body);
-  var url = '/user/'+req.params.user_id+'/stats';
-  // // console.log(url);
-  var options = {
-      host: "localhost",
-      port: 3000,
-      path: "/user/" + req.params.user_id + "/stats",
-      method:"PUT",
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': newStat.length
-      }
-  };
-  // // console.log(options);
-  var statReq = http.request(options, function( statRes ){
-    statRes.on("data", function(chunk){
 
-    });
-    statRes.on("end", function(){
-      res.sendStatus(201);
-    });
+    console.log('PUT /user'+req.params.user_id +'/stats');
+
+    var newStat = JSON.stringify(req.body);
+
+    var options = {
+        host: 'localhost',
+        port: 3000,
+        path: '/user/' + req.params.user_id + '/stats',
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': newStat.length
+        }
+    };
+
+  var statReq = http.request(options, function( statRes ){
+      statRes.on('data', function(chunk){
+
+      });
+      statRes.on('end', function(){
+          res.sendStatus(200);
+      });
+
+      console.log('OK');
+
   });
   statReq.write(newStat);
   statReq.end();
 });
 
-router.put('/user_reg', jsonParser, function(req, res){
-  console.log(req.body);
-  var newAuth = req.body;
-  // // console.log(newAuth);
-  var postData = querystring.stringify({
-    username: newAuth.username,
-    password: newAuth.password
-  });
+//[OK]
+//Speichert das Passwort eines neuen Benutzers in Redis.
+router.put('/signup', jsonParser, function(req, res){
 
-  var options = {
-    host: "localhost",
-    port: 3000,
-    path: "/signup",
-    method: "PUT",
-    headers:{
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': postData.length
-    }
-  };
-  var pwd_req = http.request(options, function(pwd_res){
-    var result = '';
-    // // console.log("StatusCode for User Reqgistration: " + pwd_res.statusCode);
-    pwd_res.on('data', function (chunk){
-      result += chunk;
+    console.log('PUT /signup');
+
+    var options = {
+        host: 'localhost',
+        port: 3000,
+        path: '/signup',
+        method: 'PUT',
+        headers:{
+            'Content-Type': 'application/json'
+        }
+    };
+
+    var exReq = http.request(options, function(exRes){
+
+        exRes.on('data', function (chunk){
+
+        });
+        res.sendStatus(exRes.statusCode);
+        console.log(exRes.statusText);
     });
-    pwd_res.on('end', function(){
-      console.log(result);
-    });
-    pwd_res.on('error', function(err){
-      // // console.log(err);
-    });
-  });
-  pwd_req.write(postData);
-  pwd_req.end();
-  res.sendStatus(200);
+    exReq.write(req.body);
+    exReq.end();
 });
 
+//[OK]
+//Verifiziert einen Benutzer für den Zugriff auf sein Profil (Statistik)
 router.put('/login', jsonParser, function(req, res){
 
+    console.log('PUT /login');
 
-  var tmp = 0;
-  var active = false;
-  var authority = 4;
-  var newAuth = {
-    "username": req.body.username,
-    "password": req.body.password,
-    "user_id": tmp
-  };
-  var user_id_req = http.request({
-    host: "localhost",
-    port: 3000,
-    path: "/user",
-    method: "GET",
-    headers: {
-      accept: 'application/json'
-    }
-  }, function( user_id_res ){
-    // // console.log(user_id_res.statusCode);
-    if(user_id_res.statusCode != 404){
-      user_id_res.on('data', function(chunk){
-        var userList = JSON.parse(chunk);
-        for(var i = 0; i<userList.length;i++){
-          if(userList[i].username == req.body.username){
-            // // console.log("UserID Found: " + userList[i].user_id);
-            tmp = userList[i].user_id;
-            active = userList[i].active;
-            authority = userList[i].authority;
-          }
-        }
-      });
-      user_id_res.on('end',function(){
-        // // console.log(tmp);
-        newAuth.user_id = tmp;
-        // // console.log(newAuth);
-        console.log(active);
-        // // console.log(postData);
-        var options = {
-          host: "localhost",
-          port: 3000,
-          path: "/login",
-          method: "PUT",
-          headers:{
+    var tmp = 0;
+    var active = false;
+    var authority = 4;
+    var newAuth = {
+        'username': req.body.username,
+        'password': req.body.password,
+        'user_id': tmp
+    };
+
+    var options = {
+        host: 'localhost',
+        port: 3000,
+        path: '/user',
+        method: 'GET',
+        headers: {
             'Content-Type': 'application/json'
-          }
-        };
-        var pwd_req = http.request(options, function(pwd_res){
-          var result = '';
-          // // console.log("StatusCode: " + pwd_res.statusCode);
-          pwd_res.on('data', function (chunk){
-            result += chunk;
-          });
-          pwd_res.on('end', function(){
-            if(pwd_res.statusCode == 204){
-              if(active == true){
-                res.cookie('username', newAuth.username);
-                res.cookie('user_id', tmp);
-                res.cookie('active', active);
-                res.cookie('authority', authority);
-                res.status(200).end();
-              } else {
-                res.status(423).end("Account deactivated!");
-              }
-            } else if(pwd_res.statusCode == 423){
-              res.status(401).end("Wrong Password!");
-            } else if(pwd_res.statusCode == 404){
-              res.status(404).end("User not found!");
-            }
-          });
-          pwd_res.on('error', function(err){
-            // // console.log(err);
-          });
-        });
-        pwd_req.end(JSON.stringify(newAuth));
-      });
-    } else {
-      res.sendStatus(404);
-    }
-  });
+        }
+    };
 
-  user_id_req.end();
+
+    var exReqUser = http.request(options, function( exResUser ) {
+
+        if(exResUser.statusCode == 200) {
+            exResUser.on('data', function(chunk) {
+                var userList = JSON.parse(chunk);
+                for(var i = 0; i<userList.length;i++) {
+                    if(userList[i].username == req.body.username) {
+                        tmp = userList[i].user_id;
+                        active = userList[i].active;
+                        authority = userList[i].authority;
+                    }
+                }
+            });
+            exResUser.on('end',function() {
+                newAuth.user_id = tmp;
+                var postData = querystring.stringify({
+                    username: newAuth.username,
+                    password: newAuth.password
+                });
+
+                options.path = '/login'; //Options Pfad auf '/login' gesetzt um weiteren Request abzusetzen
+                options.method = 'PUT';  //Options Methode auf 'PUT' gesetzt um weiteren Request abzusetzen
+
+                var exReqLogin = http.request(options, function(exResLogin){
+                    exResLogin.on('data', function (chunk){
+
+                    });
+
+                    exResLogin.on('end', function(){
+                        if(exResLogin.statusCode != 404){
+                            if(active == true){
+                                res.cookie('username', newAuth.username);
+                                res.cookie('user_id', tmp);
+                                res.cookie('active', active);
+                                res.cookie('authority', authority);
+                                res.status(200).end();
+
+                                console.log('OK');
+
+                            } else {
+                                res.status(423).end('Account deactivated!');
+
+                                console.log('LOCKED');
+
+                            }
+                        } else if(exResLogin.statusCode == 423){
+                            res.status(401).end('Wrong password!');
+
+                            console.log('UNAUTHORIZED');
+
+                        } else if(exResLogin.statusCode == 404){
+                            res.status(404).end('User not found!');
+
+                            console.log('NOT FOUND1234');
+                        }
+                        exReqLogin.end();
+                    });
+                });
+                exReqLogin.end(JSON.stringify(newAuth));
+            });
+        } else {
+            res.sendStatus(404);
+            console.log('NOT FOUND');
+        }
+    });
+    exReqUser.end();
 });
 
 
-// // console.log('loaded put.js.')
+console.log('loaded put.js.')
 module.exports = router;

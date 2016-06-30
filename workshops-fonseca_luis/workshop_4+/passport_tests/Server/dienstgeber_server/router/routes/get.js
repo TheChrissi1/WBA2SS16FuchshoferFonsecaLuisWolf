@@ -239,9 +239,9 @@ router.get('/ref/:ref_name',  function(req, res){
 
 //[OK]
 //Gibt einen bestimmten Status Code zurück, wenn ein Username vergeben bzw. frei ist.
-router.get('/registration/:user_name',  function(req, res){
+router.get('/signup/:user_name',  function(req, res){
 
-	console.log('GET /registration/' + req.params.user_name);
+	console.log('GET /signup/' + req.params.user_name);
 
 	db.keys('user:*',function(err, rep) {
 		if(err) throw err;
