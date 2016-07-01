@@ -1,12 +1,24 @@
 # Inhaltsverzeichnis
 
 1. [**Einleitung**](#einleitung)
-1.1 [**Problemstellung**](#problemstelung)
-1.2 [**Idee**](#idee)
-1.3 [**Start des Projekts**](#start)
+1.1. [**Problemstellung**](#problemstelung)
+1.2 .[**Idee**](#idee)
+1.3 [.**Start des Projekts**](#start)
+1.4 [.**Use Cases**](#use cases)
 2. [**Dienstgeber**](#dienstgeber)
-
-
+2.1 [.**Ressourcen**](#ressourcen)
+2.2 [.**Verwendete Methoden**](#verwendete methoden)
+2.3 [.**Anwendungslogik Dienstgeber**](#anwendungslogik dienstgeber)
+3. [.**Dienstnutzer**](#dienstnutzer)
+3.1 [.**Ressourcen**](#ressourcen)
+3.2 [.**Datenverarbeitung**](#datenverarbeitung)
+3.3 [.**Anwendungslogik Dienstnutzer**](#anwendungslogik dienstnutzer)
+3.4 [.**Präsentationslogik Dienstnutzer**](#präsentationslogik dienstnutzer)
+4. [.**Probleme**](#probleme)
+5. [.**Statuscodes**](#statuscodes)
+6. [.**Zeitbedingte Aussparungen**](#zeitbedingte aussparungen)
+7. [.**Fazit**](#fazit)
+8. [.**Arbeitsmatrix**](#areitsmatrix)
 
 
 # Einleitung
@@ -130,6 +142,8 @@ Beim Anlegen der Ressourcen sind wir der Frage nachgegangen was für den Benutze
 |                        | PUT     | Ändert die Daten eines bestehenden Nutzers.                                         | application/json   | application/json   |
 | /user/{uID}/stats      | GET     | Zeigt eine Liste aller angesehenen Folgen.                                          | -                  | application/json   |
 |                        | PUT     | Aktuallisiert die Statistik eines Benutzers.                                        | application/json   | application/json   |
+| /user/{uID}/stats      | GET     | Zeigt eine Liste aller angesehenen Folgen.                                          | -                  | application/json   |
+| /user/{uID}/stats/{name} | GET     | Zeigt eine Liste aller angesehenen Folgen.                                        | -                  | application/json   |
 | /genre                 | GET     | Gibt eine Liste aller Genres aus (weiterleitung auf Liste mit zutreffenden Animes). | -                  | application/json   |
 | /ref                   | GET     | Gibt eine Liste aller referenzierenden Websites aus.                                | -                  | application/json   |
 | /ref/{name}            | GET     | Gibt Informationen einer referenzierenden Website aus.                              | -                  | application/json   |
@@ -138,22 +152,34 @@ Beim Anlegen der Ressourcen sind wir der Frage nachgegangen was für den Benutze
 | /login                 | PUT     | Loggt einen Benutzer ein.                                                           | application/json   | application/json   |
 
 
+### Verwendete Methoden
+
+
+**GET:** - Liefert eine Repräsentation einer Ressource. Diese ist sicher und idempotent.
+
+**PUT:** - Erzeugt eine neue Ressource auf dem Server. Diese ist aber m Gegensatz zur POST-Methode nicht angewiesen die übertragene Datei an ein Script zu übergeben, sondern vielmehr die Datei die übergeben wird, an der benannten Stelle zu plazieren.
+
+**DELETE:** - Entfernt eine Ressource auf dem Server. Dise Methode ist ebenfalls idempotent. Wird ein DELETE erfolgreich durchgeführt ist die Ressource nicht mehr abrufbar.
+
 Dabei haben wir die HTTP-Methode "GET", als Möglichkeit zur Datenabfrage, "PUT" zum anlegen neuer Datensätze oder zum verändern dieser, und "DELETE" zum entfernen von alten, nicht mehr gebrauchten oder unerwünschten Datensätzen verwendet. "POST" als weitere Möglichkeit zum anlegen von Datensätzen haben wir vernachlässigt, da wir die Kontrolle behalten wollen, welche URI der neuen Ressource zugewiesen wird. Der Gedanke dahinter war der, dass z.B. eine wirre Zahlenfolge als Serienname in der URL für den Nutzer verwirrend sein könnte. Wir stellen somit also sicher, das der Benutzer auch anhand der URL kontrollieren kann in welchem Teil des verteilten Systems er sich gerade befindet. Auf Server-Seite hat es außerdem den Vorteil das wir anhand von Querry-Parametern in der URL die Datensätze filtern, und so gezielte Responses liefern können.
 
 Viele Websites auf die wir referenzieren wollen nutzen ein ähnliches System, womit wir auch einfacher prüfen können ob eine Serie auf einer Website verfügbar ist.
 
 ### Anwendungslogik Dienstgeber
 
-* **Hinzufügen von einem neuen Benutzern** - Sobald ein neuer Benutzer der Datenbank hinzugefügt wird, erstellt das Sytem zusätzlich einen neuen Eintrag in der Datenbank mit der dazugehörigen Statistik.
+* **Hinzufügen von einem neuen Benutzern** - Der Redis-Datenbank wird ein neuer Benutzer mit den oben aufgeführten Attributen hinzugefügt. Sobald ein neuer Benutzer der Datenbank hinzugefügt wird, erstellt das Sytem zusätzlich einen neuen Eintrag in der Datenbank mit der dazugehörigen Statistik. Die allerdings am Anfang noch leer ist, da der Benutzer gerade erst erstellt wurde und somit noch nichts in seiner Statistik (Watchlist) eingetragen sein kann.
 
-* **Hinzufügen von einem neuen Anime** - Wenn ein neuer Anime hinzugefügt wird
+* **Ändern der Informationen eines bestehenden Benutzern** - Falls sich die Informationen eines bestehenden Benutzers geändert haben, kann man dies auch für die jeweiligen Attribute in der Datenbank anpassen, damit diese wieder auf dem korrekt Stand sind.
 
-**MUSS NOCH GEMACHT WERDEN**
+* **Löschen eines bestehenden Benutzers** - Wenn ein Nutzer das System nicht mehr verwenden möchte kann dieser aus der Datenbank geöscht werden, damit wir aber keine Lücken in der UserID der Datenbank haben (nähere Informationen unter Probleme) haben wir uns dazu entschieden den Benutzer nicht komplett zu löschen sonder diesen "nur" auf inaktiv zu setzen. Somit ist zu einem späteren Zeitpunkt eine Reaktivierung des Benutzers möglich.
 
-### Präsentationslogik Dienstgeber
+* **Hinzufügen von einem neuen Anime** - Der Redis-Datenbank wird ein neuer Anime mit den oben aufgeführten Attributen hinzugefügt.
+
+* **Ändern der Informationen eines bestehenden Animes** - Falls sich die Informationen eines bestehenden Animes geändert haben, kann man dies auch für die jeweiligen Attribute in der Datenbank anpassen, damit diese wieder auf dem korrekt Stand sind.
+
+* **Löschen eines bestehenden Animes** - Wenn ein Anime nicht mehr im Internet zur Verfügung gestellt wird, oder wir diesen aus unserem System entfernen wollen, wird dies mit der DELETE-Methode erledigt. Der Anime wird im Gegensatz zum Benutzer aus der Datenbank entfernt und nicht auf inaktiv gesetzt. Somit ist eine Reaktivierung des Animes nicht mehr möglich, sondern der Anime muss (falls dieser wieder im Internet zur Verfügung steht) wieder neu in die Datenbank eingetragen werden.
 
 
-**MUSS NOCH GEMACHT WERDEN**
 
 # Dienstnutzer
 
@@ -232,7 +258,7 @@ Referenz-Related
 
 
 
-### Datenverabrbeitung
+### Datenverarbeitung
 
 Da wir uns gedacht haben das XML in vielen Fällen (wie bei uns) nicht immer der ideale Weg ist um Daten zu struktieren haben wir uns auf JSON geeinigt. Ein wichtiger Grund war, dass durch das Tag-System von XML oft kleine Datenbestände aufgebläht und sehr unübersichtlich dargestellt werden. Zusäztlich dazu ist das Ansprechen der einzelnen Konten (XML-Nodes) meist mit sehr großen Komplikationen verbunden. Daher haben wir uns für die Alternative JSON (JavaScript Object Notation) fokusiert. JSON ist bekannt dafür um Daten auf eine einfache und strukturierte Weise Daten übersichtlich darzustellen. Auch hat JSON sich mittlerweile in viele weiteren Programmiersprachen durchgsetzt.
 
@@ -243,21 +269,24 @@ Für Redis haben wir uns letztendlich entschieden, da dies eine In-Memory-Datenb
 
 
 
-
-
 ### Anwendungslogik Dienstnutzer
 
-* **Anwenden von Filteroptionen** - Wenn der Benutzer nach bestimmten Kriterien filtern möchte, hat er die Möglichkeit dies mit der Hilfe von verschiedenen Filteroptionen zu machen.
+* **Anwenden von Filteroptionen** - Wenn der Benutzer nach bestimmten Kriterien filtern möchte, hat er die Möglichkeit dies mit der Hilfe von verschiedenen Filteroptionen zu machen. Falls dieser sich nicht die Liste aller Animes anzeigen lassen möchte, sondern nach bestimmten Kriterien sucht, kann er dies mit Hilfe der Inputfelder erledigen. Hierzu kann der Benutzer nach Episode, Genre und Name filter. Wobei die Episodenfilterung nochmals aufgeteilt in "Exact Episodes" und "Min/Max Episodes". Wenn der Benutzer die Option "Exact Episodes" auswählt, werden nur Animes ausgegeben die die selbe Anzahl an Episoden hat wie im Filter eingegeben. Bei der Option "Min/Max Episoden" kann man einen Bereich angeben. Hierbei werden dann die Animes ausgegeben, deren Episodenanzahl innerhalb des zuvor im Filter festgelegten Bereich liegt.
 
+* **Login eines Benutzers** - Wenn der Benutzer sich seine Statistik anzeigen lassen möchte, kann er dies machen, in dem er sich in das System einloggt. Vorher muss er sich allerdings über das Regestrierungsformular am System regestrieren. Danach hat er die Möglichkeit sich seine persöhnliche Statistik (Watchlist) anzeigen zu lassen.
 
-**MUSS NOCH GEMACHT WERDEN**
+* **Logout eines Benutzers** - Wenn der Benutzer sich zur Zeit seine persönliche Statistik nicht mehr ausgeben möchte, oder sich möglicherweise ein anderer Benutzer über den selben Browser anmelden möchte, muss der Benutzer sich zuvor von System abmelden. Dies kann der über die Logout-Funktion ``/logout`` machen. Hier werden dann die aktuellen Cookies der Website im Browser gelöscht, so dass sich der Benutzer erneut oder ein anderer Benutzer anmelden kann.
+
 
 ### Präsentationslogik Dienstnutzer
 
+Die Präsentationslogik, welche zur Drastellung der Informationen von Benutzern, Animes, Referenzen und Genres verwendet und mit ihren Interaktionsmöglichkeiten implementiert, wurde mittels diverser Frameworks umgesetzt. Für das Dedsign, Styling und Layout unseres System wurde das Fronted-Framework Bootstrap verwendet. Seiteninformationen, die dynamisch verändert werden, wurden mittels der Template-Engine "EJS" dargestellt. Hier haben wir uns auf "EJS" geeirigt da dieses im Workshop vorgestellt wurde und ebenfalls passent für unsere Bedürfnisse war.
 
-**MUSS NOCH GEMACHT WERDEN**
+Alle wichtigen Funktionen haben wir mit Hilfe einer Menüleiste im Template eingebaut. So das der Benutzer diese nicht über einen Link anwählen muss, sondern eine optische Darstellung der Funktionen hat.
 
-### Probleme
+Die Vorschläge von Animes die der Benutzer bekommt haben wir auf den der Animes ausgegeben. Da wird dies für die sinnvollste Lösung empfanden.
+
+## Probleme
 
 * **Server Abstürze bei zu vielen Request** - Nach der Implemientierung des Dienstnutzers und den Formularen zur Eingabe der neuen Nutzer und Animes hatten wir das Problem, dass der Server des Dienstnutzers nach einigen Requests die ERROR-Meldung "Unexpected end of input" bekamen. Durch vielfaches debuggen fanden wir heraus, dass der Fehler beim Dienstgeber lag. Da dieser nach einigen Requests das JSON nicht mehr korrekt an den Dienstnutzer übergab, sondern hier nur noch das letze Zeichen (in userem Fall ein "}") an den Dienstnutzer übergab. Diesen Fehler haben wir beseitigt, in dem wir im Dienstgebener anstatt des send()-Befehls denn end()-Befehl verwendeten. Dadruch wird vom Dienstgeber sichergestellt, das die Response rechtmäßig beendet wird und somit nicht während des sendens der Response schon eine neue Anfrage geschickt eingeht.
 
@@ -279,17 +308,17 @@ var exReq = http.request(options, function(exRes){
 
 * **Benutzer ID nach DELETE nicht mehr kontinuierlich** - Wenn ein Benutzer in der Datenbank (Redis) entfernt wird, werden seine Informationen zwar gelöscht, allerdings wird die UserID nicht dekrementiert, so dass wenn ein neuer User hinzugefügt wird dieser die nachfolgende UserID des letzten hinzugefügten Benutzers bekommt. Der Bentzuer bekommt also nciht die UserID des gelöschten Benutzers, wo hier theoretisch "ein freier Platz" für den neuen User entstanden ist. Somit ist die Durchgänigkeit der UserID nach einem DELETE nicht mehr gegeben. In unserem Fall haben wir das Problem so gelöst, das wir die Benutzer mit einem zusätzlichem Attribut ausgestattet haben. Dieses Attribut nennt sich "Active". Hier wird festgelegt ob der Benutzer noch aktiv ist. Ist der Benutzer also inaktiv, sprich würde man in aus dem System entfernen wollen, so setzen wir dieses Attribut auf "false", so dass der Benutzer zwar noch in der Liste vorhanden ist, aber nicht mehr relevant für das System ist. Somit wird kein Benutzer aus der Liste gelöscht und die kontinuietät der Benutzer IDs in der Liste bleibst weiterhin bestehend.
 
+* **Anime Vorschläge asynchron abrufen** - Am Anfang unseres Projektes haben wir uns mit den wissenschaftlichen Mitarbeiter zusammen überlegt, dass wir dem Benutzer Vorschläge ausgeben wollen, anhand von Animes die andere Benutzer auch gesehen haben. Im späteren Verlauf haben wir beschlossen, dass diese Vorschlagsliste bei jedem herunterfahren des Server entleert wird, da so die Vorschläge die der Benutzer bekommt sich nur auf die aktuelle Server Sitzung bezieht und somit stehts aktuell ist. Diese Liste wollten wir durch einen asynchronen Aufruf ausgeben lassen, so das nicht jedes mal neu ein Request gesendet werden muss. Leider ist uns dies mit Hilfe von AJAX nicht gelungen. Deswegen haben wir ein Objekt erstellt in dem die Animes hinzugefügt werden und diese dann mit Hilfe der "Render-Methode" von EJS mit auf den Animeseiten ausgeben.
 
-
-### Statuscodes
+## Statuscodes
 
 An Hand dieses Codes wird dem Client mitgeteilt, ob die Anfrage erfolgreich bearbeitet werden konnte oder falls nicht, welcher Fehler aufgetreten ist.
 Wir haben uns darauf geeinigt das wir in unserem Projekt zur Zustandskommunikation HTTP Statuscodes verwenden.
 Hier eine Übersicht der Statscodes die in unserem System zum Einsatz kommen und für welche Abfragen wir diese verwenden:
 
 
-| Vorfall                                                | Statuscode                 | Semantik                                                                                                           |
-| ---------------------- ------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Vorfall                                                | Statuscode                 | Semantik                                                                                                       |
+| ------------------------------------------------------ | -------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | Erfolgreiches Abrufen einer Repräsentation durch GET   | 200 - OK                   | Die Anfrage wurde erfolgreich bearbeitet und das Ergebnis der Anfrage wird in der Antwort übertragen.              |
 | Erfolgreiches Ändern einer Ressource durch PUT         | 200 - OK                   | Die Anfrage wurde erfolgreich bearbeitet und das Ergebnis der Anfrage wird in der Antwort übertragen.              |
 | Erfolgreiches Anlegen einer Ressource durch PUT        | 201 - CREATED              | Die Anfrage wurde erfolgreich bearbeitet. Die angeforderte Ressource wurde vor dem Senden der Antwort erstellt.    |
@@ -304,14 +333,14 @@ Hier eine Übersicht der Statscodes die in unserem System zum Einsatz kommen und
 
 
 
-### Zeitbedingte Aussparungen
+## Zeitbedingte Aussparungen
 
 * **Cover des Animes** - Für die Animes haben wir uns am Anfang unseres Projekts überlegt, dass diese jeweils noch mit einem Cover versehen werden, so dass der Benutzer auch eine bildliche Vorschau bekommt. Da das Einfügen von Bildern jedoch keine Qualitätsverbesserung nach den Bewertungskriterien der Veranstaltung herbeigeführt hätte, wurde dies ebenfalls zunächst nicht implementiert.
 
-**Authentifizierung von Benutzern** - Im laufe des Projektfortschrittes ist uns aufgefallen, dass Benutzer theoretisch auch Zugriff auf Methoden wie PUT und DELETE haben. Allerdings fänden wir es sinnvoller, wenn nicht alle Benutzer Animes- und insbesondere auch Benuterdaten verändern und löschen können. Deswegen haben wir jedem Benutzer Attribut "Authority" hinzugefügt. Dieses Attribut bestimmt den Benutzertyp des Benutzers (Admin: 1 | Mod: 2 | User: 3). Somit sollte sichergestellt werden, das Benutzer mit der "Authority : 3" zwar neue Animes hinzufügen können, diese aber bevor Sie freigegeben werden erst von einem Admin oder Moderator auf Ihre validät überprüft werden. Ebenfalls sollte sichergestellt werden das nur Moderatoren und Administatoren Informationen von Animes nachträglich verändert werden können.
+* **Authentifizierung von Benutzern** - Im laufe des Projektfortschrittes ist uns aufgefallen, dass Benutzer theoretisch auch Zugriff auf Methoden wie PUT und DELETE haben. Allerdings fänden wir es sinnvoller, wenn nicht alle Benutzer Animes- und insbesondere auch Benuterdaten verändern und löschen können. Deswegen haben wir jedem Benutzer Attribut "Authority" hinzugefügt. Dieses Attribut bestimmt den Benutzertyp des Benutzers (Admin: 1 | Mod: 2 | User: 3). Somit sollte sichergestellt werden, das Benutzer mit der "Authority : 3" zwar neue Animes hinzufügen können, diese aber bevor Sie freigegeben werden erst von einem Admin oder Moderator auf Ihre validät überprüft werden. Ebenfalls sollte sichergestellt werden das nur Moderatoren und Administatoren Informationen von Animes nachträglich verändert werden können.
 
 
-### Fazit
+## Fazit
 
 **REST-Prinzipen**
 
@@ -335,15 +364,15 @@ Ebenfalls haben wir Statuscodes an vielen Stellen zur Zustandskommunikation verw
 
 Der angestrebte Funktionsumfang, der zuvor in den Ressourcen im Dienstnutzer sowie im Dienstgeber von uns spezifiziert wurde konnte zu fast allen Teilen erreicht werden. Leider haben wir es Zeitlich nicht mehr geschafft auf Dienstnutzer Seite die Funktion "Cover des Animes" zu implementieren. Alle Use Case sind aber mit aktuellen Funktionsumfang vollständig durchführbar.
 
-**Was wurde verfehlt**
+**Was wurde verfehlt?**
 
-Wie schon in dem orherigen Abschnitten erwährt haben wir es bedauerlicher weise nicht geschaftt alle Funktionen mangels des uns zur Verfügung stehenden Zeit vollständig zu implementieren.
+Wie schon in dem orherigen Abschnitten erwähnt haben wir es bedauerlicher weise nicht geschaftt alle Funktionen mangels des uns zur Verfügung stehenden Zeit vollständig zu implementieren.
+
+Wie bei dem Problemen schon erwähnt ist es uns leider nicht gelungen die Anime-Vorschlags-Liste mit einem asynchronen Aufruf auszugeben. Somit wird wenn man einen Anime anklickt dieser der Liste hinzugefügt, doch wenn man auf den Zurück-Button im Browser klickt dieser nicht in der Liste ausgeben, da die Seite nicht neu geladen wurde, sondern die vorherige Seite aufgeruft. Aktuallisiert man aber die Seite so wird ein neuer Request gesendet und der Anime rescheint in der Liste.
 
 
 
 ## Arbeitsmatrix
-
-**MUSS NOCH GEMACHT WERDEN**
 
 
 Beteiligte Personen: Bastian Fuchshofer (B) Niklas Fonseca-Luis (N) Christian Wolf (C)
@@ -358,26 +387,27 @@ aufgeführt.
 
 **Planung**
 
-* Definition der Ressourcen []
-* Planung mögicher Anwendungslogik []
-* Spezifikation der REST-API []
-* Verfassen der Use-Cases und Exposé []
+* Definition der Ressourcen [alle]
+* Planung mögicher Anwendungslogik [alle]
+* Spezifikation der REST-API [alle]
+* Verfassen der Use-Cases und Exposé [alle]
 
 **Dienstgeber**
 
-* Implementierung von Redis []
+* Implementierung von der Redis-Datenbank und dessen Funktionen [B: 0% , N: 0% , C: 100%]
 
 **Dienstnutzer**
 
-* Implementierung von EJS []
+* Implementierung von EJS und CSS [B: 0% , N: 100% , C: 0%]
+* Implementierung von JQuerry anhand von Filteroptionen [B: 100% , N: 0% , C: 0%]
 
 **Testing | Cleanup**
 
-* Cleanup vom Dienstgeber []
-* Cleanup vom Dienstnutzer []
-* Testing des Systems und erstellen von Testdaten []
+* Cleanup vom Dienstgeber [alle]
+* Cleanup vom Dienstnutzer [alle]
+* Testing des Systems und erstellen von Testdaten [alle]
 
 **Dokumentation**
 
-Dokumentation von Dienstnutzer & Dienstgeber Ressourcen []
-Verfassen der restliche Dokumentation []
+Dokumentation von Dienstnutzer & Dienstgeber Ressourcen [alle]
+Verfassen der restliche Dokumentation [alle]
