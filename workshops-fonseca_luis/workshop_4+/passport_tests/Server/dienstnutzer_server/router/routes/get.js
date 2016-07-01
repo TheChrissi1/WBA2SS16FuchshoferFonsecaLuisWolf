@@ -12,10 +12,21 @@ function check (data, newData) {
     var value = 1;
     for (var i = 0; i < anime.data.length; i++) {
         //Ist der Anime-Vorschlag schon vorhanden?
-        if (anime.data.length == 0) {
-            value = 0;
-        }
         if (anime.data[i].name == newData.name && anime.data.length != 0) {
+            value = 0;
+            break;
+        }
+    }
+    return value;
+}
+
+//Funktion zum überprüfen ob ein Anime bereits vorhanden ist (anime-filter).
+function checkFilter (data, newData) {
+    var anime = data;
+    var value = 1;
+    for (var i = 0; i < anime.length; i++) {
+        //Ist der Anime-Vorschlag schon vorhanden?  
+        if (anime[i].name == newData && anime.length != 0) {
             value = 0;
             break;
         }
@@ -71,7 +82,7 @@ router.get('/anime', function(req, res){
 //[OK]
 //Gibt eine Spezifizierung der Animeliste aus.
 router.get('/anime/filter:para', function(req, res) {
-
+    
     console.log('GET /anime/filter' + req.params.para);
 
     var options = {
@@ -84,79 +95,30 @@ router.get('/anime/filter:para', function(req, res) {
         }
     }
 
-    var tmp = 0;
-    var countEpisodes = 0;
-    var countGenre = 0;
-    var countName = 0;
-    var countMax = 0;
-    var countMin = 0;
+    var tmp;
     var query = req.params.para;
     var queryL = query.length;
 
-    //Bestimmt die Anzahl vom substring 'episodes'
-    var tmpEpisodes = query;
-    for (var t=0; t<tmpEpisodes.length; t++ ) {
-        var posEpi;
-        tmpEpisodes = tmpEpisodes.substr(posEpi+t,tmpEpisodes.length);
-        posEpi = tmpEpisodes.indexOf('episodes');
-        if (posEpi == -1) {
-            break;
-        } else {
-            countEpisodes++;
+    var filter = ['episodes', 'genre', 'name', 'maxEpisodes', 'minEpisodes'];
+    var count =  [0,          0,       0,      0,             0            ];
+    
+    //Überprüft den querystring und schreibt die Anzahl der jeweiligen Filter fest
+    for (var i = 0; i<filter.length; i++) {
+        
+        var pos = 0;
+        tmp = query;
+        
+        for (var j = 0; j < tmp.length; j++ ) {
+            tmp = tmp.substr(pos+j,tmp.length);
+            pos = tmp.indexOf(filter[i]);
+            
+            if (pos == -1) {
+                break;
+            } else {
+                count[i] = count[i]+1;
+            }
         }
-    }
-
-    //Bestimmt die Anzahl vom substring 'genre'
-    var tmpGenre = query;
-    for (var u=0; u<tmpGenre.length; u++ ) {
-        var posGen;
-        tmpGenre = tmpGenre.substr(posGen+u,tmpGenre.length);
-        posGen = tmpGenre.indexOf('genre');
-        if (posGen == -1) {
-            break;
-        } else {
-            countGenre++;
-        }
-    }
-
-     //Bestimmt die Anzahl vom substring 'name'
-    var tmpName = query;
-    for (var t=0; t<tmpName.length; t++ ) {
-        var posName;
-        tmpName = tmpName.substr(posName+t,tmpName.length);
-        posName = tmpName.indexOf('name');
-        if (posName == -1) {
-            break;
-        } else {
-            countName++;
-        }
-    }
-
-    //Bestimmt die Anzahl vom substring 'maxEpisodes'
-    var tmpMax = query;
-    for (var t=0; t<tmpMax.length; t++ ) {
-        var posMax;
-        tmpMax = tmpMax.substr(posMax+t,tmpMax.length);
-        posMax = tmpMax.indexOf('maxEpisodes');
-        if (posMax == -1) {
-            break;
-        } else {
-            countMax++;
-        }
-    }
-
-    //Bestimmt die Anzahl vom substring 'minEpisodes'
-    var tmpMin = query;
-    for (var t=0; t<tmpMin.length; t++ ) {
-        var posMin;
-        tmpMin = tmpMin.substr(posMin+t,tmpMin.length);
-        posMin = tmpMin.indexOf('minEpisodes');
-        if (posMin == -1) {
-            break;
-        } else {
-            countMin++;
-        }
-    }
+    }   
 
     //Entfernt das '?' an pos[0] aus dem string
     query = query.substr(1,query.length);
@@ -164,11 +126,10 @@ router.get('/anime/filter:para', function(req, res) {
     //Parst den querystring in ein Objekt
     var erg = queryString.parse(query);
 
-
     //Request auf den Dienstgeber
 
     //Da im 'erg'-Objekt sowohl arrays als auch normale variablenzuweisungen vorkommen können, muss über die Anzahl
-    //der im querystring vorkommenden Parameter (countEpisodes, count...) auf den Wert der Parameter zugegriffen werden.
+    //der im querystring vorkommenden Filter (countEpisodes, count...) auf den Wert der Parameter zugegriffen werden.
 
     var exReq = http.request(options, function(exRes){
 
@@ -178,100 +139,136 @@ router.get('/anime/filter:para', function(req, res) {
             var exAnimeList = JSON.parse(chunk);
             //Neue Animeliste
             var animeList = [];
-
+            
             // Überprüfen ob Filter 'Episodes' mit mindestens einem Anime übereinstimmt.
-            if (countEpisodes == 1) {
+            if (count[0] == 1) {
+                console.log('test');
                     for (var i=0; i<exAnimeList.length; i++) {
                         if (exAnimeList[i].episodes == erg.episodes) {
-                            animeList.push(exAnimeList[i]);
-
-
+                            
+                            //Überprüft ob ein Anime bereits in der Ergebnisliste vorhanden ist.
+                            if (checkFilter(animeList, exAnimeList[i].name) == 1) {
+                                   animeList.push(exAnimeList[i]);
+                               }
                         }
                     }
-            } else if( countEpisodes > 1) {
-                for (var j=0; j<=countEpisodes; j++) {
+            } else if (count[0] > 1) {
+                for (var j=0; j<=count[0]; j++) {
                     for (var k=0; k<exAnimeList.length; k++) {
                         if (exAnimeList[k].episodes == erg.episodes[j]) {
-                            animeList.push(exAnimeList[k]);
-
-
+                            
+                            //Überprüft ob ein Anime bereits in der Ergebnisliste vorhanden ist.
+                            if (checkFilter(animeList, exAnimeList[k].name) == 1) {
+                                   animeList.push(exAnimeList[k]);
+                               }
                         }
                     }
                 }
             }
+        
+            
+            // Überprüfen ob Filter 'Genre' mit mindestens einem Anime übereinstimmt.
+            if (count[1] == 1) {
+                    for (var m=0; m<exAnimeList.length; m++) {
+                        if (exAnimeList[m].genre.toLowerCase().indexOf(erg.genre.toLowerCase()) > -1) {
+                            
+                            //Überprüft ob ein Anime bereits in der Ergebnisliste vorhanden ist.
+                            if (checkFilter(animeList, exAnimeList[m].name) == 1) {
+                                   animeList.push(exAnimeList[m]);
+                               }
+                        }
+                    }
+
+            } else if (count[1] > 1) {
+                for (var n=0; n<=count[1]; n++) {
+                    for (var o=0; o<exAnimeList.length; o++) {
+                        if (exAnimeList[o].genre.toLowerCase().indexOf(erg.genre[n].toLowerCase()) > -1) {
+                            
+                            //Überprüft ob ein Anime bereits in der Ergebnisliste vorhanden ist.
+                            if (checkFilter(animeList, exAnimeList[o].name) == 1) {
+                                   animeList.push(exAnimeList[o]);
+                               }
+                        }
+                    }
+                }
+            }
+
+            // Überprüfen ob Filter 'name' mit mindestens einem Anime übereinstimmt.
+            if (count[2] == 1) {
+                    for (var m=0; m<exAnimeList.length; m++) {
+                        //Alle 3 möglichen Namen eines Animes werden verglichen
+                        if (exAnimeList[m].name.toLowerCase().indexOf(erg.name.toLowerCase()) > -1 || exAnimeList[m].name_en.toLowerCase().indexOf(erg.name.toLowerCase()) > -1 ||      exAnimeList[m].name_de.toLowerCase().indexOf(erg.name.toLowerCase()) > -1){
+                            
+                            //Überprüft ob ein Anime bereits in der Ergebnisliste vorhanden ist.
+                            if (checkFilter(animeList, exAnimeList[m].name) == 1) {
+                                   animeList.push(exAnimeList[m]);
+                               }
+                        }
+                    }
+
+            } else if (count[2] > 1) {
+                for (var n=0; n<=count[2]; n++) {
+                    for (var o=0; o<exAnimeList.length; o++) {
+                        //Alle 3 möglichen Namen eines Animes werden verglichen
+                        if (exAnimeList[o].name.toLowerCase().indexOf(erg.name[n].toLowerCase()) > -1 || exAnimeList[o].name_en.toLowerCase().indexOf(erg.name[n].toLowerCase()) > -1 || exAnimeList[o].name_de.toLowerCase().indexOf(erg.name[n].toLowerCase()) > -1) {
+                            
+                            //Überprüft ob ein Anime bereits in der Ergebnisliste vorhanden ist.
+                            if (checkFilter(animeList, exAnimeList[o].name) == 1) {
+                                   animeList.push(exAnimeList[o]);
+                               }
+                        }
+                    }
+                }
+            }
+   
             //Überprüft ob Filter 'maxEpisodes' vorhanden ist und filtert die Liste danach
-            if (countMax == 1) {
+            if (count[3] == 1 && count[4] == 0) {
                     for (var a=0; a<exAnimeList.length; a++) {
                         if (exAnimeList[a].episodes <= erg.maxEpisodes) {
-                            animeList.push(exAnimeList[a]);
-
-
+                            
+                            //Überprüft ob ein Anime bereits in der Ergebnisliste vorhanden ist.
+                            if (checkFilter(animeList, exAnimeList[a].name) == 1) {
+                                animeList.push(exAnimeList[a]);
+                            }         
                         }
                     }
             }
+            
             //Überprüft ob Filter 'minEpisodes' vorhanden ist und filtert die Liste danach
-            if (countMin == 1) {
+            if (count[3] == 0 && count[4] == 1) {
                     for (var b=0; b<exAnimeList.length; b++) {
                         if (exAnimeList[b].episodes >= erg.minEpisodes) {
-                            animeList.push(exAnimeList[b]);
-
-
+                            
+                            //Überprüft ob ein Anime bereits in der Ergebnisliste vorhanden ist.
+                               if (checkFilter(animeList, exAnimeList[b].name) == 1) {
+                                   animeList.push(exAnimeList[b]);
+                               }
                         }
                     }
             }
-            // Überprüfen ob Filter 'Genre' mit mindestens einem Anime übereinstimmt.
-            if (countGenre == 1) {
-                    for (var m=0; m<exAnimeList.length; m++) {
-                        if (exAnimeList[m].genre.indexOf(erg.genre) > -1) {
-                            animeList.push(exAnimeList[m]);
-
-
+        
+            //Überprüft ob Filter 'minEpisodes' und 'maxEpisodes' vorhanden ist und filtert die Liste danach
+            if (count[3] == 1 && count[4] == 1) {
+                    for (var b=0; b<exAnimeList.length; b++) {
+                        if (exAnimeList[b].episodes >= erg.minEpisodes && exAnimeList[b].episodes <= erg.maxEpisodes) {
+                            
+                            //Überprüft ob ein Anime bereits in der Ergebnisliste vorhanden ist.
+                               if (checkFilter(animeList, exAnimeList[b].name) == 1) {
+                                   animeList.push(exAnimeList[b]);
+                               }
                         }
                     }
-
-            } else if (countGenre > 1) {
-                for (var n=0; n<=countGenre; n++) {
-                    for (var o=0; o<exAnimeList.length; o++) {
-                        if (exAnimeList[o].genre.indexOf(erg.genre[n]) > -1) {
-                            animeList.push(exAnimeList[o]);
-
-
-                        }
-                    }
-                }
             }
 
-            // Überprüfen ob Filter 'Name' mit mindestens einem Anime übereinstimmt.
-            if (countName == 1) {
-                    for (var m=0; m<exAnimeList.length; m++) {
-                        //Alle 3 möglichen Namen eines Animes werden verglichen
-                        if (exAnimeList[m].name.indexOf(erg.name) > -1 || exAnimeList[m].name_en.indexOf(erg.name) > -1 ||      exAnimeList[m].name_de.indexOf(erg.name) > -1){
-                            animeList.push(exAnimeList[m]);
-
-
-                        }
-                    }
-
-            } else if (countName > 1) {
-                for (var n=0; n<=countName; n++) {
-                    for (var o=0; o<exAnimeList.length; o++) {
-                        //Alle 3 möglichen Namen eines Animes werden verglichen
-                        if (exAnimeList[o].name.indexOf(erg.name[n]) > -1 || exAnimeList[o].name_en.indexOf(erg.name[n]) > -1 || exAnimeList[o].name_de.indexOf(erg.name[n]) > -1) {
-                            animeList.push(exAnimeList[o]);
-
-
-                        }
-                    }
-                }
-            }
-
-            if (animeList == '') {
-                res.statusCode = 204;
+            //Wurde kein Ergebnis zum Filter gefunden:
+            if (animeList.length == 0) {
                 res.render('pages/noResult');
+                res.statusCode = 204; //204 weil Anfrage erfolgreich war, aber kein Ergebnis gefunden wurde.
                 res.end();
 
                 console.log('NO CONTENT');
 
+            //Rendert die Filter-Ergebnis Seite
             } else {
                 res.render('pages/anime',{animeList:animeList,suggestions:suggestions});
                 res.end();
