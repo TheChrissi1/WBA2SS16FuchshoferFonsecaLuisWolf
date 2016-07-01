@@ -242,7 +242,7 @@ router.put( '/user/:user_id/stats', jsonParser, function(req, res){
 router.put('/signup', jsonParser, function(req, res){
 
     console.log('PUT /signup');
-
+    var newAuth = req.body;
     var options = {
         host: 'localhost',
         port: 3000,
@@ -254,14 +254,14 @@ router.put('/signup', jsonParser, function(req, res){
     };
 
     var exReq = http.request(options, function(exRes){
+      exRes.on('data', function(chunk){
 
-        exRes.on('data', function (chunk){
-
-        });
+      });
+      exRes.on('end', function(){
         res.sendStatus(exRes.statusCode);
-        console.log(exRes.statusText);
+      });
     });
-    exReq.write(req.body);
+    exReq.write(JSON.stringify(newAuth));
     exReq.end();
 });
 

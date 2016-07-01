@@ -67,10 +67,8 @@ function putUser(){
   user_id = JSON.parse(xhr.responseText).user_id;
   // SEND AUTH INFO
   var xhr2 = new XMLHttpRequest();
-  xhr2.open("PUT", 'http://localhost:8080/user_reg', false);
+  xhr2.open("PUT", 'http://localhost:8080/signup', false);
   xhr2.setRequestHeader('Content-Type','application/json');
-  xhr2.setRequestHeader('Content-Length', JSON.stringify(auth).length);
-  xhr2.setRequestHeader('Connection', 'close');
   xhr2.send(JSON.stringify(auth));
   //alert("Status: " + xhr.status);
   //alert("User ID: " + JSON.parse(xhr.responseText).user_id);
