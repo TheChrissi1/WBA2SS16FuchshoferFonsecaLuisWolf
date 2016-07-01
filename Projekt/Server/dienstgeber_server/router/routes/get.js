@@ -3,246 +3,277 @@ var router = express.Router();
 //[OK]
 //Index
 router.get('/', function(req, res){
+
+	console.log('GET /');
+
 	res.status(200).type('text').send('Projekt der TH Köln, Medieninformatik 4. Semester.');
-    console.log('Projekt der TH Köln, Medieninformatik 4. Semester.');
+
+	console.log('OK');
+
 });
 
 //[OK]
 //Gibt eine Liste aller Animes aus.
-router.get('/anime', jsonParser, function(req, res){
+router.get('/anime',  function(req, res){
 
-	db.keys('anime:*',function(err,rep) {
+	console.log('GET /anime');
 
-	var anime = [];
-
-		if (rep.length == 0) {
-
-            console.log('keine animes vorhanden');
-            res.status(404).type('text').send('no Animes found');
-
-		} else if (rep.length > 0) {
-    	db.mget(rep, function(err,rep) {
-	    	rep.forEach(function(val){
-        	anime.push(JSON.parse(val));
-	    	});
-        res.status(200).type('json').send(anime);
-        //res.set("Content-Type", 'application/json').status(200).json(anime).end();
+	db.keys('anime:*',function(err, rep) {
+		if(err) throw err;
+		var anime = [];
+		var result = rep;
+        //Falls Animes in Redis vorhanden sind:
+		if (result.length > 0) {
+			db.mget(result, function(err, rep) {
+				if(err) throw err;
+				rep.forEach(function(val){
+					anime.push(JSON.parse(val));
+				});
+				res.status(200).type('json').send(anime);
 			});
-    }
+
+			console.log('OK');
+
+        } else if (result.length == 0) {
+            res.status(404).type('text').send('No anime found');
+
+			console.log('NOT FOUND');
+
+		}
 	});
+
 
 });
 
 //[OK]
 //Gibt einen Anime anhand seines Namens (querry-parameter) zurück.
-router.get('/anime/:anime_name', jsonParser, function(req, res){
+router.get('/anime/:anime_name',  function(req, res) {
+    
+    console.log('GET /anime/' + req.params.anime_name);
 
     db.get('anime:'+req.params.anime_name, function(err, rep) {
+        if(err) throw err;
 
 		if (rep) {
 			res.status(200).type('json').send( JSON.parse( rep ));
+
+			console.log('OK');
+
 		} else {
-			res.status(404).type('text').send();
+			res.status(404).type('text').send('This anime does not exist');
+
+			console.log('NOT FOUND');
+
 		}
 	});
-
 });
 
-//[OK] - kein json format?
+//[OK]
 //Gibt eine Liste aller Benutzer aus.
-router.get('/user', jsonParser, function(req, res){
-    db.keys('user:*',function(err,rep) {
+router.get('/user',  function(req, res){
 
+	console.log('GET /user');
+
+	db.keys('user:*', function(err, rep) {
+		if(err) throw err;
+		var result = rep;
 		var users = [];
-
-		if (rep.length == 0) {
-            console.log('keine user vorhanden');
-            res.status(404).type('text').send('no user found');
-
-        } else if (rep.length > 0) {
-            db.mget(rep, function(err,rep) {
-                rep.forEach(function(val){
-				    users.push(JSON.parse(val));
-			    });
-
-              res.status(200).type('json').send(users);
+		if (result.length > 0) {
+            db.mget(result, function(err, rep) {
+				if(err) throw err;
+      	         rep.forEach(function(val){
+					users.push(JSON.parse(val));
+                 });
+                res.status(200).type('json').send(users);
             });
+
+			console.log('OK');
+        
+        } else if (result.length == 0) {
+ 			res.status(404).type('text').send('No users found');
+
+			console.log('NOT FOUND');
+
         }
 	});
 });
 
 //[OK]
 //Gibt einen Benutzer anhand seiner ID (querry-parameter) zurück.
-router.get('/user/:user_id', jsonParser, function(req, res){
-    console.log(req.params.user_id);
-    db.get('user:'+req.params.user_id, function(err, rep) {
+router.get('/user/:user_id',  function(req, res){
 
+	console.log('GET /user/'+ req.params.user_id);
+
+    db.get('user:'+req.params.user_id, function(err, rep) {
+		if(err) throw err;
 		if (rep) {
 			res.status(200).type('json').send(rep);
+
+			console.log('OK');
+
 		} else {
-			res.status(404).type('text').send();
+			res.status(404).type('text').send('This user does not exist');
+
+			console.log('NOT FOUND');
+
 		}
 	});
-
 });
 
 //[OK]
-//Gibt die Statistik eines Benutzers aus.
-router.get( '/user/:user_id/stats', jsonParser, function(req, res){
+//Gibt die Statistik/das Profil eines Benutzers aus.
+router.get( '/user/:user_id/stats',  function(req, res){
+
+	console.log('GET /user/' + req.params.user_id + '/stats');
+
 	db.get('stats:'+req.params.user_id, function(err, rep) {
+		if(err) throw err;
 		if (rep) {
+
 			res.status(200).type('json').send(rep);
+
+			console.log('OK');
+
 		} else {
-			res.status(404).type('text').send();
+            //Sollte nicht passieren, da beim anlegen eines Users eine Statistk erzeugt wird.
+            //Bedeutet das der User nicht existiert.
+			res.status(404).type('text').send('This user statistic does not exist');
+
+			console.log('NOT FOUND');
+
 		}
 	});
 });
 
 //[OK]
 //Gibt eine Liste der Genres aus.
-router.get('/genre', jsonParser, function(req, res) {
+router.get('/genre',  function(req, res) {
+
+	console.log('GET /genre');
 
     var genre = [];
-    db.lrange( 'genre', 0, -1, function( err, rep ){
-        if( err ) throw error;
+    db.lrange( 'genre', 0, -1, function( err, rep ) {
+        if( err ) throw err;
+		if( rep.length > 0 ){
+			rep.forEach( function( val ) {
+				genre.push( JSON.parse( val ));
+			});
 
-        if( rep.length == 0 ){
-            console.log( 'Keine Genre vorhanden' );
-            res.status( 404 ).type( 'text' ).send( 'No Genre found' );
-        } else if( rep.length > 0 ){
-            rep.forEach( function( val ){
-                genre.push( JSON.parse( val ));
-            });
-            res.status( 200 ).type( 'json' ).send( genre );
+			res.status( 200 ).type( 'json' ).send( genre );
+
+			console.log('OK');
+
+		} else if ( rep.length == 0 ) {
+            res.status( 404 ).type( 'text' ).send( 'No genre found' );
+
+			console.log('NOT FOUND');
+
         }
-    })
+    });
 });
 
-//[NOT OK]
-//Gibt Alle Anime eines bestimmten Genres aus.
-router.get('/genre/:genre_name', jsonParser, function( req, res ){
-      db.keys('anime:*',function(err,rep) {
-
-		var anime_forGenre = [];
-
-		if (rep.length == 0) {
-
-            console.log('keine animes vorhanden');
-            res.status(404).type('text').send('no Animes found');
-
-		} else if (rep.length > 0) {
-            db.mget(rep, function(err,rep) {
-                rep.forEach(function(val){
-                    val = JSON.parse( val );
-                    if( val.genre.toLowerCase().indexOf( req.params.genre_name.toLowerCase() ) > -1 ){
-                       anime_forGenre.push( val );
-                    }
-			    });
-                if( anime_forGenre.length > 0 ){
-                    res.status(200).type('json').send(anime_forGenre);
-                } else {
-                    res.status( 404 ).type( 'text' ).send( 'No Anime with this Genre' );
-                }
-            });
-        }
-	});
-});
-/*
-if( val.genre.toLowerCase().contains( req.params.genre_name.toLowerCase() )){
-                       anime_forGenre.push( val );
-                    }
-*/
 //[OK]
 //Gibt eine Liste der Referenzen aus.
-router.get('/ref', jsonParser, function(req, res) {
+router.get('/ref',  function(req, res) {
+
+	console.log('GET /ref');
 
     db.keys('refs:*',function(err,rep) {
+		if(err) throw err;
 
 		var refs = [];
-
-		if (rep.length == 0) {
-
-            console.log('keine refs vorhanden');
-            res.status(404).type('text').send('no refs found');
-
-		} else if (rep.length > 0) {
-            db.mget(rep, function(err,rep) {
+		var result = rep;
+		if (result.length > 0) {
+            db.mget(result, function(err, rep) {
+				if(err) throw err;
                 rep.forEach(function(val){
                     refs.push(JSON.parse(val));
-			    });
-
+                });
+                
                 res.status(200).type('json').send(refs);
-                //res.set("Content-Type", 'application/json').status(200).json(anime).end();
 
+				console.log('OK');
             });
-        }
+            
+        } else if (result.length == 0) {
+
+ 			res.status(404).type('text').send('No refs found');
+
+			console.log('NOT FOUND');
+
+ 		}
 	});
 });
 
 //[OK]
 //Gibt eine bestimmte Referenz aus.
-router.get('/ref/:ref_name', jsonParser, function(req, res){
+router.get('/ref/:ref_name',  function(req, res){
 
-    db.keys('refs:*',function(err,rep) {
+	console.log('GET /ref/' + req.params.ref_name);
 
+    db.keys('refs:' + req.params.ref_name ,function(err, rep) {
+		if(err) throw err;
+		if (rep.length > 0) {
+            db.get('refs:' + req.params.ref_name, function(err, rep) {
+				if(err) throw err;
 
-		if (rep.length == 0) {
+                res.status(200).type('json').send(JSON.parse(rep));
 
-            console.log('keine refs vorhanden');
-            res.status(404).type('text').send('no refs found');
+				console.log('OK');
 
-		} else if (rep.length > 0) {
-            db.get('refs:' + req.params.ref_name, function(err,rep) {
-                var refs = JSON.parse(rep);
-                res.status(200).type('json').send(refs);
-                //res.set("Content-Type", 'application/json').status(200).json(anime).end();
             });
-        }
+        } else if (rep.length == 0) {
+
+ 			res.status(404).type('text').send('No refs found');
+
+			console.log('NOT FOUND');
+
+ 		}
 	});
 });
 
-//[NOT OK]
-//Gibt eine spezifizierung der Animetabelle aus.
-router.get('/anime/filter/:para', jsonParser, function(req, res) {
+//[OK]
+//Gibt einen bestimmten Status Code zurück, wenn ein Username vergeben bzw. frei ist.
+router.get('/signup/:user_name',  function(req, res){
 
-    //Anhand der querry parameter kann die profil.json nach bestimmten
-    //kriterien wie genre, anzahl folgen etc. durchsucht werden.
-    // localhost.de/anime/filter/?genre=action&folgen=500
+	console.log('GET /signup/' + req.params.user_name);
 
-});
-
-//[NOT OK]
-//Gibt das Formular für die registrierung aus.
-router.get('/registration', jsonParser, function(req, res){
-	res.status(200).send();
-});
-
-router.get('/registration/:user_name', jsonParser, function(req, res){
-	//console.log("Asking for Username: " + req.params.user_name);
-	db.keys('user:*',function(err,rep) {
-		var result = false;
+	db.keys('user:*',function(err, rep) {
+		if(err) throw err;
+		var result = rep;
+		var available = true;
 		var user_id = -1;
-		if (rep.length == 0) {
-					console.log('keine user vorhanden');
-					res.status(200).type('text').send('no user found');
+		if (result.length == 0) {
 
-		} else if (rep.length > 0) {
-			db.mget(rep, function(err,rep) {
+			res.status(200).type('text').send('Username available');
+
+			console.log('OK');
+
+		} else if (result.length > 0) {
+			db.mget(result, function(err, rep) {
+				if(err) throw err;
 				rep.forEach(function(val){
 					if(JSON.parse(val).username.toLowerCase() == req.params.user_name.toLowerCase()){
 						user_id = JSON.parse(val).user_id;
-						result = true;
+						available = false;
 					}
 				});
-				if(result){
-					res.sendStatus(422).send();
+				if(available){
+					res.status(200).type('text').send('Username available');
+
+					console.log('OK');
+
 				} else {
-					res.sendStatus(200).send();
+					res.status(422).type('text').send('Username already taken');
+
+					console.log('UNPROCESSABLE ENTITY');
+
 				}
 			});
 		}
 	});
-})
+});
+
 
 console.log('loaded get.js');
 module.exports = router;

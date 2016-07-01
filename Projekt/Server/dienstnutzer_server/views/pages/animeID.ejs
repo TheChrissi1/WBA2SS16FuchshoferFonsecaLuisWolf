@@ -1,4 +1,4 @@
-<!-- views/pages/anime.ejs -->
+<!-- views/pages/animeID.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,33 +13,53 @@
 
     <main>
         <div class="jumbotron">
-            <h2 class="headline"><%= animeData.name %></h2>
-
+            <h2 id="anime_name_head" class="headline"><%= animeData.name %></h2>
+            <a id="edit_anime" href="/editanime/<%= animeData.name.toLowerCase().replace(/ /g, '-') %>">[edit]</a>
             <section class="content">
-              <div>
+              <section class="infos">
                 <ul>
-                  <p>Name_Jap: <%= animeData.name_jap %></p>
-                  <p>Episodes: <%= animeData.episodes %></p>
-                  <p>Release: <%= animeData.release %></p>
-                  <p>Release_Jap: <%= animeData.release_jap %></p>
-                  <p>License: <%= animeData.license %></p>
-                  <p>status: <%= animeData.status %></p>
+                  <div class="linfo">
+                    <li><span class="descr">ALTERNATIVE NAMES:</span><span class="descr_val"><%= animeData.name_en %>, <%=animeData.name_de %></span></li>
+                    <li id="episode_number" value="<%= animeData.episodes %>"><span class="descr">EPISODES:</span><span class="descr_val"><%= animeData.episodes %></span></li>
+                    <li><span class="descr">GENRE:</span><span class="descr_val"><%= animeData.genre %></span></li>
+                    <li value="<%= animeData.status %>"><span class="descr">STATUS:</span><span id="anime_status" class="descr_val"><%= animeData.status %></span></li>
+                    <li><span class="descr">DUB:</span><span class="descr_val"><%= animeData.dub %></span></li>
+                    <li><span class="descr">SUB:</span><span class="descr_val"><%= animeData.sub %></span></li>
+                    <li><span class="descr">RELEASE [JP]:</span><span class="descr_val"><%= animeData.release_jp %></span></li>
+                    <li><span class="descr">RELEASE [EN]:</span><span class="descr_val"><%= animeData.release_en %></span></li>
+                    <li><span class="descr">RELEASE [DE]:</span><span class="descr_val"><%= animeData.release_de %></span></li>
+                    <li><span class="descr">LICENSE:</span><span class="descr_val"><%= animeData.license %></span></li>
+                  </div>
+                  <div class="rinfo">
+                    <li><%= animeData.description %></li>
+                  </div>
                 </ul>
-              </div>
-            </section>
-            <% refData.forEach(function(refs) { %>
-                <p><a href=<%= refs.address %>><%= refs.name %></a></p>
-            <% }); %>
+              </section>
+              <section id="episode-section">
+                <ul id="episode_list" onload="loadEpisodes()">
+                </ul>
+              </section>
+              <div>.</div>
+            </section class="episode_listing">
+
 
         </div>
 
+        <div class="well">
+        <h2>Nutzer haben heute auch gesehen:</h2>
+        <% suggestions.data.forEach(function(data) { %>
+            <a href='/anime/<%= data.name.toLowerCase().replace(/ /g,'-') %>'>
 
+            <p><%= data.name %></p>
+            <% });  %>
+        </div>
 
+        <script src="../js/animeid.js"></script>
     </main>
 
     <footer>
         <% include ../partials/footer %>
     </footer>
 
-</body>
+</body onload="loadEpisodes()">
 </html>

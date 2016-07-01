@@ -1,4 +1,4 @@
-<!-- views/pages/index.ejs -->
+<!-- views/pages/user.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,13 +18,8 @@
               <div>
                 <% userList.forEach(function(user) { %>
                 <section id="user_info">
-                  <p>ID: <%= user.user_id %></p>
-                  <p>Name: <%= user.name %></p>
-                  <p>E-Mail: <%= user.email %></p>
-                  <p>Alias: <%= user.username %></p>
-                  <p>Wohnort: <%= user.wohnort %></p>
-                  <p>Geschlecht: <%= user.gender %></p>
-                  <p>Alter: <%= user.alter %></p>
+                  <p ><span id="name">Name:</span> <%= user.name %></p>
+                  <p><span id="name">Alias:</span> <%= user.username %></p>
                 </section>
                 <% });  %>
               </div>

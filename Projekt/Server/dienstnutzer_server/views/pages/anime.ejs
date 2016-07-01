@@ -20,15 +20,16 @@
                   <a href='/anime/<%= anime.name.toLowerCase().replace(/ /g,'-') %>'>
                     <section id="anime">
                       <ul id="anime_list">
-                        <div id="anime_info1">
+                        <div id="info1">
                           <li id="anime_name"><%= anime.name %></li>
                         </div>
-                        <div id="anime_info2">
-                          <li class="anime_info"><span>Genre:</span> <%= anime.genre %></li>
-                          <li class="anime_info"><span>Episodes:</span> <%= anime.episodes %></li>
-                          <li class="anime_info"><span>Released:</span> <%= anime.release_jp %></li>
-                          <li class="anime_info"><span>License</span> <%= anime.license %></li>
-                          <li class="anime_info"><span>Status:</span> <%= anime.status %></li>
+                        <div id="info2">
+                          <li class="anime_info"><span class="descr1">Released:</span> <%= anime.release_jp %></li>
+                          <li class="anime_info"><span class="descr1">Genre:</span> <%= anime.genre %></li>
+                          <li class="anime_info"><span class="descr1">Episodes:</span> <%= anime.episodes %></li>
+                          <li class="anime_info"><span class="descr1">Released:</span> <%= anime.release_jp %></li>
+                          <li class="anime_info"><span class="descr1">License</span> <%= anime.license %></li>
+                          <li class="anime_info"><span class="descr1">Status:</span> <%= anime.status %></li>
                         </div>
                       </ul>
                     </section>
@@ -36,6 +37,15 @@
                 <% });  %>
               </div>
             </section>
+        </div>
+        
+        <div class="well">
+        <h2>Nutzer haben heute auch gesehen:</h2>
+        <% suggestions.data.forEach(function(data) { %>
+            <a href='/anime/<%= data.name.toLowerCase().replace(/ /g,'-') %>'>
+
+            <p><%= data.name %></p>
+            <% });  %>
         </div>
 
 

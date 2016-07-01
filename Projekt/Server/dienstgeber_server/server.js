@@ -7,6 +7,13 @@ global.db = redis.createClient(); //Creates a new Client
 global.bodyParser = require('body-parser');
 global.jsonParser = bodyParser.json();
 
+
+global.cookieParser = require('cookie-parser');
+global.bcrypt = require('bcryptjs');
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended: false}));
+
+
 app.set('port', 3000);
 
 console.log('**************************************');
@@ -22,12 +29,11 @@ app.listen(app.get('port'), function() {
 
  db.on('connect', function(){
 		console.log('Redis DB connected');
-        console.log('--------------------------------------');
+    console.log('--------------------------------------');
  });
 
 
 router = require('./router')(app);
-
 
 // Error Handling
 app.use(function(err, req, res, next) {

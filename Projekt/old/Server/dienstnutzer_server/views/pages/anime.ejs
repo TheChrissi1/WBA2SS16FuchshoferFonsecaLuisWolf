@@ -1,0 +1,50 @@
+<!-- views/pages/anime.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container" id="body">
+
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+    <main>
+        <div class="jumbotron">
+            <h2 class="headline">Anime Liste</h2>
+            <section class="content">
+                <div id="list">
+                <% animeList.forEach(function(anime) { %>
+                  <a href='/anime/<%= anime.name.toLowerCase().replace(/ /g,'-') %>'>
+                    <section id="anime">
+                      <ul id="anime_list">
+                        <div id="anime_info1">
+                          <li id="anime_name"><%= anime.name %></li>
+                        </div>
+                        <div id="anime_info2">
+                          <li class="anime_info"><span>Genre:</span> <%= anime.genre %></li>
+                          <li class="anime_info"><span>Episodes:</span> <%= anime.episodes %></li>
+                          <li class="anime_info"><span>Released:</span> <%= anime.release_jp %></li>
+                          <li class="anime_info"><span>License</span> <%= anime.license %></li>
+                          <li class="anime_info"><span>Status:</span> <%= anime.status %></li>
+                        </div>
+                      </ul>
+                    </section>
+                  </a>
+                <% });  %>
+              </div>
+            </section>
+        </div>
+
+
+
+    </main>
+
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
+
+</body>
+</html>

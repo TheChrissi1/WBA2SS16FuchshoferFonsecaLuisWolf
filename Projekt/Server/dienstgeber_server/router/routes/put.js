@@ -1,176 +1,318 @@
 var router = express.Router();
 
-//[OK]
-//Trägt einen neuen Anime in die DB ein.
-router.put('/anime', jsonParser, function( req, res){
-    var newAnime = req.body;
-    db.set('anime:'+newAnime.name.toLowerCase().replace(/ /g,'-'), JSON.stringify(newAnime), function(err, rep) {
-        res.status(201).type('text').send('new anime: ' +newAnime.name);
-    });
 
+
+//[OK]
+//Fügt einen neuen Anime hinzu.
+router.put('/anime', jsonParser, function( req, res){
+    
+    console.log('PUT /anime');
+    
+    var newAnime = req.body;
+    var available = true;
+    db.keys('anime:*', function(err, rep) {
+        if(err) throw err;
+        for(var i = 0; i<rep.length; i++){
+            if( rep[i] == 'anime:' + newAnime.name.toLowerCase().replace(/ /g,'-')){
+                available = false;
+            }
+        }   
+        if(available) {
+            db.set('anime:'+newAnime.name.toLowerCase().replace(/ /g,'-'), JSON.stringify(newAnime), function(err, rep) {
+                if(err) throw err;
+                
+                res.status(201).type('json').send({'name':newAnime.name});
+
+                console.log('CREATED');
+
+            });
+        } else {
+            res.status(422).type('text').send('Anime does already exist');
+
+            console.log('UNPROCESSABLE ENTITY');
+                
+        }
+    });
 });
 
 //[OK]
-// Ändert die Daten eines Animes.
+//Ändert die Daten eines Animes.
 router.put( '/anime/:anime_name', jsonParser, function(req, res){
+    
+    console.log('PUT /anime/' + req.params.anime_name);
 
 	db.exists('anime:'+req.params.anime_name, function(err, rep) {
+        if(err) throw err;
 		if (rep == 1) {
 			var updatedAnime = req.body;
-		//	updatedAnime.name = req.params.anime_name;
 
 			db.set('anime:' + req.params.anime_name, JSON.stringify(updatedAnime), function(err, rep) {
-				res.status(200).type('json').send(updatedAnime);
+                if(err) throw err;
+                res.status(200).type('json').send({'name':updatedAnime.name});
+
+                console.log('OK');
+
 			});
 		} else {
-			res.status(404).type('text').send('Anime not exists!');
-        }
+			res.status(404).type('text').send('Anime does not exists!');
 
+            console.log('NOT FOUND');
+
+        }
 	});
 });
 
 //[OK]
-//Trägt einen neuen Benutzer in die DB ein.
+//Fügt einen neuen Benutzer hinzu.
 router.put('/user', jsonParser, function(req, res){
+    
+    console.log('PUT /user');
+    //User ID und Authority müssen unabhängig vom req.body verändert werden.
+    var User = req.body;
+    var newUser = {
+        user_id:0,
+        'name':User.name,
+        'lastname':User.lastname,
+        'username':User.username,
+        'authority':3,
+        'email':User.email,
+        'gender':User.gender,
+        'birthdate':User.birthdate,
+        'active':true
+    }
+    var available = true;
+    db.keys('user:*' , function(err, rep){
+        if(err) throw err;
+        var result = rep;
+        //Wenn noch kein User in Redis vorhanden ist:
+        if(result.length > 0){
+            db.mget(result, function(err, rep){
+                if(err) throw err;
+                rep.forEach(function(val){
+                    if(JSON.parse(val).username == User.username){
+                        available = false;
+                    }
+                });
+                //Ist der Username verfügbar? Wenn ja:
+                if(available){
+                db.incr('user_id:user', function (err, rep) {
+                    if(err) throw err;
 
-  var User = req.body;
-  // console.log(User);
-  var newUser = {
-    "user_id":0,
-    "name":User.name,
-    "lastname":User.lastname,
-    "username":User.username,
-    "authority":3,
-    "email":User.email,
-    "gender":User.gender,
-    "birthdate":User.birthdate,
-    "active":true
-  }
-  // console.log(newUser);
-  db.incr('user_id:user', function (err, rep) {
+                    newUser.user_id = rep;
+                    //Neue ID wird erstellt
+                    db.set('user:'+newUser.user_id, JSON.stringify(newUser), function(err, rep) {
+                        if(err) throw err;
+                    });
+                    //Leere Statistik für den User wird erstellt.
+                    var newStat = {
+                        'stats':[
+                            {
+                                'user_id':newUser.user_id,
+                                'username':newUser.username,
+                                'seen_ep':0,
+                                'seen_anime':0,
+                            }
+                        ]
+                    };
+                    //Neuer User wird in Redis eingetragen.
+                    db.set('stats:'+newUser.user_id, JSON.stringify(newStat), function(err, rep) {
+                        if( err ) throw err;
+                    });
+                    res.status(201).type('json').send({'user_id':newUser.user_id});
 
-		newUser.user_id = rep;
-		db.set('user:'+newUser.user_id, JSON.stringify(newUser), function(err, rep) {
-      // console.log("New User with ID: " + newUser.user_id);
-		});
-    var newStat = {
-        "stats":[
-          {
-            "user_id":newUser.user_id,
-            "username":newUser.username,
-            "seen_ep":0,
-            "seen_anime":0,
-          }
-        ]
-    };
-    db.set('stats:'+newUser.user_id, JSON.stringify(newStat), function(err, rep) {
-      if( err ) throw err;
-        // console.log('new statistic for user: ' + newUser.user_id);
+                    console.log('CREATED');
+
+                });
+                    //Gewählter username ist schon vorhanden.
+                } else {
+                    res.status(422).type('text').send('Username already taken');
+
+                    console.log('UNPROCESSABLE ENTITY');
+
+                }
+            });
+            //Noch kein User in Redis vorhanden:
+            } else {
+                db.incr('user_id:user', function (err, rep) {
+                    if(err) throw err;
+
+                    newUser.user_id = rep;
+                    db.set('user:'+newUser.user_id, JSON.stringify(newUser), function(err, rep) {
+                        if(err) throw err;
+                    });
+                    var newStat = {
+                        'stats':[
+                            {
+                                'user_id':newUser.user_id,
+                                'username':newUser.username,
+                                'seen_ep':0,
+                                'seen_anime':0,
+                            }
+                        ]
+                    };
+                    db.set('stats:'+newUser.user_id, JSON.stringify(newStat), function(err, rep) {
+                        if( err ) throw err;
+                    });
+                    res.status(201).type('json').send({'user_id':newUser.user_id});
+
+                    console.log('CREATED');
+                });
+            }
     });
-    res.status(201).type('text').send({"user_id":newUser.user_id});
-	});
 });
 
 //[OK]
 //Ändert die Daten eines Benutzers.
 router.put( '/user/:user_id', jsonParser, function(req, res){
+    
+    console.log('PUT /user/' + req.params.user_id);
 
-  db.exists('user:'+req.params.user_id, function(err, rep) {
+    //Existiert der User in Redis?
+    db.exists('user:'+req.params.user_id, function(err, rep) {
+        if(err) throw err;
+        //Wenn der User existiert:
 		if (rep == 1) {
 			var updatedUser = req.body;
-			updatedUser.user_id = req.params.user_id;
 
+			updatedUser.user_id = parseInt(req.params.user_id, 10);
+
+            //Der req.body wird als Datensatz für den User gespeichert.
 			db.set('user:' + req.params.user_id, JSON.stringify(updatedUser), function(err, rep) {
+                if(err) throw err;
+
 				res.status(200).type('json').send(updatedUser);
+
+                console.log('OK');
+
 			});
+        //User existiert nicht.
 		} else {
-			res.status(404).type('text').send('User already exists!');
+			res.status(404).type('text').send('User does not exists!');
+
+            console.log('NOT FOUND');
+
 		}
 	});
 });
 
-//[NOT OK]
+//[OK]
 //Ändert die Statistik eines Nutzers.
 router.put( '/user/:user_id/stats', jsonParser, function(req, res){
+    
+    console.log('PUT /user/' + req.params.user_id + '/stats');
 
-  db.exists('stats:'+req.params.user_id, function(err, rep){
-    if(rep == 1){
-      db.get('stats:'+req.params.user_id, function(err, rep2) {
-    		if (rep2) {
-          var exists = 0;
-          rep2 = JSON.parse(rep2);
-          for(var i = 1; i<rep2.stats.length; i++){
-            if(rep2.stats[i].name == req.body.name) exists = i;
-          }
-          if( exists > 0 ){
-            var tmp = rep2.stats[exists].episodes;
-            rep2.stats[exists].episodes = req.body.episodes;
-            rep2.stats[0].seen_ep += (tmp-req.body.episodes);
-          } else if (exists == 0){
-            rep2.stats.push(req.body);
-            rep2.stats[0].seen_ep += req.body.episodes;
-            rep2.stats[0].seen_anime += 1;
-          }
-          db.set('stats:' + req.params.user_id, JSON.stringify(rep2), function(err, rep) {
-    				res.status(200).type('json').send(rep2);
-    			});
-    		} else {
-    			res.status(404).type('text').send();
-    		}
-    	});
-    }
-  });
+    //Existiert der User?
+    db.exists('stats:'+req.params.user_id, function(err, rep){
+        if(err) throw err;
+        //Falls User existiert:
+        if(rep == 1){
+            //Statistik wird anhand es req.body aktuallisiert
+            db.get('stats:'+req.params.user_id, function(err, rep) {
+                if(err) throw err;
+                var exists = 0;
+                rep = JSON.parse(rep);
+                for(var i = 1; i<rep.stats.length; i++){
+                    if(rep.stats[i].name == req.body.name) exists = i;
+                }
+                if( exists > 0 ){
+                    if(rep.stats[exists].episodes > req.body.episodes){
+                        var differenz = (rep.stats[exists].episodes-req.body.episodes);
+                        rep.stats[exists].episodes = req.body.episodes;
+                        rep.stats[0].seen_ep -= differenz;
+                        rep.stats[exists].max_ep = req.body.max_ep;
+                } else {
+                    var tmp = rep.stats[exists].episodes;
+                    rep.stats[exists].episodes = req.body.episodes;
+                    rep.stats[0].seen_ep += (req.body.episodes-tmp);
+                    rep.stats[exists].max_ep = req.body.max_ep;
+                }
+                } else if (exists == 0){
+                    rep.stats.push(req.body);
+                    rep.stats[0].seen_ep += req.body.episodes;
+                    rep.stats[0].seen_anime += 1;
+                }
+                db.set('stats:' + req.params.user_id, JSON.stringify(rep), function(err, rep) {
+                    if(err) throw err;
+                    res.status(200).type('json').send(rep);
+
+                    console.log('OK');
+
+  			   });
+    	   });
+        //Falls Usernicht vohanden ist existiert auch keine Statistik.
+        } else {
+            res.status(404).type('text').send('Statistic does not exists');
+
+            console.log('NOT FOUND');
+
+        }
+    });
 });
 
+//[OK]
+//Registriert einen neuen Benutzer mit Passwort.
+router.put('/signup', jsonParser, function(req, res){
+    console.log('PUT /signup');
 
-/*
-///////// PUT GENRE ONLY ONCE /////////////////
-router.put('/genre', jsonParser, function( req, res ){
+    var newUser = req.body;
+    var hash = bcrypt.hashSync( newUser.password, 8 );
+    var user = {
+        'username': newUser.username,
+        'password': hash
+    };
+    db.get('auth:' + user.username, function(err, rep){
+        if(err) throw err;
+        if( !rep ){
+            //Dem username wird ein passwort zugewiesen.
+            db.set('auth:' + user.username , user.password, function ( err ){
+                if( err ) throw err;
+                res.sendStatus(204);
 
-    var genre = require('./input/genre.json');
-    genre = genre.genre;
-    genre.forEach(function(val){
-        db.rpush(['genre', JSON.stringify(val)]);
-    })
-    res.status(201).type('text').send('added');
+                console.log('OK');
+
+            });
+        //User nicht gefunden    
+        } else {
+            res.sendStatus(422);
+
+            console.log('UNPROCESSABLE ENTITY');
+
+        }
+    });
 });
-///////////////////////////////////////////////
 
-///////// PUT REFS ONLY ONCE //////////////////
-router.put('/refs', jsonParser, function( req, res ){
+//[OK]
+//Logged einen Benutzer ein.
+router.put('/login', jsonParser, function(req, res){
 
-    var refs = require('./input/references.json');
-    refs = refs.reference;
-    refs.forEach(function(val){
-        db.set('refs:' + val.ref_id, JSON.stringify(val));
-    })
-    res.status(201).type('text').send('added');
+    console.log('PUT /login');
+
+    var User = req.body;
+    db.get('auth:' + User.username, function( err, rep ){
+        if(err) throw err;
+        if( rep ){
+            var hash = rep;
+            if( bcrypt.compareSync( User.password, hash )){
+                res.sendStatus(204);
+
+                console.log('OK');
+
+            //Useraccount ist aktuell deaktiviert.    
+            } else {
+                res.sendStatus(423);
+
+                console.log('LOCKED')
+
+            }
+        //Useraccount nicht gefunden.    
+        } else {
+            res.sendStatus(404);
+
+            console.log('NOT FOUND')
+
+        }
+    });
 });
-///////////////////////////////////////////////
 
-//////// PUT ANIME ONLY ONCE //////////////////
-router.put('/animes', jsonParser, function( req, res ){
-    var animes = require('./input/anime.json');
-    animes = animes.anime;
-
-    animes.forEach(function(val){
-        console.log(val.name.toLowerCase().replace(/ /g,'-'));
-        db.set('anime:' + val.name.toLowerCase().replace(/ /g,'-'), JSON.stringify(val));
-    })
-    res.status(201).type('text').send('added');
-})
-
-///////////////////////////////////////////////
-
-//////// PUT STATS ONLY ONCE //////////////////
-router.put('/stats', jsonParser, function( req, res ){
-    console.log("IN PUT STATS");
-    var stat = require('./input/stats.json');
-    console.log(stat);
-    db.set('stats:1', JSON.stringify(stat));
-    res.status(201).type('text').send('added');
-})
-///////////////////////////////////////////////
-*/
 console.log('loaded put.js.')
 module.exports = router;

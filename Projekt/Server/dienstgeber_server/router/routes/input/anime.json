@@ -4,7 +4,7 @@
             "name":"Naruto Shippuuden",
             "name_en":"Naruto Shippuuden",
             "name_de":"Naruto Shippuuden",
-            "description":"",
+            "description":"...",
             "genre":"Action, Adventure, Comedy, Drama, Fantasy, Martial Arts, Shounen, Super Power",
             "episodes":465,
             "release_jp":"14.02.2007",
@@ -14,7 +14,7 @@
             "dub":"JP, EN, DE",
             "sub":"DE, EN",
             "license":"JP, EN, DE",
-            "refs":"narutotube|0|anilinkz|1|gogoanime|2|"
+            "refs":"narutotube|anilinkz|gogoanime|"
         },
         {
             "name":"Shingeki no Kyojin",
@@ -30,7 +30,7 @@
             "dub":"JP, EN, DE",
             "sub":"DE, EN",
             "license":"JP, EN, DE",
-            "refs":"anilinkz|0|gogoanime|1|"
+            "refs":"anilinkz|gogoanime|"
         }
     ]
 }
