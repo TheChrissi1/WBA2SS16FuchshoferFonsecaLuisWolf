@@ -14,12 +14,11 @@
     <main>
         <div class="jumbotron">
             <h1>Anime</h1>
-            <p>Liste aller Refs:</p>
+            <p>Liste aller Referenzen:</p>
 
             <% refList.forEach(function(refs) { %>
-
-            <p>Name: <%= refs.name %></p>
-            <% });  %>
+                <p><a href=<%= refs.address %>><%= refs.name %></a></p>
+            <% }); %>
         </div>
 
 

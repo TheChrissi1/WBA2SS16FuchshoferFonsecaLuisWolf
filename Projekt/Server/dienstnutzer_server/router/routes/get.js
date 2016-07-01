@@ -318,13 +318,36 @@ router.get('/anime/:anime_name', function(req, res){
                             tmp = index + 1;
                         }
                     }
-                    //Überprüft ob Vorschlag bereits existiert, sonst wird er eingetragen
-                    if (check(suggestions, {'name':animeData.name}) == 1) {
-                        suggestions.data.push({'name':animeData.name});
-                    }
-                    refData = ref_ids;
-				    res.render('pages/animeID',{animeData:animeData, refData:refData,suggestions:suggestions});
-                    res.end();
+                    
+                    options.path = '/ref';
+                    var content;
+                    var exReqRef = http.request(options, function(exResRef) {
+        
+                        exResRef.on('data', function(chunk) {
+                            content = JSON.parse(chunk);
+                            
+                        });
+                        
+                        exResRef.on('end', function() {
+                            for (var i = 0; i<content.length; i++) {
+                                for(var j = 0; j<ref_ids.length; j++) {
+                                    if (content[i].ref_id == ref_ids[j]) {
+                                        refData.push(content[i]);
+                                        
+                                    }
+                                }
+                            }
+  
+                            //Überprüft ob Vorschlag bereits existiert, sonst wird er eingetragen
+                            if (check(suggestions, {'name':animeData.name}) == 1) {
+                                suggestions.data.push({'name':animeData.name});
+                            }
+                    
+				            res.render('pages/animeID',{animeData:animeData, refData:refData,suggestions:suggestions});
+                            res.end();
+                        });
+                    });
+                    exReqRef.end();
                 });
             });
 
@@ -340,6 +363,7 @@ router.get('/anime/:anime_name', function(req, res){
         }
     });
     exReq.end();
+    
 });
 
 //[OK]

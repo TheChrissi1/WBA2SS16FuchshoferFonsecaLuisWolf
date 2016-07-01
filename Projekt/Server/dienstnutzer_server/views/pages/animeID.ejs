@@ -12,6 +12,9 @@
     </header>
 
     <main>
+        
+        
+        
         <div class="jumbotron">
             <h2 id="anime_name_head" class="headline"><%= animeData.name %></h2>
             <a id="edit_anime" href="/editanime/<%= animeData.name.toLowerCase().replace(/ /g, '-') %>">[edit]</a>
@@ -29,6 +32,15 @@
                     <li><span class="descr">RELEASE [EN]:</span><span class="descr_val"><%= animeData.release_en %></span></li>
                     <li><span class="descr">RELEASE [DE]:</span><span class="descr_val"><%= animeData.release_de %></span></li>
                     <li><span class="descr">LICENSE:</span><span class="descr_val"><%= animeData.license %></span></li>
+                    <li><span class="descr">REFERENCES:</span>
+                        <span class="descr_val">
+                            <% refData.forEach(function(refs) { %>
+                            <p><a href=<%= refs.address %>><%= refs.name %></a></p>
+                        <% }); %></span></li> 
+                    
+                      
+                    
+                    
                   </div>
                   <div class="rinfo">
                     <li><%= animeData.description %></li>
