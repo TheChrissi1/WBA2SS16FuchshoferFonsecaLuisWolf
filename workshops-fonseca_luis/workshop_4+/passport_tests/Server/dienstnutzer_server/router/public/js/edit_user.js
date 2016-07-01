@@ -28,9 +28,11 @@ function sendUser(){
     "birthdate":document.getElementById('user_birthdate').value,
     "active": true,
   }
-  alert(JSON.stringify(user));
   var request = new XMLHttpRequest();
   request.open("PUT", 'http://localhost:8080/user/'+ user.user_id, true);
   request.setRequestHeader('Content-Type','application/json');
   request.send(JSON.stringify(user));
+
+  window.location = 'http://localhost:8080/user/'+ user.user_id;
+  return false;
 };

@@ -28,10 +28,11 @@ function sendAnime(){
       "name_de": document.getElementById('name_ger').value,
       "genre": genre_erg,
       "episodes": document.getElementById('episodes').value,
+      "description":document.getElementById('description').value,
       "release_jp": document.getElementById('release_jp').value,
       "release_en": document.getElementById('release_en').value,
       "release_de": document.getElementById('release_de').value,
-      "status": document.getElementById('status').value,
+      "status": document.getElementById(document.getElementById('status').value).innerHTML,
       "dub": document.getElementById('dub').value,
       "sub": document.getElementById('sub').value,
       "license": document.getElementById('license').value,
@@ -42,4 +43,7 @@ function sendAnime(){
   request.open("PUT", 'http://localhost:8080/anime/'+ anime.name.toLowerCase().replace(/ /g, '-'), true);
   request.setRequestHeader('Content-Type','application/json');
   request.send(JSON.stringify(anime));
+
+  window.location = 'http://localhost:8080/anime/'+ anime.name.toLowerCase().replace(/ /g, '-');
+  return false;
 }

@@ -131,7 +131,6 @@
 */
 #edit_anime{
   display:inline-block;
-  background-color: #c0c0c0;
   float:right;
   width: 15px;
   height: 15px;
@@ -192,8 +191,12 @@
 #user_info{
   background-color: #c0c0c0;
 }
-
-
+#edit_user{
+  display:inline-block;
+  float:right;
+  width: 15px;
+  height: 15px;
+}
 /* ********************************************
  *          STATS                             *
  ******************************************** */

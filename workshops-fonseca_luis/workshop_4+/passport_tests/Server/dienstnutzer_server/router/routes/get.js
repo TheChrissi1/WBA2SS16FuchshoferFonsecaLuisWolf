@@ -324,7 +324,7 @@ router.get('/anime/:anime_name', function(req, res){
                         suggestions.data.push({'name':animeData.name});
                     }
                     refData = ref_ids;
-				    res.render('pages/animeID',{animeData:animeData, refData:refData,suggestions:suggestions});
+				            res.render('pages/animeID',{animeData:animeData, refData:refData,suggestions:suggestions});
                     res.end();
                 });
             });
@@ -780,6 +780,58 @@ router.get('/filterform', function(req, res){
   res.render('pages/filter');
   res.end();
 })
+
+//[OK]
+//Gibt die Anzahl der gesehenen Folgen eines betstimmten Anime aus.
+router.get('/user/:user_id/stats/:anime_name', function(req, res){
+
+      console.log('GET /user/' + req.params.user_id + '/stats/' + req.params.anime_name);
+
+  	var options = {
+  			host: 'localhost',
+  			port: 3000,
+  			path: '/user/' + req.params.user_id + '/stats',
+  			method:'GET',
+  			headers:{
+  					accept:'application/json'
+  			}
+  	}
+    var seen_episode = 0;
+    var seen_string;
+  	var statData = '';
+  	var data = '';
+  	var exReq = http.request(options, function(exRes){
+  		if ( exRes.statusCode == 200 ){
+            exRes.on('data', function(chunk){
+                  data = JSON.parse(chunk).stats;
+
+  			});
+  			exRes.on('end', function(){
+          for(var i = 1; i<data.length; i++){
+            if( data[i].name.toLowerCase().replace(/ /g, '-') == req.params.anime_name){
+              seen_episode = data[i].episodes;
+            }
+          }
+          seen_string += seen_episode;
+  				res.send({'seen_episode':seen_episode});
+          res.end();
+        });
+
+              console.log('OK');
+
+  		} else {
+
+              res.statusCode = 404;
+              res.render('pages/error');
+              res.end();
+
+              console.log('NOT FOUND');
+
+  		}
+      });
+      exReq.end();
+
+});
 
 console.log('loaded get.js');
 module.exports = router;

@@ -13,22 +13,26 @@
 
     <main>
         <div class="jumbotron">
-            <h1>User</h1>
-
-
-            <ul>
-            <p>ID: <%= userData.uID %></p>
-            <p>Name: <%= userData.name %></p>
-            <p>E-Mail: <%= userData.email %></p>
-            <p>Alias: <%= userData.alias %></p>
-            <p>Wohnort: <%= userData.wohnort %></p>
-            <p>Geschlecht: <%= userData.gender %></p>
-            <p>Alter: <%= userData.alter %></p>
-            </ul>
+            <h2 id="user_name_head" class="headline"><%= userData.username %> [<%= userData.user_id %>]</h2>
+            <section class='content'>
+              <div>
+                <a href="/user/<%=userData.user_id%>/stats">[yourStats]</a>
+                <a id="edit_user" href="/edituser/<%=userData.user_id%>">[edit]</a>
+                <ul id="list">
+                  <div class="linfo" style="float:none; border-right:none">
+                    <li id="user_pro_name"><span class="descr">Name:</span><span class="descr_val"><%= userData.name %></span></li>
+                    <li id="user_pro_lastname"><span class="descr">Lastname:</span><span class="descr_val"><%= userData.lastname %></span></li>
+                    <li id="user_pro_email"><span class="descr">Email:</span><span class="descr_val"><%= userData.email %></span></li>
+                    <li id="user_pro_gender"><span class="descr">Gender:</span><span class="descr_val"><%= userData.gender %></span></li>
+                    <li id="user_pro_birthdate"><span class="descr">Birthdate:</span><span class="descr_val"><%= userData.birthdate %></span></li>
+                  </div>
+                </ul>
+              </div>
+            </section>
         </div>
 
 
-
+        <script src="../js/userid.js"></script>
     </main>
 
     <footer>

@@ -49,16 +49,17 @@ function sendFilter(){
       query += "minEpisodes=" + document.getElementById('filter_min').value + "&maxEpisodes=" + document.getElementById('filter_max').value;
       count += 2;
     }
-  }
-  if(episodes.length != 0){
-    for(var i = 0; i<episodes.length; i++){
-      if(episodes[i].value != ''){
-        if( count == 0 ){
-          query += "episodes=" + episodes[i].value;
-        } else {
-          query += "&episodes=" + episodes[i].value;
+  }else{
+    if(episodes.length != 0){
+      for(var i = 0; i<episodes.length; i++){
+        if(episodes[i].value != ''){
+          if( count == 0 ){
+            query += "episodes=" + episodes[i].value;
+          } else {
+            query += "&episodes=" + episodes[i].value;
+          }
+          count++;
         }
-        count++;
       }
     }
   }
@@ -75,7 +76,7 @@ function sendFilter(){
     }
   }
   if(document.getElementById('filter_name').value != ''){
-    if(count != 0){
+    if(count == 0){
       query += "name=" + document.getElementById('filter_name').value;
       count++;
     } else {

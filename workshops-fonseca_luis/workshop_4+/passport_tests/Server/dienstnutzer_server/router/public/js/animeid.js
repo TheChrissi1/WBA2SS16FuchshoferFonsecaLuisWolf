@@ -1,3 +1,12 @@
+var statRequest = new XMLHttpRequest();
+var cookie_user_id = document.cookie.split(';');
+var cookie_user_id_value = cookie_user_id[1].split('=');
+var seen_episode = 0;
+if(cookie_user_id_value[1] != 0){
+  statRequest.open('GET', 'http://localhost:8080/user/' +  cookie_user_id_value[1] + '/stats/' + document.getElementById('anime_name_head').innerHTML.toLowerCase().replace(/ /g, '-'), false);
+  statRequest.send(null);
+  seen_episode = JSON.parse(statRequest.responseText).seen_episode;
+}
 var d = document.getElementById('episode_list');
 var value = document.getElementById('episode_number').value;
 var episodes = parseInt(value, 10);
@@ -11,8 +20,11 @@ for(var i = episodes ; i>0; i--){
   button.class = "episode_button";
   span.innerHTML = "Episode: <br>"
   button.innerHTML = span.innerHTML + i;
+  if(i <= seen_episode){
+    button.style.background = "#2DEC56";
+  }
   button.id = i;
-  button.setAttribute("onclick", "updateStats("+ button.id+ ")");
+  button.setAttribute("onclick", "return updateStats("+ button.id+ ")");
 
 
   li.appendChild(button);
@@ -67,4 +79,7 @@ function updateStats( id ){
   request.open("PUT", url, true);
   request.setRequestHeader('Content-Type','application/json');
   request.send(JSON.stringify(newStats));
+
+  location.reload();
+  return false;
 };
