@@ -111,7 +111,7 @@ router.put('/user', jsonParser, function(req, res){
             db.set('stats:'+newUser.user_id, JSON.stringify(newStat), function(err, rep) {
               if( err ) throw err;
             });
-            res.status(201).type('text').send({'user_id':newUser.user_id});
+            res.status(201).type('json').send({'user_id':newUser.user_id});
 
             console.log('CREATED');
 
@@ -144,7 +144,7 @@ router.put('/user', jsonParser, function(req, res){
         db.set('stats:'+newUser.user_id, JSON.stringify(newStat), function(err, rep) {
           if( err ) throw err;
         });
-        res.status(201).type('text').send({'user_id':newUser.user_id});
+        res.status(201).type('json').send({'user_id':newUser.user_id});
 
         console.log('CREATED');
       });

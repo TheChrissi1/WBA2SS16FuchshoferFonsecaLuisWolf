@@ -26,14 +26,16 @@ router.put('/anime', jsonParser, function( req, res){
     };
 
     var resBody;
+    var data;
     var exReq = http.request(options, function (exRes) {
         exRes.on('data', function (chunk) {
-            resBody = {'name':JSON.parse(chunk).name};
+            //resBody = {'name':JSON.parse(chunk).name};
+            data = chunk;
         });
 
         if (exRes.statusCode == 201) {
             exRes.on('end', function(){
-
+                resBody = {'name':JSON.parse(data).name};
                 res.status(201).type('json').send(resBody);
             });
 
@@ -124,12 +126,12 @@ router.put('/user', jsonParser, function(req, res){
     var exReq = http.request(options, function (exRes) {
 
         exRes.on('data', function (chunk) {
-            resBody = {'user_id':JSON.parse(chunk).user_id};
+            data = chunk;
         });
 
         if (exRes.statusCode == 201) {
             exRes.on('end', function() {
-
+                resBody = {'user_id':JSON.parse(data).user_id};
                 res.status(201).type('json').send(resBody);
             });
 
