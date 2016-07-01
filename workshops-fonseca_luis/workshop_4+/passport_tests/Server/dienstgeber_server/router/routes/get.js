@@ -22,6 +22,7 @@ router.get('/anime',  function(req, res){
 		if(err) throw err;
 		var anime = [];
 		var result = rep;
+        //Falls Animes in Redis vorhanden sind:
 		if (result.length > 0) {
 			db.mget(result, function(err, rep) {
 				if(err) throw err;
@@ -33,9 +34,8 @@ router.get('/anime',  function(req, res){
 
 			console.log('OK');
 
-		}	else if (result.length == 0) {
-
-		  res.status(404).type('text').send('No anime found');
+        } else if (result.length == 0) {
+            res.status(404).type('text').send('No anime found');
 
 			console.log('NOT FOUND');
 
@@ -47,21 +47,19 @@ router.get('/anime',  function(req, res){
 
 //[OK]
 //Gibt einen Anime anhand seines Namens (querry-parameter) zurück.
-router.get('/anime/:anime_name',  function(req, res){
+router.get('/anime/:anime_name',  function(req, res) {
+    
+    console.log('GET /anime/' + req.params.anime_name);
 
-	console.log('GET /anime/' + req.params.anime_name);
-
-  db.get('anime:'+req.params.anime_name, function(err, rep) {
-		if(err) throw err;
+    db.get('anime:'+req.params.anime_name, function(err, rep) {
+        if(err) throw err;
 
 		if (rep) {
-
 			res.status(200).type('json').send( JSON.parse( rep ));
 
 			console.log('OK');
 
 		} else {
-
 			res.status(404).type('text').send('This anime does not exist');
 
 			console.log('NOT FOUND');
@@ -81,23 +79,22 @@ router.get('/user',  function(req, res){
 		var result = rep;
 		var users = [];
 		if (result.length > 0) {
-      db.mget(result, function(err, rep) {
+            db.mget(result, function(err, rep) {
 				if(err) throw err;
-      	rep.forEach(function(val){
+      	         rep.forEach(function(val){
 					users.push(JSON.parse(val));
-				});
-      	res.status(200).type('json').send(users);
-    	});
+                 });
+                res.status(200).type('json').send(users);
+            });
 
 			console.log('OK');
-
-	  } else if (result.length == 0) {
-
+        
+        } else if (result.length == 0) {
  			res.status(404).type('text').send('No users found');
 
 			console.log('NOT FOUND');
 
-     }
+        }
 	});
 });
 
@@ -107,16 +104,14 @@ router.get('/user/:user_id',  function(req, res){
 
 	console.log('GET /user/'+ req.params.user_id);
 
-  db.get('user:'+req.params.user_id, function(err, rep) {
+    db.get('user:'+req.params.user_id, function(err, rep) {
 		if(err) throw err;
 		if (rep) {
-
 			res.status(200).type('json').send(rep);
 
 			console.log('OK');
 
 		} else {
-
 			res.status(404).type('text').send('This user does not exist');
 
 			console.log('NOT FOUND');
@@ -140,7 +135,8 @@ router.get( '/user/:user_id/stats',  function(req, res){
 			console.log('OK');
 
 		} else {
-
+            //Sollte nicht passieren, da beim anlegen eines Users eine Statistk erzeugt wird.
+            //Bedeutet das der User nicht existiert.
 			res.status(404).type('text').send('This user statistic does not exist');
 
 			console.log('NOT FOUND');
@@ -155,11 +151,11 @@ router.get('/genre',  function(req, res) {
 
 	console.log('GET /genre');
 
-  var genre = [];
-  db.lrange( 'genre', 0, -1, function( err, rep ){
-    if( err ) throw err;
+    var genre = [];
+    db.lrange( 'genre', 0, -1, function( err, rep ) {
+        if( err ) throw err;
 		if( rep.length > 0 ){
-			rep.forEach( function( val ){
+			rep.forEach( function( val ) {
 				genre.push( JSON.parse( val ));
 			});
 
@@ -167,14 +163,13 @@ router.get('/genre',  function(req, res) {
 
 			console.log('OK');
 
-		} else if( rep.length == 0 ){
-
-     	res.status( 404 ).type( 'text' ).send( 'No genre found' );
+		} else if ( rep.length == 0 ) {
+            res.status( 404 ).type( 'text' ).send( 'No genre found' );
 
 			console.log('NOT FOUND');
 
-     }
-  });
+        }
+    });
 });
 
 //[OK]
@@ -183,24 +178,24 @@ router.get('/ref',  function(req, res) {
 
 	console.log('GET /ref');
 
-  db.keys('refs:*',function(err,rep) {
+    db.keys('refs:*',function(err,rep) {
 		if(err) throw err;
 
 		var refs = [];
 		var result = rep;
 		if (result.length > 0) {
-      db.mget(result, function(err, rep) {
+            db.mget(result, function(err, rep) {
 				if(err) throw err;
-        rep.forEach(function(val){
-              refs.push(JSON.parse(val));
-    		});
-
-    		res.status(200).type('json').send(refs);
+                rep.forEach(function(val){
+                    refs.push(JSON.parse(val));
+                });
+                
+                res.status(200).type('json').send(refs);
 
 				console.log('OK');
-
-      });
-    } else if (result.length == 0) {
+            });
+            
+        } else if (result.length == 0) {
 
  			res.status(404).type('text').send('No refs found');
 
@@ -216,18 +211,18 @@ router.get('/ref/:ref_name',  function(req, res){
 
 	console.log('GET /ref/' + req.params.ref_name);
 
-  db.keys('refs:' + req.params.ref_name ,function(err, rep) {
+    db.keys('refs:' + req.params.ref_name ,function(err, rep) {
 		if(err) throw err;
 		if (rep.length > 0) {
-      db.get('refs:' + req.params.ref_name, function(err, rep) {
+            db.get('refs:' + req.params.ref_name, function(err, rep) {
 				if(err) throw err;
 
-        res.status(200).type('json').send(JSON.parse(rep));
+                res.status(200).type('json').send(JSON.parse(rep));
 
 				console.log('OK');
 
-      });
-    } else if (rep.length == 0) {
+            });
+        } else if (rep.length == 0) {
 
  			res.status(404).type('text').send('No refs found');
 

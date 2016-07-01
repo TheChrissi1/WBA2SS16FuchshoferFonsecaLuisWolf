@@ -60,12 +60,14 @@ router.get('/anime', function(req, res){
         if(exRes.statusCode == 200){
             exRes.on('data', function(chunk){
                 var animeList = JSON.parse(chunk);
+                //Zusätzlich zur Animeliste wird die Vorschlagliste gerendert.
                 res.render('pages/anime',{animeList:animeList,suggestions:suggestions});
                 res.end();
             });
 
             console.log('OK');
 
+        //Falls keine Animes vorhanden sind wird eine leere Seite ausgegeben.
         } else {
             exRes.on('data', function(chunk){
                 var animeList = [];
@@ -142,7 +144,6 @@ router.get('/anime/filter:para', function(req, res) {
             
             // Überprüfen ob Filter 'Episodes' mit mindestens einem Anime übereinstimmt.
             if (count[0] == 1) {
-                console.log('test');
                     for (var i=0; i<exAnimeList.length; i++) {
                         if (exAnimeList[i].episodes == erg.episodes) {
                             
@@ -250,6 +251,7 @@ router.get('/anime/filter:para', function(req, res) {
             //Überprüft ob Filter 'minEpisodes' und 'maxEpisodes' vorhanden ist und filtert die Liste danach
             if (count[3] == 1 && count[4] == 1) {
                     for (var b=0; b<exAnimeList.length; b++) {
+                        //Speichert nur die Animes ein die zwischen minEpisodes und maxEpisodes liegen.
                         if (exAnimeList[b].episodes >= erg.minEpisodes && exAnimeList[b].episodes <= erg.maxEpisodes) {
                             
                             //Überprüft ob ein Anime bereits in der Ergebnisliste vorhanden ist.
@@ -321,12 +323,13 @@ router.get('/anime/:anime_name', function(req, res){
                         suggestions.data.push({'name':animeData.name});
                     }
                     refData = ref_ids;
-				            res.render('pages/animeID',{animeData:animeData, refData:refData,suggestions:suggestions});
+				    res.render('pages/animeID',{animeData:animeData, refData:refData,suggestions:suggestions});
                     res.end();
                 });
             });
 
             console.log('OK');
+            
         }else {
             res.statusCode = 404;
             res.render('pages/error');
@@ -357,6 +360,7 @@ router.get('/user', function(req, res){
 
     var exReq = http.request(options, function(exRes){
         exRes.on('data', function(chunk){
+            
             if(exRes.statusCode != 404){
                 var userList = JSON.parse(chunk);
                 res.render('pages/user',{userList:userList});
@@ -364,6 +368,7 @@ router.get('/user', function(req, res){
 
                 console.log('OK');
 
+            //Wenn keine User in Redis vorhanden sind wird eine leere Seite ausgegeben.
             } else {
                 var userList = [];
 				res.render('pages/user',{userList:userList});
@@ -404,7 +409,7 @@ router.get('/user/:user_id', function(req, res) {
                     console.log('OK');
 
                 });
-			}else {
+			} else {
                     res.statusCode = 404;
 					res.render('pages/error');
 					res.end();
@@ -449,7 +454,6 @@ router.get( '/user/:user_id/stats', function(req, res) {
             console.log('OK');
 
 		} else {
-
             res.statusCode = 404;
             res.render('pages/error');
             res.end();

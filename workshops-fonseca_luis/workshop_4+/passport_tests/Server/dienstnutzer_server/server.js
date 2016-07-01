@@ -37,7 +37,7 @@ app.listen(app.get('port'), function() {
     console.log( 'EJS ready on http://127.0.0.1:' + app.get('port'));
 });
 
- db.on('connect', function(){
+db.on('connect', function(){
 		console.log('Redis DB connected');
         console.log('--------------------------------------');
  });
