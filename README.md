@@ -12,9 +12,11 @@
 4. Navigiere zum Verzeichnis "redisDB_server"
  * 4.1. Starte den Redis Server mit der Datei "redis-server.exe"
 5. Navigiere zum Verzeichnis "dienstgeber_server"
-  * 5.1. Starte den Dienstgeber mit dem Kommando ``node server.js``, der Dienstgeber lauscht fortan auf Port 3000 auf eingehende Requests.
+  * 5.1. Installiere alle benötigten Module mit dem Kommando ``npm install -l``.
+  * 5.2. Starte den Dienstgeber mit dem Kommando ``node server.js``, der Dienstgeber lauscht fortan auf Port 3000 auf eingehende Requests.
 6. Navigiere zum Verzeichnis "dienstnutzer_server"
-  * 6.1. Starte den Dienstnutzer mit dem Kommando ``node server.js``, der Dienstnutzer nutzt den Port 8080.
+  * 6.1. Installiere alle benötigten Module mit dem Kommando ``npm install -l``.
+  * 6.2. Starte den Dienstnutzer mit dem Kommando ``node server.js``, der Dienstnutzer nutzt den Port 8080.
 6. Die Benutzungsschnittstelle kann nun über einen Browser unter der Adresse ``localhost:8080`` dargestellt werden.
 
 
